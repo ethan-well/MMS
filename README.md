@@ -1,24 +1,13 @@
-# README
+#简介
+##轻松获取你的卡片
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+#在本地运行
 
-Things you may want to cover:
+##下载项目到本地
+git clone https://github.com/wewin11235/get_card.git
 
-* Ruby version
+##修改配置文件
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+###/config/database.yml中数据库访问的用户名和密码
+username: your_database_user_name
+password: your_database_user_password
