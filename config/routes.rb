@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :sessions
+  resources :cards
 
   get '/example', to: 'them#index'
 
