@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :users
   resources :sessions
   resources :cards
+  resources :photo_walls, only: [:index]
 
   get '/example', to: 'them#index'
 
