@@ -5,12 +5,10 @@ Rails.application.routes.draw do
 
   get 'password_resets/update'
 
-  root 'users#index'
+  root 'home_pages#index'
 
   resources :users
   resources :sessions
-  resources :cards
-  resources :photo_walls, only: [:index]
 
   get '/example', to: 'them#index'
 

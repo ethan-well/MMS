@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170328133422) do
+ActiveRecord::Schema.define(version: 20170715142519) do
 
   create_table "cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "number"
     t.float    "balance",    limit: 24
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+  end
+
+  create_table "goods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.decimal  "price",      precision: 10
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "leases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -27,6 +34,19 @@ ActiveRecord::Schema.define(version: 20170328133422) do
     t.datetime "updated_at", null: false
     t.index ["card_id"], name: "index_leases_on_card_id", using: :btree
     t.index ["user_id"], name: "index_leases_on_user_id", using: :btree
+  end
+
+  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.decimal  "price_current",   precision: 10,                     null: false
+    t.integer  "count",                          default: 0,         null: false
+    t.decimal  "total_price",     precision: 10, default: 0,         null: false
+    t.string   "status",                         default: "Waiting", null: false
+    t.string   "account",                                            null: false
+    t.string   "secreate_string"
+    t.integer  "goods_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

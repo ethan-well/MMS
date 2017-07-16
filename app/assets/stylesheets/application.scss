@@ -17,5 +17,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
-@import "index";
-@import "session";
+@import "_all-skins.min";
+@import "AdminLTE.min";
+@import "ionicons.min";
+@import "morris";

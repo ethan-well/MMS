@@ -12,5 +12,13 @@
 //
 //= require jquery3
 //= require jquery_ujs
-//= require_tree .
+//= require adminlte.min
+//= require bootstrap3-wysihtml5.all
+//= require dashboard
+//= require demo
+//= require fastclick
+//= require jquery.slimscroll.min
+//= require morris.min
+//= require raphael.min
 //= require bootstrap-sprockets
+//= require_tree .
