@@ -10,43 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170715142519) do
+ActiveRecord::Schema.define(version: 20170721183132) do
 
-  create_table "cards", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "number"
-    t.float    "balance",    limit: 24
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+  create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "namespace"
+    t.text     "body",          limit: 65535
+    t.string   "resource_type"
+    t.integer  "resource_id"
+    t.string   "author_type"
+    t.integer  "author_id"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
   end
 
   create_table "goods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
-    t.decimal  "price",      precision: 10
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  create_table "leases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "user_id"
-    t.integer  "card_id"
-    t.boolean  "active"
+    t.string   "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["card_id"], name: "index_leases_on_card_id", using: :btree
-    t.index ["user_id"], name: "index_leases_on_user_id", using: :btree
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.decimal  "price_current",   precision: 10,                     null: false
-    t.integer  "count",                          default: 0,         null: false
-    t.decimal  "total_price",     precision: 10, default: 0,         null: false
-    t.string   "status",                         default: "Waiting", null: false
-    t.string   "account",                                            null: false
+    t.decimal  "price_current",       precision: 10,                     null: false
+    t.integer  "count",                              default: 0,         null: false
+    t.decimal  "total_price",         precision: 10, default: 0,         null: false
+    t.string   "status",                             default: "Waiting", null: false
+    t.string   "account",                                                null: false
     t.string   "secreate_string"
     t.integer  "goods_id"
     t.integer  "user_id"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.string   "identification_code"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

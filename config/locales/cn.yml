@@ -1,0 +1,21 @@
+cn:
+  will_paginate:
+    page_entries_info:
+      single_page:
+        zero:  "没有数据"
+        one:   "共 <b>1</b>  %{model}"
+        other: "显示<b>所有&nbsp;%{count}</b> %{model}"
+
+
+      single_page_html:
+        zero:  "没有数据"
+        one:   "共 <b>1</b>  %{model}"
+        other: "显示<b>所有&nbsp;%{count}</b> %{model}"
+
+      multi_page: "当前记录显示 %{model} %{from} - %{to} of %{count} in total"
+      multi_page_html: "共<b>%{count}</b>篇%{model} 当前记录显示第 <b>%{from}&nbsp;-&nbsp;%{to}</b> 的%{model}"
+    previous_label: "上一页"
+    next_label: "下一页"
+  activerecord:
+    models:
+      post: "文"

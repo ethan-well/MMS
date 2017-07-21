@@ -53,16 +53,18 @@
 
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
+        <li class="header">主菜单</li>
         <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-th"></i> <span>Widgets</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
+          <%= link_to orders_path do %>
+            <i class="fa fa-th"></i> <span>订单中心</span>
+          <% end %>
+        </li>
+        <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>信息管理</span></a></li>
+        <li>
+          <a>
+            <i ><span></span></i>
           </a>
         </li>
-        <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->
