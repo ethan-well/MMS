@@ -54,12 +54,16 @@
 
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">主菜单</li>
-            <li>
+            <li class="<%= current_menu('orders') %>" >
               <%= link_to orders_path do %>
                 <i class="fa fa-th"></i> <span>订单中心</span>
               <% end %>
             </li>
-            <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>信息管理</span></a></li>
+            <li class="<%= current_menu('users') %>" >
+              <%= link_to user_path(current_user.id) do %>
+                <i class="fa fa-book"></i><span>信息管理</span>
+              <% end %>
+            </li>
             <li>
               <a>
                 <i ><span></span></i>
@@ -72,7 +76,7 @@
       <div class="content-wrapper">
         <section class="content-header">
           <h1>
-            订单中心
+            <%= content_header %>
             <small>Control</small>
           </h1>
           <ol class="breadcrumb">

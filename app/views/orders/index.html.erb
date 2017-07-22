@@ -1,7 +1,7 @@
 <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">订单中心</h3>
+        <h3 class="box-title">我的订单</h3>
       </div>
       <div class="box-body">
         <table class="table table-bordered">
@@ -11,6 +11,7 @@
             <th>数量</th>
             <th>购买时单价</th>
             <th>状态</th>
+            <th>操作</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
@@ -19,6 +20,11 @@
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>
               <td><%= order.status %></td>
+              <td>
+                <% if true %>
+                  <%= link_to '去支付', '#' %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </table>
@@ -99,8 +105,56 @@
 </div>
 
 <style>
-.digg_pagination .pagination{
-    margin: 0px !important;
-    padding: 0px !important;
+  .digg_pagination .pagination{
+      margin: 0px !important;
+      padding: 0px !important;
+  }
+  .error{
+    color: #a94442;
+    font-size: 12px;
   }
 </style>
+
+<script>
+
+// <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> Input with
+//   error</label>,
+
+$().ready(function() {
+  $("#new_order").validate({
+    errorPlacement: function(error, element){
+      console.log(element);
+      $(element).parent('div').addClass('has-error');
+      $(element).parent('div').append(error);
+    },
+		errorElement: 'label',
+    errorClass: 'error',
+    rules: {
+      'order[goods_id]': "required",
+      'order[price_current]': {
+        required: true,
+        number:true
+      },
+      'order[count]': {
+        required: true,
+        digits: true,
+        min: 1
+      },
+      'order[account]': "required"
+    },
+    messages: {
+      'order[goods_id]': "请选择业务",
+      'order[price_current]': {
+        required: '单价必须填写',
+        number: '单价必须是数字'
+      },
+      'order[count]':{
+        required: '数量不能为空',
+        digits: '必须输入整数',
+        min: '下单数量不能小于1'
+      },
+      'order[account]': "目标账户必须填写"
+    }
+  });
+});
+</script>

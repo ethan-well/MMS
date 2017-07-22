@@ -12,6 +12,7 @@
 //
 //= require jquery3
 //= require jquery_ujs
+//= require jquery.validate.min
 //= require bootstrap.min
 //= require fastclick
 //= require adminlte.min

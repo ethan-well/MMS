@@ -17,4 +17,9 @@ class Order < ApplicationRecord
     id_code =  self.created_at.to_i.to_s + '0'*len + id_str
     self.update_attribute(:identification_code, id_code)
   end
+
+  def is_not_pay
+    self.status == 'waiting_pay'
+  end
+
 end
