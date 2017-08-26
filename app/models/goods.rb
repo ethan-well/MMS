@@ -1,5 +1,5 @@
 class Goods < ApplicationRecord
-  serialize :price, Array
+  # serialize :price, Array
   validates :name, presence: true, uniqueness: true
   validates :price, presence: true
 
@@ -11,5 +11,9 @@ class Goods < ApplicationRecord
     goods_arr.each do |good|
       Goods.create(name: good, price: [10, 20, 30])
     end
+  end
+
+  def get_current_price(level)
+    price.split(' ')[ level - 1 ]
   end
 end

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', confirmations: 'confirmations' }
+
   ActiveAdmin.routes(self)
   get 'password_resets/create'
 
@@ -6,13 +9,17 @@ Rails.application.routes.draw do
 
   get 'password_resets/update'
 
-  root 'orders#index'
+  root to: 'orders#index'
 
-  resources :users
-  resources :sessions
+  devise_scope :user do
+    get 'sign_in', to: 'users/sessions#new'
+    get 'sign_out', to: 'users/sessions#destroy'
+  end
+
   resources :orders
-  resources :goods
-
-  get '/login', to: 'sessions#new', as: 'login'
-  post '/logout', to: 'sessions#destroy', as: 'logout'
+  resources :goods do
+    member do
+      get 'get_price'
+    end
+  end
 end

@@ -16,7 +16,8 @@ module GetCard
       g.test_framework false
     end
 
-    config.i18n.default_locale = :cn
+    config.i18n.available_locales = [:"zh-CN", :en]
+    config.i18n.default_locale = :"zh-CN"
 
   end
 end

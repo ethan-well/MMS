@@ -9,8 +9,6 @@ class Order < ApplicationRecord
 
   after_create :add_identification_code
 
-  self.per_page = 10
-
   def add_identification_code
     id_str = self.id.to_s
     len = 6 - id_str.length

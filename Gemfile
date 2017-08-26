@@ -23,12 +23,14 @@ gem "font-awesome-rails"
 
 gem 'adminlte2-rails'
 
-gem 'sorcery'
+gem 'redis-rails'
 
 gem 'activeadmin'
+gem 'devise'
 
-gem 'will_paginate', '~> 3.1.0'
+#gem 'kaminari'
 
+gem 'rucaptcha'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

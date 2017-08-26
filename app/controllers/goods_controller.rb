@@ -1,4 +1,4 @@
-class Goods < ApplicationController
+class GoodsController < ApplicationController
   def index
   end
 
@@ -15,5 +15,13 @@ class Goods < ApplicationController
   end
 
   def destroy
+  end
+
+  def get_price
+    goods = Goods.find(params['id'])
+    level = current_user.level_id
+    price = goods.get_current_price(level)
+
+    return render json: { price: price }
   end
 end

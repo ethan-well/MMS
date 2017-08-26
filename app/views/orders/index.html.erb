@@ -6,7 +6,7 @@
       <div class="box-body">
         <table class="table table-bordered">
           <tr>
-            <th style="width: 10px">订单编号</th>
+            <th style="width: 75px">订单编号</th>
             <th>业务</th>
             <th>数量</th>
             <th>购买时单价</th>
@@ -36,12 +36,11 @@
           </button>
         </ul>
         <ul class="pagination pagination-sm no-margin pull-right digg_pagination">
-          <%= will_paginate @posts %>
+          <%= paginate @orders %>
         </ul>
       </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modal-default">
   <div class="modal-dialog">
@@ -57,10 +56,10 @@
           <div class="box-body">
 
             <div class="form-group">
-              <%= f.label :goods_id, '业务', class: 'col-sm-2 control-label'%>
+              <%= f.label :goods_id, '业务', class: 'col-sm-2 control-label '%>
 
               <div class="col-sm-10">
-                <%= f.select :goods_id, Goods.all.collect { |g| [ g.name, g.id ] }, {}, class: 'form-control' %>
+                <%= f.select :goods_id, Goods.all.collect { |g| [ g.name, g.id ] }, {}, class: 'form-control goods-id' %>
               </div>
             </div>
 
@@ -121,6 +120,35 @@
 //   error</label>,
 
 $().ready(function() {
+
+  // 根据商品和用户level返回对应的价格
+  function get_price(goods_id){
+    $.ajax({
+      url: '/goods/' + goods_id + '/get_price',
+      method: 'get',
+      type: 'json',
+      success: function(data){
+        price = data['price'];
+        $('#order_price_current').val(price);
+      },
+      error: function(){
+        console.log('get prices error');
+      }
+    });
+  }
+
+  // 进入页面时根据初始化的商品显示显示初始化的价格
+  goods_id = $('.goods-id').val();
+  get_price(goods_id);
+
+  //用户选项变更后变更对应的价格
+  $('select#order_goods_id').change(function(){
+    console.log($(this).val());
+    goods_id = $(this).val();
+    get_price(goods_id);
+  });
+
+  //订单验证
   $("#new_order").validate({
     errorPlacement: function(error, element){
       console.log(element);

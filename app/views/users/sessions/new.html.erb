@@ -1,0 +1,48 @@
+<div class="login-box">
+  <div class="login-box-body">
+    <p class="login-box-msg">请登录</p>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+      <div class="form-group has-feedback">
+        <%= f.email_field :email, class: 'form-control', autofocus: true %>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+        <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+
+      <div class="row">
+        <% if devise_mapping.rememberable? -%>
+          <div class="col-xs-8">
+            <div class="checkbox icheck">
+              <label>
+                <%= f.check_box :remember_me %> 记住我
+              </label>
+            </div>
+          </div>
+        <% end -%>
+        <div class="col-xs-4">
+          <%= f.submit "登录", class: 'btn btn-primary btn-block btn-flat' %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+    </div>
+    <%= render "users/shared/links" %>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%'
+    });
+  });
+</script>

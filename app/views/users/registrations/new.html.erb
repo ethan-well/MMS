@@ -1,0 +1,65 @@
+<div class="register-box">
+  <div class="register-box-body">
+    <p class="login-box-msg">注册</p>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <% if @user.errors.present? %>
+        <strong>出错了！</strong>
+      <% end %>
+      <ul>
+        <% @user.errors.messages.each do |key, value|%>
+          <li>
+            <%= value[0] %>
+          </li>
+        <% end %>
+      </ul>
+      <div class="form-group has-feedback">
+        <%= f.text_field :name, class: 'form-control', placeholder: '昵称'%>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <%= f.email_field :email, class: 'form-control', placeholder: '邮箱'%>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <%= f.password_field :password, class: 'form-control', placeholder: '密码', autocomplete: 'off'%>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <%= f.password_field :password_confirmation, class: 'form-control', placeholder: '再次输入密码', autocomplete: "off" %>
+        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+      </div>
+      <div class="form-group">
+        <%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入验证码') %>
+        <%= rucaptcha_image_tag(alt: 'Captcha') %>
+      </div>
+      <%= f.hidden_field :level_id, value: 1%>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <!-- <a href="login.html" class="text-center">已有账号点击登录</a> -->
+              <%= render "users/shared/links" %>
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    <% end %>
+  </div>
+  <!-- /.form-box -->
+</div>
+
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
