@@ -4,15 +4,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   layout 'registrations'
   before_action :captcha_validated?, only: [:create]
+  before_action :invitation_code_validated?, only: [:create]
   # GET /resource/sign_up
   # def new
   #   super
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -63,6 +64,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def captcha_validated?
     unless verify_rucaptcha?
       return redirect_to :back, alert: '验证码输入不正确'
+    end
+  end
+
+  def invitation_code_validated?
+    u = User.find_by_invitation_code(params[:invitation_code])
+    unless u.present?
+      return redirect_to :back, alert: '邀请码无效'
     end
   end
 end

@@ -5,7 +5,24 @@
 @import "skin-blue";
 @import "will_paginate";
 @import "all";
+@import "admins";
 
 a, a:link, a:visited{
   text-decoration: none;
+}
+
+.padding-left-none{
+  padding-left: 0px ;
+}
+
+.padding-right-none{
+  padding-right: 0px;
+}
+
+.border-none{
+  border: none;
+}
+
+img.rucaptcha-image{
+  cursor: pointer;
 }

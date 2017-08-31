@@ -1,0 +1,74 @@
+<%= form_for @order, html: {:class => 'form-horizontal'} do |f| %>
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">修改订单</h3>
+      </div>
+      <div class="box-body">
+        <div class="form-group">
+          <%= f.label :goods_id, '业务', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.select :goods_id, Goods.all.collect { |g| [ g.name, g.id ] }, {}, disabled: @order.is_paied?, class: 'form-control goods-id' %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :price_current, '单价', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_field :price_current, class: 'form-control', readonly: true %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :count, '购买数量', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_field :count, class: "form-control", placeholder: '填写购买数量', readonly: @order.is_paied? %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :remark, '备注', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '你需要通知商家的信息请在这里填写' %>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <%= link_to  '放弃修改', orders_path, class: 'btn btn-default'%>
+        <%= f.submit '提交修改', class: 'btn btn-primary' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+// 根据商品和用户level返回对应的价格
+  function get_price(goods_id){
+    $.ajax({
+      url: '/goods/' + goods_id + '/get_price',
+      method: 'get',
+      type: 'json',
+      success: function(data){
+        price = data['price'];
+        $('#order_price_current').val(price);
+      },
+      error: function(){
+        console.log('get prices error');
+      }
+    });
+  }
+
+  // 进入页面时根据初始化的商品显示显示初始化的价格
+  goods_id = $('.goods-id').val();
+  get_price(goods_id);
+
+  //用户选项变更后变更对应的价格
+  $('select#order_goods_id').change(function(){
+    console.log($(this).val());
+    goods_id = $(this).val();
+    get_price(goods_id);
+  });
+</script>

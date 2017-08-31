@@ -3,16 +3,7 @@
     <p class="login-box-msg">注册</p>
 
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <% if @user.errors.present? %>
-        <strong>出错了！</strong>
-      <% end %>
-      <ul>
-        <% @user.errors.messages.each do |key, value|%>
-          <li>
-            <%= value[0] %>
-          </li>
-        <% end %>
-      </ul>
+      <%= render 'layouts/errors'%>
       <div class="form-group has-feedback">
         <%= f.text_field :name, class: 'form-control', placeholder: '昵称'%>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -20,6 +11,10 @@
       <div class="form-group has-feedback">
         <%= f.email_field :email, class: 'form-control', placeholder: '邮箱'%>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码'%>
+        <span class="glyphicon glyphicon-euro form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
         <%= f.password_field :password, class: 'form-control', placeholder: '密码', autocomplete: 'off'%>
@@ -31,27 +26,25 @@
       </div>
       <div class="form-group">
         <%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入验证码') %>
-        <%= rucaptcha_image_tag(alt: 'Captcha') %>
+        <a src="#">
+          <%= rucaptcha_image_tag(alt: 'Captcha') %>
+        </a>
       </div>
       <%= f.hidden_field :level_id, value: 1%>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
-              <!-- <a href="login.html" class="text-center">已有账号点击登录</a> -->
               <%= render "users/shared/links" %>
             </label>
           </div>
         </div>
-        <!-- /.col -->
         <div class="col-xs-4">
           <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
         </div>
-        <!-- /.col -->
       </div>
     <% end %>
   </div>
-  <!-- /.form-box -->
 </div>
 
 <script>
@@ -59,7 +52,7 @@
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
+      increaseArea: '20%'
     });
   });
 </script>

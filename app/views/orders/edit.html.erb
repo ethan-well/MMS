@@ -1,0 +1,6 @@
+<% if @order.is_paied? %>
+  <%= render 'edit_after_paied' %>
+<% end %>
+<% if @order.status == 'Waiting' %>
+  <%= render 'edit_before_paied' %>
+<% end %>

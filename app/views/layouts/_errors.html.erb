@@ -1,0 +1,10 @@
+<div class="col-md-12">
+  <div>
+    <% if flash[:alert] %>
+      <p class="flash-error"><%= flash[:alert] %></p>
+    <% end %>
+    <% if flash[:notice] %>
+      <p class="flash-notice"><%= flash[:notice] %></p>
+    <% end %>
+  </div>
+</div>

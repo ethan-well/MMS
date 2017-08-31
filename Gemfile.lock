@@ -52,6 +52,7 @@ GEM
       tzinfo (~> 1.1)
     adminlte2-rails (0.0.6)
       bootstrap-sass (~> 3.3.4.1)
+    aescrypt (1.0.0)
     arbre (1.1.1)
       activesupport (>= 3.0.0)
     arel (7.1.4)
@@ -270,6 +271,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin
   adminlte2-rails
+  aescrypt
   byebug
   coffee-rails (~> 4.2)
   database_cleaner

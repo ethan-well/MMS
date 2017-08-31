@@ -3,7 +3,7 @@
     <p class="login-box-msg">请登录</p>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <%= devise_error_messages! %>
+      <%= render 'layouts/errors'%>
       <div class="form-group has-feedback">
         <%= f.email_field :email, class: 'form-control', autofocus: true %>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -13,7 +13,6 @@
         <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-
       <div class="row">
         <% if devise_mapping.rememberable? -%>
           <div class="col-xs-8">

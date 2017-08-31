@@ -17,3 +17,9 @@
 //= require fastclick
 //= require adminlte.min
 //= require icheck.min
+//= require capture
+
+
+$('doucument').ready({
+
+});

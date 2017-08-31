@@ -1,0 +1,16 @@
+<div class="col-md-12 controll-button">
+  <%= render 'controll_button' %>
+</div>
+
+<div class="col-md-12">
+  <div class="form-group">
+    <textarea rows="10" cols="50" placeholder="双击进入编辑模式" >
+      <%= @notice.try(:content) %>
+    </textarea>
+  </div>
+  <div class="form-group">
+    <button type="button" class="btn btn-default btn-flat">发布公告</button>
+    <button type="button" class="btn btn-default btn-flat">取消更改</button>
+    <button type="button" class="btn btn-default btn-flat">清除公告</button>
+  </div>
+</div>

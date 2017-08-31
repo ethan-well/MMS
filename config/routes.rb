@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', confirmations: 'confirmations' }
+  devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', confirmations: 'confirmations', passwords: 'users/passwords' }
 
   ActiveAdmin.routes(self)
   get 'password_resets/create'
@@ -16,10 +16,27 @@ Rails.application.routes.draw do
     get 'sign_out', to: 'users/sessions#destroy'
   end
 
-  resources :orders
+  resources :orders do
+    member do
+      post 'cancel'
+      post 'finished'
+    end
+  end
+
   resources :goods do
     member do
       get 'get_price'
+    end
+  end
+
+  resources :infos
+
+  resources :admins do
+    collection do
+      get 'goods'
+      get 'notices'
+      get 'orders'
+      get 'users'
     end
   end
 end

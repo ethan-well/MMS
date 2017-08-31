@@ -4,7 +4,13 @@ module ApplicationHelper
   end
 
   def content_header
-    return '订单中心' if controller_name == 'orders'
-    return '信息管理' if controller_name == 'users'
+    case controller_name
+    when 'orders'
+      '订单中心'
+    when 'infos'
+      '信息管理'
+    when 'admins'
+      '管理后台'
+    end
   end
 end

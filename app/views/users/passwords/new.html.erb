@@ -1,16 +1,42 @@
-<h2>Forgot your password?</h2>
+<div class="login-box">
+  <div class="login-box-body">
+    <p class="login-box-msg">发送重置密码邮件</p>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <%= devise_error_messages! %>
+      <% if flash[:alert] %>
+        <li><%= flash[:alert] %></li>
+      <% end %>
+      <% if flash[:notice] %>
+        <li class="flash-notice"><%= flash[:notice] %></li>
+      <% end %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= devise_error_messages! %>
+      <div class="form-group has-feedback">
+        <%= f.email_field :email, value: nil, class: 'form-control', autofocus: true, placeholder: '请输入邮箱' %>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+      <div class="form-group">
+        <%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入验证码') %>
+        <a src="#">
+          <%= rucaptcha_image_tag(alt: 'Captcha') %>
+        </a>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <%= f.submit "提交", class: 'btn btn-primary btn-block btn-flat' %>
+        </div>
+      </div>
+    <% end %>
+    <div class="social-auth-links text-center">
+      <p>- OR -</p>
+    </div>
+    <%= render "users/shared/links" %>
   </div>
+</div>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+<style>
+  #error_explanation ul{
+    padding-left: 15px !important;
+  }
+</style>
