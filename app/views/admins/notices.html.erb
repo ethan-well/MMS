@@ -4,13 +4,89 @@
 
 <div class="col-md-12">
   <div class="form-group">
-    <textarea rows="10" cols="50" placeholder="双击进入编辑模式" >
-      <%= @notice.try(:content) %>
-    </textarea>
+    <textarea rows="10" cols="50" placeholder="双击进入编辑模式" id="enterprises_notice_value" readonly=true><%= @notice.try(:content) %></textarea>
   </div>
+
   <div class="form-group">
-    <button type="button" class="btn btn-default btn-flat">发布公告</button>
-    <button type="button" class="btn btn-default btn-flat">取消更改</button>
-    <button type="button" class="btn btn-default btn-flat">清除公告</button>
+    <button type="button" class="btn btn-default btn-flat send_notice">发布公告</button>
+    <button type="button" class="btn btn-default btn-flat cancel_change">取消更改</button>
+    <button type="button" class="btn btn-default btn-flat clear_notice">清除公告</button>
   </div>
 </div>
+
+
+<script>
+  var gload_notice = $('textarea#enterprises_notice_value').val();
+  // 双击输入框可编辑输入框内容
+  $('textarea#enterprises_notice_value').dblclick(function(){
+    $('textarea#enterprises_notice_value').prop('readonly', false);
+    $('textarea#enterprises_notice_value').addClass('textarea_active');
+    gload_notice = $('textarea#enterprises_notice_value').val();
+  });
+
+  // 点击'取消更改'，修改撤下
+  $('button.cancel_change').click(function(){
+    $('textarea#enterprises_notice_value').val(gload_notice);
+
+    $('textarea#enterprises_notice_value').removeClass('textarea_active');
+    $('textarea#enterprises_notice_value').prop('readonly', true);
+  });
+
+  // 点击'发送公告'，发送新的公告给用户
+  $('button.send_notice').click(function(){
+    r = confirm('确定发送系统公告？')
+    if(r){
+      notice_value = $('textarea#enterprises_notice_value').val();
+      $.ajax({
+        url: "<%= notice_path(@notice.id) %>",
+        method: 'put',
+        type: 'json',
+        data: {
+          content: notice_value,
+        },
+        success: function(data){
+          if(data['result']){
+            $('textarea#enterprises_notice_value').removeClass('textarea_active');
+            $('textarea#enterprises_notice_value').prop('readonly', true);
+            gload_notice = notice_value;
+            alert('公告发送成功')
+          }else{
+            alert('发送公告失败，请稍后重试发送');
+          }
+        },
+        error: function(){
+          console.log('dddddd');
+        }
+      });
+    }
+  });
+
+  // 点击'清空公告'，清除发送给用户的公告
+  $('button.clear_notice').click(function(){
+    var r = confirm('确定清除系统公告？');
+    if(r){
+      $.ajax({
+        url: "<%= notice_path(@notice.id) %>",
+        method: 'put',
+        type: 'json',
+        data: {
+          content: '',
+        },
+        success: function(data){
+          if(data['result']){
+            $('textarea#enterprises_notice_value').val('');
+            $('textarea#enterprises_notice_value').removeClass('textarea_active');
+            $('textarea#enterprises_notice_value').attr('readonly', true);
+            alert('公告已清除')
+          }else{
+            alert('清空公告失败，请稍后重试');
+          }
+        },
+        error: function(){
+          console.log('dddddd');
+        }
+      });
+    }
+  });
+
+</script>

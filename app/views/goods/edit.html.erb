@@ -1,0 +1,31 @@
+<%= form_for @goods, html: {:class => 'form-horizontal'} do |f| %>
+
+<div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">修改业务</h3>
+      </div>
+      <div class="box-body">
+        <div class="form-group">
+          <%= f.label :name, '业务', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_field :name, class: 'form-control' %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :price, '备注', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_area :price, class: 'form-control', rows: 5, placeholder: '四个单价，以空格隔开，如：10 11 23 13' %>
+          </div>
+        </div>
+      </div>
+      <div class="box-footer clearfix">
+        <%= link_to  '放弃修改', goods_admins_path, class: 'btn btn-default'%>
+        <%= f.submit '提交修改', class: 'btn btn-primary' %>
+      </div>
+    </div>
+</div>
+<% end %>

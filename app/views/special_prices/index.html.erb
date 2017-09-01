@@ -1,32 +1,21 @@
-<div class="col-md-12 controll-button">
-  <%= render 'controll_button' %>
-</div>
-
 <div class="col-md-12">
   <div class="box">
     <div class="box-header">
-      <h3 class="box-title">业务信息</h3>
+      <h3 class="box-title">业务：<%= @goods.name %></h3>
     </div>
     <div class="box-body table-responsive no-padding">
       <table class="table table-hover">
         <tr>
-          <th>商品名</th>
-          <th>级别1价格</th>
-          <th>级别2价格</th>
-          <th>价格3价格</th>
-          <th>价格4价格</th>
-          <td>管理</td>
+          <th>用户</th>
+          <th>特价</th>
         </tr>
-        <% @goods.each do |goods| %>
+        <% @special_prices.each do |price| %>
           <tr>
-            <td><%= goods.name %></td>
-            <td><%= goods.get_current_price(1) %></td>
-            <td><%= goods.get_current_price(2) %></td>
-            <td><%= goods.get_current_price(3) %></td>
-            <td><%= goods.get_current_price(4) %></td>
+            <td><%= "#{price.user.name}(#{price.user.email})" %></td>
+            <td><%= price.price %></td>
             <td>
               <%= link_to '修改', edit_good_path(goods.id) %>
-              <%= link_to '特价信息', special_prices_path(goods_id: goods.id) %>
+              <%= link_to '删除', special_prices_path(goods_id: goods.id) %>
             </td>
           </tr>
         <% end %>
@@ -34,7 +23,7 @@
     </div>
   </div>
   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-    添加新订单
+    添加新特价
   </button>
 </div>
 
@@ -44,24 +33,30 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">新业务</h4>
+        <h4 class="modal-title">添加特价</h4>
       </div>
-      <%= form_tag goods_path, method: 'post', html: {:class => 'form-horizontal'} do %>
-
+      <%= form_for SpecialPrice.new, html: {:class => 'form-horizontal'} do |f| %>
         <div class="modal-body">
             <div class="box-body">
               <div class="form-group">
-                <%= label_tag :name, '业务', class: 'col-sm-2 control-label '%>
+                <%= f.label :goods_id, '业务', class: 'col-sm-2 control-label '%>
 
                 <div class="col-sm-10">
-                  <%= text_field_tag :name, nil, class: 'form-control goods-id', placeholder: '业务名称' %>
+                  <%= f.select :goods_id, Goods.all.collect { |g| [ g.name, g.id ] }, {value: @goods.id}, readonly: true, disabled: true, class: 'form-control goods-id' %>
                 </div>
-              </div><br><br>
+              </div>
               <div class="form-group">
-                <%= label_tag :price, '单价', class: 'col-sm-2 control-label'%>
+                <%= f.label :user_id, '用户', class: 'col-sm-2 control-label '%>
 
                 <div class="col-sm-10">
-                  <%= text_field_tag :price, nil, class: 'form-control', placeholder: '单价' %>
+                  <%= f.select :user_id, User.all.collect { |u| [ u.name, u.id ] }, {}, class: 'form-control goods-id' %>
+                </div>
+              </div>
+              <div class="form-group">
+                <%= f.label :price, '特价', class: 'col-sm-2 control-label'%>
+
+                <div class="col-sm-10">
+                  <%= f.text_field :price, value: nil, class: 'form-control', placeholder: '单价' %>
                 </div>
               </div>
             </div>

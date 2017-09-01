@@ -11,6 +11,8 @@ module ApplicationHelper
       '信息管理'
     when 'admins'
       '管理后台'
+    when 'special_prices'
+      '特价信息'
     end
   end
 end

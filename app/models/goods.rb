@@ -5,6 +5,7 @@ class Goods < ApplicationRecord
 
 
   has_many :orders
+  has_many :special_prices
 
   def self.seed
     goods_arr = ['赞', '粉丝', '鲜花']

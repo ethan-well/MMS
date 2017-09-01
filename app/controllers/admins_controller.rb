@@ -7,6 +7,17 @@ class AdminsController < ApplicationController
     @goods = Goods.all
   end
 
+  def create_goods
+    begin
+      Goods.create(params.require(:goods).permit(:name, :price))
+      notice = '业务添加成功'
+    rescue
+      notice = '业务添加失败，稍后重试'
+    end
+
+    redirect_to :back, notice: notice
+  end
+
   def orders
     @orders = Order.all
   end
@@ -17,12 +28,5 @@ class AdminsController < ApplicationController
 
   def notices
     @notice = Notice.first
-  end
-
-  private
-  def is_admin?
-    unless current_user.admin
-      redirect_to :back, notice: '抱歉，权限不够！'
-    end
   end
 end

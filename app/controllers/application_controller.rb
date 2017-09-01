@@ -15,4 +15,10 @@ class ApplicationController < ActionController::Base
   def not_authenticated
     redirect_to login_path, alert: "Please login first"
   end
+
+  def is_admin?
+    unless current_user.admin
+      redirect_to :back, notice: '抱歉，权限不够！'
+    end
+  end
 end

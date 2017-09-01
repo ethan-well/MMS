@@ -37,6 +37,11 @@ Rails.application.routes.draw do
       get 'notices'
       get 'orders'
       get 'users'
+      post 'create_goods'
     end
   end
+
+  resources :notices, only: [:index, :update]
+
+  resources :special_prices
 end

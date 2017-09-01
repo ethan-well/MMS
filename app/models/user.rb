@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   has_many :orders
+  has_many :special_prices
   belongs_to :level, required: false
 
   after_create :generate_invitation_code
