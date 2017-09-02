@@ -9,6 +9,7 @@ class Order < ApplicationRecord
 
   after_create :add_identification_code
 
+  after_update :update_user_level
   #生成订单编号
   def add_identification_code
     id_str = self.id.to_s
@@ -75,6 +76,16 @@ class Order < ApplicationRecord
     when 'Refunded'
       '已经退款'
     end
+  end
 
+  def update_user_level
+    if status_changed? && status == 'Finished' && user.level_id < 4
+      tar_user = self.user
+      total_spend = tar_user.total_spend
+      current_level_id = tar_user.level_id
+      next_level = Level.find(current_level_id + 1)
+
+      tar_user.update_attribute(:level_id, next_level.id) if total_spend >= next_level.price
+    end
   end
 end
