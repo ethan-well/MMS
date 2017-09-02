@@ -42,8 +42,8 @@ class GoodsController < ApplicationController
   def get_price
     goods = Goods.find(params['id'])
     level = current_user.level_id
+    special_price = current_user.current_goods_special_prices(goods.id)
     price = goods.get_current_price(level)
-
-    return render json: { price: price }
+    return render json: { price: special_price || price }
   end
 end

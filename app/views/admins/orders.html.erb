@@ -5,7 +5,7 @@
 <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">待处理订单</h3>
+        <%= render 'order_controll_link' %>
       </div>
       <div class="box-body">
         <table class="table table-bordered">
@@ -26,109 +26,14 @@
               <td><%= order.goods.name %></td>
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>
-              <td>用户已经支付完成，等待处理</td>
+              <td><%= order.status_in_word_admin %></td>
               <td>账号：密码：</td>
               <td>
-                <button type="button" class="btn btn-default btn-sm">
-                  完成
-                </button>
+                <%= render :partial => 'operation_link', :locals =>{ order_id: order.id, status: order.status } %>
               </td>
             </tr>
           <% end %>
         </table>
-      </div>
-    </div>
-</div>
-
-<div class="col-md-12">
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">未支付订单</h3>
-      </div>
-      <div class="box-body">
-        <table class="table table-bordered">
-          <tr>
-            <th style="width: 75px">订单编号</th>
-            <th>下单日期</th>
-            <th>业务</th>
-            <th>数量</th>
-            <th>购买时单价</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-          <% @orders.each do |order| %>
-            <tr>
-              <td><%= order.identification_code %></td>
-              <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td><%= order.goods.name %></td>
-              <td><%= order.count %></td>
-              <td><%= order.price_current %></td>
-              <td>用户尚未支付</td>
-              <td>
-                <% if order.is_not_pay? %>
-                  <%= link_to '去支付', '#' %>
-                  <%= link_to '取消订单', cancel_order_path(order.id),method: 'post', data: {confirm: '确认取消该比订单？'} %>
-                <% end %>
-
-                <% if order.is_canceled? %>
-                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                    重新下单
-                  </button>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-    </div>
-</div>
-
-<div class="col-md-12">
-    <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">已完成订单</h3>
-      </div>
-      <div class="box-body">
-        <table class="table table-bordered">
-          <tr>
-            <th style="width: 75px">订单编号</th>
-            <th>下单日期</th>
-            <th>业务</th>
-            <th>数量</th>
-            <th>购买时单价</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-          <% @orders.each do |order| %>
-            <tr>
-              <td><%= order.identification_code %></td>
-              <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td><%= order.goods.name %></td>
-              <td><%= order.count %></td>
-              <td><%= order.price_current %></td>
-              <td>已经处理完成，可关闭</td>
-              <td>
-                <% if order.is_not_pay? %>
-                  <%= link_to '去支付', '#' %>
-                  <%= link_to '取消订单', cancel_order_path(order.id),method: 'post', data: {confirm: '确认取消该比订单？'} %>
-                <% end %>
-
-                <% if order.is_canceled? %>
-                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                    重新下单
-                  </button>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-      <div class="box-footer clearfix">
-        <ul class="pagination pagination-sm no-margin pull-left">
-          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-            批量删除
-          </button>
-        </ul>
       </div>
     </div>
 </div>

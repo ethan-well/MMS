@@ -1,9 +1,11 @@
-<div class="col-md-12">
-  <div class="callout callout-success">
-    <h4>系统公告!</h4>
-    <p><%= Notice.first.content %></p>
+<% if Notice.first.content.present? %>
+  <div class="col-md-12">
+    <div class="callout callout-success">
+      <h4>系统公告!</h4>
+      <p><%= Notice.first.content %></p>
+    </div>
   </div>
-</div>
+<% end %>
 <%= render 'layouts/errors'%>
 <div class="col-md-12">
     <div class="box">
@@ -130,12 +132,7 @@
 </style>
 
 <script>
-
-// <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i> Input with
-//   error</label>,
-
 $().ready(function() {
-
   // 根据商品和用户level返回对应的价格
   function get_price(goods_id){
     $.ajax({
@@ -158,7 +155,6 @@ $().ready(function() {
 
   //用户选项变更后变更对应的价格
   $('select#order_goods_id').change(function(){
-    console.log($(this).val());
     goods_id = $(this).val();
     get_price(goods_id);
   });
@@ -166,7 +162,6 @@ $().ready(function() {
   //订单验证
   $("#new_order").validate({
     errorPlacement: function(error, element){
-      console.log(element);
       $(element).parent('div').addClass('has-error');
       $(element).parent('div').append(error);
     },

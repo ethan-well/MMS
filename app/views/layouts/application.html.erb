@@ -67,7 +67,7 @@
             </li>
             <% if current_user.admin != 0 %>
               <li class="<%= current_menu('admins') %>" >
-                <%=link_to orders_admins_path do %>
+                <%=link_to orders_admins_path(status: 'Paied') do %>
                   <i class="fa fa-book"></i><span>管理员入口</span>
                 <% end %>
               </li>

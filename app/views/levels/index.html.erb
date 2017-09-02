@@ -1,0 +1,24 @@
+<div class="col-md-12">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">会员级别规则</h3>
+    </div>
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tr>
+          <th>等级</th>
+          <th>升级标准</th>
+          <th>操作</th>
+        </tr>
+        <% @levels.each do |level| %>
+          <tr>
+            <td><%= level.number %></td>
+            <td><%= level.price %></td>
+            <td><%= link_to '编辑', edit_level_path(level.id), remote: true %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+  <div id="add_edit_level_modal"></div>
+</div>

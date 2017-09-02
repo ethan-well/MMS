@@ -28,10 +28,13 @@
             <td><%= user.orders.count %></td>
             <td><%= user.total_spend %></td>
             <td><%= user.invitation_code %></td>
-            <td><a>删除</a> <a>设置特价</a></td>
+            <td><%= link_to '用户特价信息', user_special_prices_special_prices_path(user_id: user.id) %></td>
           </tr>
         <% end %>
       </table>
     </div>
   </div>
+
+  <%= link_to '会员级别规则', levels_path %>
+
 </div>

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     member do
       post 'cancel'
       post 'finished'
+      post 'admin_change_status'
     end
   end
 
@@ -43,5 +44,12 @@ Rails.application.routes.draw do
 
   resources :notices, only: [:index, :update]
 
-  resources :special_prices
+  resources :special_prices do
+    collection do
+      get 'user_special_prices'
+      get 'goods_special_prices'
+    end
+  end
+
+  resources :levels, only: [:index, :edit, :update]
 end

@@ -74,7 +74,7 @@
         <% @goods.each do |goods| %>
           <tr>
             <td ><%= goods.name %></td>
-            <th class="bg-green">10</th>
+            <th class="bg-green"><%= current_user.current_goods_special_prices(goods.id) %> </th>
             <td class="<%= current_price(1) %>"><%= goods.get_current_price(1) %></td>
             <td class="<%= current_price(2) %>"><%= goods.get_current_price(2) %></td>
             <td class="<%= current_price(3) %>"><%= goods.get_current_price(3) %></td>

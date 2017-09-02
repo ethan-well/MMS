@@ -2,6 +2,7 @@ class OrdersController < ApplicationController
   before_action :current_order, only: [:cancel, :finished, :edit]
   before_action :validate_user, only: [:cancel, :finished]
   before_action :validate_can_edit, only: [:edit]
+  before_action :is_admin?, only: [:admin_change_status]
 
   def index
     @orders = current_user.orders.includes(:goods)
@@ -91,6 +92,13 @@ class OrdersController < ApplicationController
     end
 
     redirect_to :back, notice: notice
+  end
+
+  def admin_change_status
+    @order = Order.find(params[:id])
+    @order.update_attribute(:status, params[:status])
+
+    redirect_to :back, notice: '状态变更成功'
   end
 
   private

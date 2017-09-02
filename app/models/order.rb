@@ -45,7 +45,6 @@ class Order < ApplicationRecord
     status == 'Paied' || status == 'Waiting'
   end
 
-
   def status_in_word
     case status
     when 'Waiting'
@@ -59,5 +58,23 @@ class Order < ApplicationRecord
     when 'dealing'
       '商家已接单，处理中'
     end
+  end
+
+  def status_in_word_admin
+    case status
+    when 'Paied'
+      '用户已经支付，等待你的待处理'
+    when 'Dealing'
+      '用户已经支付，你标记状态为处理中'
+    when 'Waiting'
+      '用户未支付'
+    when 'Finished'
+      '已完成订单，可点击隐藏订单'
+    when 'Refunding'
+      '用户申请退款'
+    when 'Refunded'
+      '已经退款'
+    end
+
   end
 end

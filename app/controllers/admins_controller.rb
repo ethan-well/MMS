@@ -19,7 +19,7 @@ class AdminsController < ApplicationController
   end
 
   def orders
-    @orders = Order.all
+    @orders = Order.where('status = ?', params['status'])
   end
 
   def users

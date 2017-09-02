@@ -28,6 +28,10 @@ class User < ApplicationRecord
     self.update_attribute(:invitation_code, invitation_code[0..6] + id.to_s)
   end
 
+  def current_goods_special_prices(goods_id)
+    self.special_prices.find_by_goods_id(goods_id).price rescue nil
+  end
+
   def invitation_code_in_word
     level_id > 1 ? invitation_code : '等级不够暂时不能邀请他人'
   end
