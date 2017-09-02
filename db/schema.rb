@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170902040410) do
     t.integer  "count",                                            default: 0,         null: false
     t.decimal  "total_price",                       precision: 10, default: 0,         null: false
     t.string   "status",                                           default: "Waiting", null: false
+    t.string   "account"
     t.string   "secreate_string"
     t.integer  "goods_id"
     t.integer  "user_id"
@@ -74,7 +75,6 @@ ActiveRecord::Schema.define(version: 20170902040410) do
     t.datetime "updated_at",                                                           null: false
     t.string   "identification_code"
     t.text     "remark",              limit: 65535
-    t.string   "account"
   end
 
   create_table "special_prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

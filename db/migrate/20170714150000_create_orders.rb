@@ -5,7 +5,7 @@ class CreateOrders < ActiveRecord::Migration[5.0]
       t.integer :count, null: false, default: 0
       t.decimal :total_price, null: false, default: 0
       t.string  :status, null: false, :default => 'Waiting'
-      t.string :account, null: false
+      t.string :account
       t.string :secreate_string
       t.integer :goods_id
       t.integer :user_id
