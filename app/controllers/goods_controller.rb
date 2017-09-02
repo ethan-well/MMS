@@ -8,7 +8,7 @@ class GoodsController < ApplicationController
 
   def create
     begin
-      Goods.create(params.require(:goods).permit(:name, :price))
+      Goods.create(name: params[:name], price: params[:price])
       notice = '业务添加成功'
     rescue
       notice = '业务添加失败，稍后重试'
