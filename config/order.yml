@@ -1,0 +1,12 @@
+defaults: &defaults
+  order:
+    status: ['Waiting', 'Paied', 'Dealing', 'Finished', 'Cancel', 'Hidden' ]
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -55,12 +55,33 @@
 
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">主菜单</li>
+
             <li class="<%= current_menu('orders') %>" >
               <%= link_to orders_path do %>
-                <i class="fa fa-th"></i> <span>订单中心</span>
+                <i class="fa fa-th"></i> <span>我的订单</span>
               <% end %>
             </li>
-            <li class="<%= current_menu('users') %>" >
+            <li class="treeview <%= current_menu('goods') %>">
+              <a href="#">
+                <i class="fa fa-pie-chart"></i>
+                <span>业务购买</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <% Goods.all.each do |goods| %>
+                  <li class="<%= current_goods(goods.id)  %>">
+                    <%= link_to good_path(goods.id)  do %>
+                     <i class="fa fa-circle-o"></i>
+                     <%= goods.name %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+            </li>
+            <li class="<%= current_menu('infos') %>" >
               <%=link_to infos_path do %>
                 <i class="fa fa-book"></i><span>信息管理</span>
               <% end %>

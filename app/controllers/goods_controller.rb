@@ -18,6 +18,7 @@ class GoodsController < ApplicationController
   end
 
   def show
+    @goods = Goods.find(params[:id])
   end
 
   def edit

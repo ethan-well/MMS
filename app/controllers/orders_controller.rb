@@ -6,11 +6,14 @@ class OrdersController < ApplicationController
 
   def index
     @orders = current_user.orders.includes(:goods)
-    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(20)
+    search_order
+    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(5)
   end
 
   def new
     @order = Order.new
+    puts params[:goods_id]
+    @goods = Goods.find(params[:goods_id])
   end
 
   def edit
@@ -23,10 +26,10 @@ class OrdersController < ApplicationController
       count = params['order']['count']
       goods = Goods.find(goods_id)
       if goods.present?
-        price_current = goods.get_current_price(current_user.level_id)
+        price_current = current_user.my_price(goods.id)
         total_price = price_current.to_i * count.to_i
 
-        order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark))
+        order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark, :account))
 
         order.price_current = price_current
         order.total_price = total_price
@@ -38,11 +41,11 @@ class OrdersController < ApplicationController
     rescue => e
       notice = e.message
     end
-    redirect_to :back, notice: notice
+    redirect_to action: 'index', notice: notice
   end
 
   def update
-    #begin
+    begin
       @order = Order.find(params[:id])
       goods = Goods.find(params[:order][:goods_id])
       count = params[:order][:count]
@@ -57,9 +60,9 @@ class OrdersController < ApplicationController
         @order.update_attributes(goods_id: goods.id, price_current: price_current, count: count, total_price: total_price, remark: remark)
       end
       notice = '订单修改完成'
-    #rescue
+    rescue
       notice = '订单修改失败'
-    #end
+    end
 
     redirect_to action: 'index', notice: notice
   end
@@ -112,5 +115,19 @@ class OrdersController < ApplicationController
 
   def validate_can_edit
     return redirect_to :back, notice: '当前订单不可以修改！' if !@order.can_edit?
+  end
+
+  def search_order
+    filter_params = params.permit(['status', 'goods_id', 'account', 'remark'])
+    filter_params.each do |filter_param, value|
+      if value.present?
+        puts filter_param
+        if ['status', 'goods_id'].include? filter_param
+          @orders = @orders.where("#{filter_param} = ?", value)
+        else ['account', 'remark'].include? filter_param
+          @orders = @orders.where("#{filter_param} LIKE ?", "%#{value}%")
+        end
+      end
+    end
   end
 end

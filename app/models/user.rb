@@ -35,4 +35,9 @@ class User < ApplicationRecord
   def invitation_code_in_word
     level_id > 1 ? invitation_code : '等级不够暂时不能邀请他人'
   end
+
+  def my_price(good_id)
+    @good = Goods.find(good_id)
+    current_goods_special_prices(good_id) || @good.get_current_price(self.level_id)
+  end
 end

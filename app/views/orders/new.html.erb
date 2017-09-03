@@ -1,0 +1,122 @@
+<div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">新订单</h3>
+      </div>
+      <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
+        <div class="box-body">
+
+          <div class="form-group">
+            <%= f.label :goods_name, '业务', class: 'col-sm-1 control-label '%>
+
+            <div class="col-sm-4">
+              <%= text_field_tag :goods_name, @goods.name, readonly: true, class: 'form-control goods-id' %>
+              <%= f.hidden_field :goods_id, value: @goods.id %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :price_current, '单价', class: 'col-sm-1 control-label'%>
+
+            <div class="col-sm-4">
+              <%= f.text_field :price_current, value: current_user.my_price(@goods.id), class: 'form-control', readonly: true %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :count, '购买数量', class: 'col-sm-1 control-label'%>
+
+            <div class="col-sm-4">
+              <%= f.text_field :count, value: nil, class: "form-control", placeholder: '填写购买数量'%>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :account, '下单账号', class: 'col-sm-1 control-label'%>
+
+            <div class="col-sm-4">
+              <%= f.text_field :account, value: nil, class: "form-control", placeholder: '填写下单账号'%>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :remark, '备注', class: 'col-sm-1 control-label'%>
+
+            <div class="col-sm-4">
+              <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '你需要通知商家的信息请在这里填写' %>
+            </div>
+          </div>
+        </div>
+        <div class="box-footer clearfix">
+          <ul class="pagination pagination-sm no-margin pull-left">
+            <button type="button" class="btn btn-default" data-dismiss="modal">放弃</button>
+            <%= f.submit '提交订单', class: 'btn btn-primary' %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+</div>
+
+<script>
+$().ready(function() {
+  // 根据商品和用户level返回对应的价格
+  function get_price(goods_id){
+    $.ajax({
+      url: '/goods/' + goods_id + '/get_price',
+      method: 'get',
+      type: 'json',
+      success: function(data){
+        price = data['price'];
+        $('#order_price_current').val(price);
+      },
+      error: function(){
+        console.log('get prices error');
+      }
+    });
+  }
+
+  // 进入页面时根据初始化的商品显示显示初始化的价格
+  goods_id = $('.goods-id').val();
+  get_price(goods_id);
+
+  //用户选项变更后变更对应的价格
+  $('select#order_goods_id').change(function(){
+    goods_id = $(this).val();
+    get_price(goods_id);
+  });
+
+  //订单验证
+  $("#new_order").validate({
+    errorPlacement: function(error, element){
+      $(element).parent('div').addClass('has-error');
+      $(element).parent('div').append(error);
+    },
+		errorElement: 'label',
+    errorClass: 'error',
+    rules: {
+      'order[goods_id]': "required",
+      'order[price_current]': {
+        required: true,
+        number:true
+      },
+      'order[count]': {
+        required: true,
+        digits: true,
+        min: 1
+      },
+      'order[account]': "required"
+    },
+    messages: {
+      'order[goods_id]': "请选择业务",
+      'order[price_current]': {
+        required: '单价必须填写',
+        number: '单价必须是数字'
+      },
+      'order[count]':{
+        required: '数量不能为空',
+        digits: '必须输入整数',
+        min: '下单数量不能小于1'
+      },
+      'order[account]': "目标账户必须填写"
+    }
+  });
+});
+</script>
