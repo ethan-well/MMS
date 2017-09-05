@@ -29,4 +29,14 @@ class AdminsController < ApplicationController
   def notices
     @notice = Notice.first
   end
+
+  def expenses
+    # 总消费
+    if params[:user] == 'all'
+      @user = '所有用户'
+
+    else
+
+    end
+  end
 end

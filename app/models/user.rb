@@ -40,4 +40,12 @@ class User < ApplicationRecord
     @good = Goods.find(good_id)
     current_goods_special_prices(good_id) || @good.get_current_price(self.level_id)
   end
+
+  def month_ago_spend
+    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', Date.today - 1.month, Date.today).map(&:total_price).reduce(:+)
+  end
+
+  def today_spend
+    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+  end
 end

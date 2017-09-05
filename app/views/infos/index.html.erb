@@ -55,39 +55,3 @@
     </div>
   </div>
 </div>
-
-<div class="col-md-12">
-  <div class="box box-primary">
-    <div class="box-header">
-      <h3 class="box-title">业务信息</h3>
-    </div>
-    <div class="box-body table-responsive no-padding">
-      <table class="table table-hover">
-        <tr>
-          <th>商品名</th>
-          <th class="bg-green">我的特价</th>
-          <th class="<%= current_price(1) %>">级别1价格</th>
-          <th class="<%= current_price(2) %>">级别2价格</th>
-          <th class="<%= current_price(3) %>">价格3价格</th>
-          <th class="<%= current_price(4) %>">价格4价格</th>
-        </tr>
-        <% @goods.each do |goods| %>
-          <tr>
-            <td ><%= goods.name %></td>
-            <th class="bg-green"><%= current_user.current_goods_special_prices(goods.id) %> </th>
-            <td class="<%= current_price(1) %>"><%= goods.get_current_price(1) %></td>
-            <td class="<%= current_price(2) %>"><%= goods.get_current_price(2) %></td>
-            <td class="<%= current_price(3) %>"><%= goods.get_current_price(3) %></td>
-            <td class="<%= current_price(4) %>"><%= goods.get_current_price(4) %></td>
-          </tr>
-        <% end %>
-      </table>
-    </div>
-  </div>
-</div>
-
-<style>
-.light-active-green{
-  color: green;
-}
-<style>

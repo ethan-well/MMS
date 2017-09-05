@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'users/sessions', registrations: 'users/registrations', confirmations: 'confirmations', passwords: 'users/passwords' }
 
   ActiveAdmin.routes(self)
+
+  mount Member::API => '/'
   get 'password_resets/create'
 
   get 'password_resets/edit'
@@ -39,6 +41,7 @@ Rails.application.routes.draw do
       get 'orders'
       get 'users'
       post 'create_goods'
+      get 'expenses'
     end
   end
 

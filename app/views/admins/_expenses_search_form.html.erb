@@ -1,0 +1,22 @@
+<div class="col-md-12">
+  <div class="box">
+    <%= form_tag orders_path, method: 'get' do %>
+      <div class="box-body">
+        <div class="form-group">
+          <div class="col-xs-4">
+            <%= label_tag '用户' %>
+            <%= select_tag :user, options_from_collection_for_select(User.all, 'email', 'email', params['user']), class: 'form-control' %>
+          </div>
+          <div class="col-xs-4">
+            <%= label_tag '自定义时间'%>
+            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), class: 'form-control' %>
+          </div>
+          <div class="col-xs-4">
+            <label></label>
+            <%= submit_tag '查询', class: 'btn btn-block btn-primary btn-flat'%>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
