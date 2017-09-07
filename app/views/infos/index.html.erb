@@ -19,23 +19,26 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="col-sm-3 control-label">会员级别</label>
+            <div class="col-sm-9 padding-left-none">
+              <span class="form-control border-none"> <%= current_user.level_id %> </span>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-3 control-label">个人邀请码</label>
             <div class="col-sm-9padding-left-none">
               <span class="form-control border-none"> <%= current_user.invitation_code_in_word %> </span>
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">上级邀请码</label>
-            <div class="col-sm-9padding-left-none">
-              <span class="form-control border-none"> <%= current_user.h_invitation_code %> </span>
-            </div>
-          </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label class="col-sm-3 control-label">会员级别</label>
+            <label class="col-sm-3 control-label">账户余额</label>
             <div class="col-sm-9 padding-left-none">
-              <span class="form-control border-none"> <%= current_user.level_id %> </span>
+              <span class="form-control border-none">
+                <%= current_user.balance %> (单位：元)&nbsp;&nbsp;&nbsp;
+                <a class="btn btn-xs btn-primary">充值</a>
+              </span>
             </div>
           </div>
           <div class="form-group">
@@ -48,6 +51,12 @@
             <label class="col-sm-3 control-label">消费总额</label>
             <div class="col-sm-9 padding-left-none">
               <span class="form-control border-none"> <%= @total_spend  || 0 %> </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">上级邀请码</label>
+            <div class="col-sm-9padding-left-none">
+              <span class="form-control border-none"> <%= current_user.h_invitation_code %> </span>
             </div>
           </div>
         </div>

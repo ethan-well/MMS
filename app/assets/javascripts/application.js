@@ -18,6 +18,7 @@
 //= require adminlte.min
 //= require icheck.min
 //= require capture
+//= require bootstrap-timepicker
 
 
 $('doucument').ready({

@@ -21,4 +21,17 @@ module ApplicationHelper
       '业务购买'
     end
   end
+
+  def custom_query_time(start_time, stop_time)
+    if start_time.blank? && stop_time.blank?
+      '未指定时间'
+    elsif start_time.blank?
+      "#{start_time}往后"
+    elsif stop_time.blank?
+      "截止#{stop_time}"
+    else
+      "#{start_time} —— #{stop_time}"
+    end
+  end
+
 end

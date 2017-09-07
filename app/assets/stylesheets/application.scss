@@ -6,13 +6,11 @@
 @import "will_paginate";
 @import "all";
 @import "admins";
+@import "bootstrap-timepicker";
+
 
 a, a:link, a:visited{
   text-decoration: none;
-}
-
-.link_active{
-  color: #008d4c;
 }
 
 .padding-left-none{

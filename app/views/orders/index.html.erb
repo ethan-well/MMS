@@ -27,7 +27,6 @@
             <td>下单账号</td>
             <th>备注信息</th>
             <th>状态</th>
-            <th>操作</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
@@ -39,22 +38,6 @@
               <td><%= order.account %></td>
               <td><%= order.remark %></td>
               <td><%= order.status_in_word %></td>
-              <td>
-                <% if order.is_not_pay? %>
-                  <%= link_to '去支付', '#' %>
-                  <%= link_to '取消订单', cancel_order_path(order.id),method: 'post', data: {confirm: '确认取消该比订单？'} %>
-                  <%= link_to '修改订单', edit_order_path(order.id)%>
-                <% end %>
-
-                <% if order.is_canceled? %>
-                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                    重新下单
-                  </button>
-                <% end %>
-                <% if order.is_paied? %>
-                  <%= link_to '修改订单', edit_order_path(order.id)%>
-                <% end %>
-              </td>
             </tr>
           <% end %>
         </table>

@@ -3,26 +3,23 @@
     <%= form_tag orders_path, method: 'get' do %>
       <div class="box-body">
         <div class="form-group">
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <%= label_tag '订单状态' %>
             <%= select_tag :status, options_from_collection_for_select(Settings.order.status, 'to_s', 'to_chinese', params['status']), class: 'form-control' %>
           </div>
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <%= label_tag '业务类型'%>
             <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), class: 'form-control' %>
           </div>
-
-        </div> <br><br><br>
-        <div class="form-group">
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <label for="exampleInputEmail1">下单账号</label>
             <%= text_field_tag :account, params['account'], class: 'form-control', placeholder: '下单账号' %>
           </div>
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <label for="exampleInputEmail1">备注信息</label>
             <%= text_field_tag :remark, params['remark'], class: 'form-control', placeholder: '备注信息'%>
           </div>
-          <div class="col-xs-4">
+          <div class="col-xs-2">
             <label></label>
             <%= submit_tag '查询', class: 'btn btn-block btn-primary btn-flat'%>
           </div>

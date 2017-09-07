@@ -1,4 +1,5 @@
-<%= link_to '待处理订单', orders_admins_path(status: 'Paied'), class: "btn  btn-flat #{current_status_order?('Paied')}" %>
+<%= link_to '待处理订单', orders_admins_path(status: 'Waiting'), class: "btn  btn-flat #{current_status_order?('Waiting')}" %>
 <%= link_to '处理中订单', orders_admins_path(status: 'Dealing'), class: "btn  btn-flat #{current_status_order?('Dealing')}"%>
-<%= link_to '未支付订单', orders_admins_path(status: 'Waiting'), class: "btn  btn-flat #{current_status_order?('Waiting')}" %>
+<%= link_to '已退款订单', orders_admins_path(status: 'Cancel'), class: "btn  btn-flat #{current_status_order?('Cancel')}" %>
 <%= link_to '已完成订单', orders_admins_path(status: 'Finished'), class: "btn  btn-flat #{current_status_order?('Finished')}" %>
+<%= link_to '退款失败订单', orders_admins_path(status: 'CancelFailed'), class: "btn  btn-flat #{current_status_order?('CancelFailed')}" %>

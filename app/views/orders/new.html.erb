@@ -1,3 +1,4 @@
+<%= render 'layouts/errors' %>
 <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
@@ -56,8 +57,8 @@
         </div>
         <div class="box-footer clearfix">
           <ul class="pagination pagination-sm no-margin pull-left">
-            <button type="button" class="btn btn-default" data-dismiss="modal">放弃</button>
-            <%= f.submit '提交订单', class: 'btn btn-primary' %>
+            <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
+            <%= f.submit '提交订单', data: {confirm: '提交订单，将直接从账户余额中扣除对应金额，请保证余额充足'},class: 'btn btn-primary' %>
           </ul>
         </div>
       <% end %>

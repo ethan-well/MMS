@@ -12,6 +12,7 @@
         <tr>
           <th>ID</th>
           <th>邮箱</th>
+          <th>账户余额</th>
           <th>等级</th>
           <th>下级会员数</th>
           <th>订单总数</th>
@@ -23,18 +24,21 @@
           <tr>
             <td><%= user.id %></td>
             <td><%= user.email %></td>
+            <th><%= user.balance %></th>
             <td><%= user.level_id %></td>
             <td><%= user.id %></td>
             <td><%= user.orders.count %></td>
             <td><%= user.total_spend %></td>
             <td><%= user.invitation_code %></td>
-            <td><%= link_to '用户特价信息', user_special_prices_special_prices_path(user_id: user.id) %></td>
+            <td>
+              <%= link_to '特价', user_special_prices_special_prices_path(user_id: user.id) %>
+              <%= link_to '编辑', edit_user_admins_path(user_id: user.id), remote: true  %>
+            </td>
           </tr>
         <% end %>
       </table>
     </div>
   </div>
-
+  <div id="add_edit_user_modal"></div>
   <%= link_to '会员级别规则', levels_path %>
-
 </div>

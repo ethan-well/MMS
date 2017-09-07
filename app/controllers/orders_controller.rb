@@ -27,16 +27,21 @@ class OrdersController < ApplicationController
       goods = Goods.find(goods_id)
       if goods.present?
         price_current = current_user.my_price(goods.id)
-        total_price = price_current.to_i * count.to_i
+        total_price = price_current.to_f * count.to_i
 
-        order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark, :account))
+        if current_user.balance < total_price
+          render redirect_to :back, notice: "余额不足，下单失败。本次需支付#{total_price}元，您账户余额#{current_user.balance}元。请充值后再下单"
+        end
+        Order.transaction do
+          current_user.update_attribute!(:balance, balance - total_price)
 
-        order.price_current = price_current
-        order.total_price = total_price
-
-        notice = order.save ?  '订单创建成功，请点支付订单' : '订单创建失败，请稍后重试'
+          order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark, :account))
+          order.price_current = price_current
+          order.total_price = total_price
+          raise '下单失败，请稍后重试！'  if !order.save
+        end
       else
-        notice = ''
+        notice = '业务类型不存在，请核对后重新下单'
       end
     rescue => e
       notice = e.message

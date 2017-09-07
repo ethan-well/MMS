@@ -17,29 +17,29 @@
 <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">消费信心</h3>
+        <h3 class="box-title">消费信息</h3>
       </div>
       <div class="box-body">
         <table class="table table-bordered">
           <tr>
             <th style="width: 75px"><%= @user %></th>
             <th>总消费</th>
-            <th>最近30天</th>
+            <th>本月消费</th>
             <th>今日消费</th>
-            <th><% @custom_query_time %></th>
+            <th><%= custom_query_time(params[:start_time], params[:end_time]) %></th>
           </tr>
           <tr>
             <td><%= @user %></td>
-            <td><%= @user.total_spend %></td>
-            <td><%= @user.month_ago_spend %></td>
-            <td><%= @user.today_spend %></td>
+            <td><%= @total_spend %></td>
+            <td><%= @month_ago_spend %></td>
+            <td><%= @today_spend %></td>
             <td><%= @custom_query_spend %></td>
           </tr>
         </table>
       </div>
       <div class="box-footer clearfix">
         <ul class="pagination pagination-sm inline">
-          <%= paginate @orders %>
+          <%#= paginate @orders %>
         </ul>
       </div>
     </div>

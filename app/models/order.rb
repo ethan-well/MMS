@@ -49,32 +49,30 @@ class Order < ApplicationRecord
   def status_in_word
     case status
     when 'Waiting'
-      '等待支付'
-    when 'Paied'
-      '已支付，等待处理'
+      '等待处理'
     when 'Canceled'
       '已取消'
     when 'Finished'
       '已完成'
     when 'dealing'
-      '商家已接单，处理中'
+      '处理中'
+    when 'CancelFailed'
+      '退款失败'
     end
   end
 
   def status_in_word_admin
     case status
-    when 'Paied'
-      '用户已经支付，等待你的待处理'
-    when 'Dealing'
-      '用户已经支付，你标记状态为处理中'
     when 'Waiting'
-      '用户未支付'
+      '等待处理'
+    when 'Dealing'
+      '处理中订单'
     when 'Finished'
       '已完成订单，可点击隐藏订单'
-    when 'Refunding'
-      '用户申请退款'
-    when 'Refunded'
+    when 'Canceled'
       '已经退款'
+    when 'CancelFailed'
+      '退款失败'
     end
   end
 

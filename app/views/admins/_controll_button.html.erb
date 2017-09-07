@@ -2,4 +2,4 @@
 <%= link_to '订单管理', orders_admins_path(status: 'Paied'), class: "btn  btn-flat #{show_light?('orders')}"%>
 <%= link_to '会员管理', users_admins_path, class: "btn  btn-flat #{show_light?('users')}" %>
 <%= link_to '系统公告', notices_admins_path, class: "btn  btn-flat #{show_light?('notices')}" %>
-<%= link_to '消费信息', expenses_admins_path, class: "btn  btn-flat #{show_light?('expenses')}" %>
+<%= link_to '消费信息', expenses_admins_path(user_type: 'all'), class: "btn  btn-flat #{show_light?('expenses')}" %>

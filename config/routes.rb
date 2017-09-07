@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       get 'users'
       post 'create_goods'
       get 'expenses'
+      get 'edit_user'
+      post 'update_user'
     end
   end
 

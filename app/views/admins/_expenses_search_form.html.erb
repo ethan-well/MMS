@@ -8,8 +8,14 @@
             <%= select_tag :user, options_from_collection_for_select(User.all, 'email', 'email', params['user']), class: 'form-control' %>
           </div>
           <div class="col-xs-4">
-            <%= label_tag '自定义时间'%>
-            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), class: 'form-control' %>
+            <label>自定义时间:</label>
+
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <input type="text" class="form-control pull-right" id="reservation">
+            </div>
           </div>
           <div class="col-xs-4">
             <label></label>
@@ -20,3 +26,9 @@
     <% end %>
   </div>
 </div>
+
+
+
+<script type="text/javascript">
+    $("#reservation").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+</script>
