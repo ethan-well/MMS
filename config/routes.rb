@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
 
-  mount Member::API => '/'
+  mount Member::API => '/api'
   get 'password_resets/create'
 
   get 'password_resets/edit'
