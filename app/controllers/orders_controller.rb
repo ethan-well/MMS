@@ -10,6 +10,25 @@ class OrdersController < ApplicationController
     @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(5)
   end
 
+  def purchase_history
+    if params[:id].blank?
+      @goods = '所有商品'
+      @finished_orders = current_user.orders.where('status = ?', 'Finished')
+      @total_spend = @finished_orders.map(&:total_price).reduce(:+)
+      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
+      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+    else
+      @goods = Goods.find(params[:id])
+      @finished_orders = current_user.orders.where('goods_id = ?', params[:id]).where('status =?', 'Finished')
+      @total_spend = @finished_orders.map(&:total_price).reduce(:+)
+      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
+      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+      @goods = @goods.name
+    end
+  end
+
   def new
     @order = Order.new
     puts params[:goods_id]
@@ -33,12 +52,12 @@ class OrdersController < ApplicationController
           render redirect_to :back, notice: "余额不足，下单失败。本次需支付#{total_price}元，您账户余额#{current_user.balance}元。请充值后再下单"
         end
         Order.transaction do
-          current_user.update_attribute!(:balance, balance - total_price)
+          current_user.update_attribute(:balance, current_user.balance - total_price)
 
           order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark, :account))
           order.price_current = price_current
           order.total_price = total_price
-          raise '下单失败，请稍后重试！'  if !order.save
+          raise '下单失败，请稍后重试！'  unless order.save
         end
       else
         notice = '业务类型不存在，请核对后重新下单'

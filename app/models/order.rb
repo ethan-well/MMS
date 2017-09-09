@@ -50,13 +50,13 @@ class Order < ApplicationRecord
     case status
     when 'Waiting'
       '等待处理'
-    when 'Canceled'
-      '已取消'
+    when 'Refund'
+      '已取消，已退款'
     when 'Finished'
       '已完成'
     when 'dealing'
       '处理中'
-    when 'CancelFailed'
+    when 'RefundFailed'
       '退款失败'
     end
   end
@@ -69,9 +69,9 @@ class Order < ApplicationRecord
       '处理中订单'
     when 'Finished'
       '已完成订单，可点击隐藏订单'
-    when 'Canceled'
+    when 'Refund'
       '已经退款'
-    when 'CancelFailed'
+    when 'RefundFailed'
       '退款失败'
     end
   end

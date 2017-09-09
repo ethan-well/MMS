@@ -14,8 +14,48 @@
   </div>
 </div>
 
+<div class="col-md-12">
+  <hr>
+  <div class="form-group">
+    <% system_setting = SystemSetting.first %>
+    <% if system_setting.can_sigin_up %>
+      <input type="checkbox" id="toggle-sigin-up" checked data-toggle="toggle" data-on="可注册" data-off="不可注册" data-onstyle="success" data-offstyle="danger">
+    <% else %>
+      <input type="checkbox" id="toggle-sigin-up" data-toggle="toggle" data-on="可注册" data-off="不可注册" data-onstyle="success" data-offstyle="danger">
+    <% end %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <% if system_setting.can_recharge %>
+      <input type="checkbox" id="toggle-recharge" checked data-toggle="toggle" data-on="可充值" data-off="不可充值" data-onstyle="success" data-offstyle="danger">
+    <% else %>
+      <input type="checkbox" id="toggle-recharge" data-toggle="toggle" data-on="可充值" data-off="不可充值" data-onstyle="success" data-offstyle="danger">
+    <% end %>
+  </div>
+</div>
 
 <script>
+  $('#toggle-sigin-up').change(function(){
+    state = $(this).prop('checked');
+    $.ajax({
+      url: "<%= system_setting_path(1) %>",
+      method: 'put',
+      type: 'json',
+      data: {
+        change_info: { can_sigin_up: state }
+      }
+    })
+  });
+
+  $('#toggle-recharge').change(function(){
+    state = $(this).prop('checked');
+    $.ajax({
+      url: "<%= system_setting_path(1) %>",
+      method: 'put',
+      type: 'json',
+      data: {
+        change_info: { can_recharge: state }
+      }
+    })
+  });
+
   var gload_notice = $('textarea#enterprises_notice_value').val();
   // 双击输入框可编辑输入框内容
   $('textarea#enterprises_notice_value').dblclick(function(){

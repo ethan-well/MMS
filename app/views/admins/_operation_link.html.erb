@@ -1,7 +1,10 @@
 <% if status == 'Waiting' %>
   <%= link_to '标记为处理中', admin_change_status_order_path(order_id, status: 'Dealing'), method: 'post' %>
+  <%= link_to '退款', admin_change_status_order_path(order_id, status: 'Refund'), method: 'post' %>
 <% elsif status == 'Dealing' %>
   <%= link_to '标记为完成', admin_change_status_order_path(order_id, status: 'Finished'), method: 'post' %>
+  <%= link_to '退款', admin_change_status_order_path(order_id, status: 'Refund'), method: 'post' %>
 <% elsif status == 'Finished' %>
-  <%= link_to '隐藏', admin_change_status_order_path(order_id, status: 'Hided'), method: 'post' %>
+  <%#= link_to '隐藏', admin_change_status_order_path(order_id, status: 'Hided'), method: 'post' %>
+  已完成
 <% end %>

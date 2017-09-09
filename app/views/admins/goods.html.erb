@@ -10,15 +10,17 @@
     <div class="box-body table-responsive no-padding">
       <table class="table table-hover">
         <tr>
-          <th>商品名</th>
-          <th>级别1价格</th>
-          <th>级别2价格</th>
-          <th>价格3价格</th>
-          <th>价格4价格</th>
+          <th>#</th>
+          <th>商品</th>
+          <th>LV1价格</th>
+          <th>LV2价格</th>
+          <th>LV3价格</th>
+          <th>LV4价格</th>
           <td>管理</td>
         </tr>
         <% @goods.each do |goods| %>
           <tr>
+            <td><%= goods.id %></td>
             <td><%= goods.name %></td>
             <td><%= goods.get_current_price(1) %></td>
             <td><%= goods.get_current_price(2) %></td>

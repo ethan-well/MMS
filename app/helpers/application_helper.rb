@@ -10,7 +10,12 @@ module ApplicationHelper
   def content_header
     case controller_name
     when 'orders'
-      '订单中心'
+      case action_name
+      when 'purchase_history'
+        '消费记录'
+      else
+        '订单查询'
+      end
     when 'infos'
       '信息管理'
     when 'admins'
@@ -34,4 +39,11 @@ module ApplicationHelper
     end
   end
 
+  def order_controller_action(action)
+    controller_name == 'orders' && action_name == action ? 'active' : ''
+  end
+
+  def order_controller_action_goods(goods_id)
+    goods_id == params['goods_id'].to_i ? 'active' : ''
+  end
 end

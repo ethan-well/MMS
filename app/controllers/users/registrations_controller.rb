@@ -5,6 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   layout 'registrations'
   before_action :captcha_validated?, only: [:create]
   before_action :invitation_code_validated?, only: [:create]
+  before_action :can_sigin_up?, only: [:create]
   # GET /resource/sign_up
   # def new
   #   super
@@ -71,6 +72,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     u = User.find_by_invitation_code(params[:user][:h_invitation_code])
     unless u.present?
       return redirect_to :back, alert: '邀请码无效'
+    end
+  end
+
+  def can_sigin_up?
+    unless SystemSetting.first.can_sigin_up
+      return redirect_to :back, alert: '系统已关闭注册功能，请稍后重试'
     end
   end
 end

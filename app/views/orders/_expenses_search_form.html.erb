@@ -1,11 +1,11 @@
 <div class="col-md-12">
   <div class="box">
-    <%= form_tag expenses_admins_path, method: 'get' do %>
+    <%= form_tag purchase_history_orders_path, method: 'get' do %>
       <div class="box-body">
         <div class="form-group">
           <div class="col-xs-2">
-            <%= label_tag '用户' %>
-            <%= select_tag :id, options_from_collection_for_select(User.all, 'id', 'email', params['id']), include_blank: true, class: 'form-control single-select' %>
+            <%= label_tag '业务' %>
+            <%= select_tag :id, options_from_collection_for_select(Goods.all, 'id', 'name', params['id']), include_blank: true, class: 'form-control single-select' %>
           </div>
           <div class="col-xs-3">
             <label>自定义时间:</label>
@@ -49,7 +49,7 @@
     $(".end-time").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
 
     $(".single-select").select2({
-      placeholder: "选择用户",
+      placeholder: "选择业务",
       allowClear: true
     });
 </script>

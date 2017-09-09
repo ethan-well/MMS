@@ -28,10 +28,11 @@ class AdminsController < ApplicationController
   def update_user
     begin
       user = User.find(params[:id])
-      user.update_attribute(:balance, params[:balance])
+      raise '等级不合法'  unless Level.find(params[:level_id]).present?
+      user.update_attributes(level_id: params[:level_id], balance: params[:balance])
       nitice = '用户信息更改成功'
-    rescue
-      notice = '用户信息更改失败'
+    rescue => ex
+      notice = ex.message
     end
     return redirect_to :back, notice: notice
   end
@@ -50,7 +51,7 @@ class AdminsController < ApplicationController
 
   def expenses
     # 总消费
-    if params[:user_type] == 'all'
+    if params[:id].blank?
       @user = '所有用户'
       @finished_orders = Order.where('status = ?', 'Finished')
       @total_spend = @finished_orders.map(&:total_price).reduce(:+)
@@ -59,6 +60,12 @@ class AdminsController < ApplicationController
       @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
     else
       @user = User.find(params[:id])
+      @finished_orders = @user.orders.where('status =?', 'Finished')
+      @total_spend = @finished_orders.map(&:total_price).reduce(:+)
+      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
+      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+      @user = @user.name
     end
   end
 end

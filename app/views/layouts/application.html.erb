@@ -55,15 +55,38 @@
 
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">主菜单</li>
-
-            <li class="<%= current_menu('orders') %>" >
-              <%= link_to orders_path do %>
-                <i class="fa fa-th"></i> <span>我的订单</span>
+            <li class="<%= current_menu('infos') %>" >
+              <%=link_to infos_path do %>
+                <i class="fa fa-book"></i><span>个人中心</span>
               <% end %>
             </li>
-            <li class="treeview <%= current_menu('goods') %>">
+            <li class="treeview <%= order_controller_action('index') %> <%= order_controller_action('purchase_history') %>">
               <a href="#">
-                <i class="fa fa-pie-chart"></i>
+                <i class="fa fa fa-th"></i>
+                <span>订单记录</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="<%= order_controller_action('index')  %>">
+                  <%= link_to orders_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   订单查询
+                  <% end %>
+                </li>
+                <li class="<%= order_controller_action('purchase_history')  %>">
+                  <%= link_to purchase_history_orders_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   消费记录
+                  <% end %>
+                </li>
+              </ul>
+            </li>
+
+            <li class="treeview <%= order_controller_action('new') %>">
+              <a href="#">
+                <i class="fa fa-list"></i>
                 <span>业务购买</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
@@ -71,8 +94,8 @@
               </a>
               <ul class="treeview-menu">
                 <% Goods.all.each do |goods| %>
-                  <li class="<%= current_goods(goods.id)  %>">
-                    <%= link_to good_path(goods.id)  do %>
+                  <li class="<%= order_controller_action_goods(goods.id) %>">
+                    <%= link_to new_order_path(goods_id: goods.id) do %>
                      <i class="fa fa-circle-o"></i>
                      <%= goods.name %>
                     <% end %>
@@ -81,15 +104,10 @@
               </ul>
             </li>
             </li>
-            <li class="<%= current_menu('infos') %>" >
-              <%=link_to infos_path do %>
-                <i class="fa fa-book"></i><span>信息管理</span>
-              <% end %>
-            </li>
-            <% if current_user.admin != 0 %>
+            <% if current_user.admin %>
               <li class="<%= current_menu('admins') %>" >
                 <%=link_to orders_admins_path(status: 'Waiting') do %>
-                  <i class="fa fa-book"></i><span>管理员入口</span>
+                  <i class="fa fa-cog"></i><span>管理员入口</span>
                 <% end %>
               </li>
             <% end %>
@@ -121,7 +139,25 @@
 
         <section class="content">
           <div class="row">
-            <%= yield %>
+            <% if Notice.first.content.present? %>
+              <div class="col-md-12">
+                <div class="box box-success">
+                <div class="box-header with-border">
+                  <h3 class="box-title">系统公告！</h3>
+
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="box-body">
+                  <%= Notice.first.content %>
+                </div>
+              </div>
+            </div>
+           <% end %>
+
+          <%= yield %>
+
           </div>
         </section>
 

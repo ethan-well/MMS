@@ -1,7 +1,3 @@
-<div class="col-md-12 controll-button">
-  <%= render 'controll_button' %>
-</div>
-
 <%= render 'expenses_search_form'%>
 
 <div class="col-md-12">
@@ -12,14 +8,14 @@
       <div class="box-body">
         <table class="table table-bordered">
           <tr>
-            <th style="width: 75px">用户</th>
+            <th style="width: 75px">商品</th>
             <th>总消费</th>
             <th>本月消费</th>
             <th>今日消费</th>
             <th><%= custom_query_time(params[:start_time], params[:end_time]) %></th>
           </tr>
           <tr>
-            <td><%= @user %></td>
+            <td><%= @goods %></td>
             <td><%= @total_spend %></td>
             <td><%= @month_ago_spend %></td>
             <td><%= @today_spend %></td>

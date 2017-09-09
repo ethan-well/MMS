@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       post 'finished'
       post 'admin_change_status'
     end
+    collection do
+      get 'purchase_history'
+    end
   end
 
   resources :goods do
@@ -57,4 +60,6 @@ Rails.application.routes.draw do
   end
 
   resources :levels, only: [:index, :edit, :update]
+
+  resources :system_settings, only: [:update]
 end

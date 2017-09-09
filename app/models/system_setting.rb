@@ -1,0 +1,3 @@
+class SystemSetting < ApplicationRecord
+
+end

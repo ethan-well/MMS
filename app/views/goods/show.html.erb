@@ -1,11 +1,3 @@
-<% if Notice.first.content.present? %>
-  <div class="col-md-12">
-    <div class="callout callout-success">
-      <h4>系统公告!</h4>
-      <p><%= Notice.first.content %></p>
-    </div>
-  </div>
-<% end %>
 <%= render 'layouts/errors'%>
 <div class="col-md-12">
     <div class="box">
@@ -15,14 +7,16 @@
       <div class="box-body">
         <table class="table table-bordered">
           <tr>
+            <th>ID</th>
             <th style="width: 75px">名称</th>
-            <th>级别一价格</th>
-            <th>级别二价格</th>
-            <th>级别三价格</th>
-            <th>级别四价格</th>
+            <th>LV1价格</th>
+            <th>LV2价格</th>
+            <th>LV3价格</th>
+            <th>LV4价格</th>
             <th>我的特价</th>
           </tr>
           <tr>
+            <td><%= @goods.id %></td>
             <td><%= @goods.name %></td>
             <td><span class="<%= price_light?(@goods.get_current_price(1), @goods.id) %>"><%= @goods.get_current_price(1) %></span></td>
             <td><span class="<%= price_light?(@goods.get_current_price(2), @goods.id) %>"><%= @goods.get_current_price(2) %></span></td>

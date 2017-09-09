@@ -1,14 +1,4 @@
 <%= render 'layouts/errors'%>
-
-<% if Notice.first.content.present? %>
-  <div class="col-md-12">
-    <div class="callout callout-success">
-      <h4>系统公告!</h4>
-      <p><%= Notice.first.content %></p>
-    </div>
-  </div>
-<% end %>
-
 <%= render 'search_form' %>
 
 <div class="col-md-12">
@@ -20,6 +10,7 @@
         <table class="table table-bordered">
           <tr>
             <th style="width: 75px">订单编号</th>
+            <th>下单时间</th>
             <th>业务</th>
             <th>数量</th>
             <th>购买时单价</th>
@@ -34,6 +25,7 @@
           <% @orders.each do |order| %>
             <tr>
               <td><%= order.identification_code %></td>
+              <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
               <td><%= order.goods.name %></td>
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>

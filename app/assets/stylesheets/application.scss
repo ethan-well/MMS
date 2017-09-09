@@ -6,8 +6,9 @@
 @import "will_paginate";
 @import "all";
 @import "admins";
-@import "bootstrap-timepicker";
-
+@import "bootstrap-toggle.min";
+@import 'bootstrap-datetimepicker.min';
+@import "select2.min";
 
 a, a:link, a:visited{
   text-decoration: none;
