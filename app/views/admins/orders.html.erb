@@ -26,7 +26,7 @@
             <tr>
               <td><%= order.identification_code %></td>
               <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td><%= order.goods.name %></td>
+              <td><%= order.goods.name rescue '' %></td>
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>
               <td><%= order.status_in_word_admin %></td>

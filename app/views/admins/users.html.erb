@@ -18,6 +18,7 @@
           <th>订单总数</th>
           <th>消费总额</th>
           <th>邀请码</th>
+          <th>可邀请下级</th>
           <th>管理</th>
         </tr>
         <% @users.each do |user| %>
@@ -26,10 +27,11 @@
             <td><%= user.email %></td>
             <th><%= user.balance %></th>
             <td><%= user.level_id %></td>
-            <td><%= user.id %></td>
+            <td><%= user.low_level_users %></td>
             <td><%= user.orders.count %></td>
             <td><%= user.total_spend %></td>
-            <td><%= user.invitation_code %></td>
+            <td><%= user.invitation_code_in_word %></td>
+            <td><%= user.can_invite_in_word %></td>
             <td>
               <%= link_to '特价', user_special_prices_special_prices_path(user_id: user.id) %>
               <%= link_to '编辑', edit_user_admins_path(user_id: user.id), remote: true  %>

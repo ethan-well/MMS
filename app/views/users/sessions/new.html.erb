@@ -13,6 +13,12 @@
         <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+      <div class="form-group">
+        <%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入验证码') %>
+        <a src="#">
+          <%= rucaptcha_image_tag(alt: 'Captcha') %>
+        </a>
+      </div>
       <div class="row">
         <% if devise_mapping.rememberable? -%>
           <div class="col-xs-8">

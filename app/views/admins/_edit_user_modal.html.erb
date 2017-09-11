@@ -23,6 +23,13 @@
                   <%= text_field_tag :balance, @user.balance, class: 'form-control goods-id' %>
                 </div>
               </div><br><br>
+              <div class="form-group">
+                <%= label_tag :can_invite, '可邀请', class: 'col-sm-2 control-label '%>
+                <div class="col-sm-10">
+                  <%#= text_field_tag :balance, @user.balance,  %>
+                  <%= select_tag :can_invite , options_for_select([true, false], @user.can_invite), class: 'form-control goods-id' %>
+                </div>
+              </div><br><br>
             </div>
         </div>
         <div class="modal-footer">

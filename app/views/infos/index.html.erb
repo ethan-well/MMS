@@ -1,3 +1,22 @@
+<% if Notice.first.content.present? %>
+  <div class="col-md-12">
+    <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title">系统公告！</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+      <%= Notice.first.content %>
+      <span class="text-right">
+        &nbsp;&nbsp;&nbsp;—— <%= Notice.first.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
+      </span>
+    </div>
+  </div>
+</div>
+<% end %>
 <div class="col-md-12">
   <div class="box box-primary">
     <div class="box-header">

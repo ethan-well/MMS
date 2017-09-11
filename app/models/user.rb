@@ -33,7 +33,7 @@ class User < ApplicationRecord
   end
 
   def invitation_code_in_word
-    level_id > 1 ? invitation_code : '等级不够暂时不能邀请他人'
+    level_id > 1 ? invitation_code : '未开放'
   end
 
   def my_price(good_id)
@@ -45,7 +45,15 @@ class User < ApplicationRecord
     orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', Date.today - 1.month, Date.today).map(&:total_price).reduce(:+)
   end
 
+  def low_level_users
+    User.where('h_invitation_code = ?', self.invitation_code).count
+  end
+
   def today_spend
     orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+  end
+
+  def can_invite_in_word
+    can_invite ? '是' : '否'
   end
 end

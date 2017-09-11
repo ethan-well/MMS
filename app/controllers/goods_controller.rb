@@ -7,12 +7,12 @@ class GoodsController < ApplicationController
   end
 
   def create
-    begin
-      Goods.create(name: params[:name], price: params[:price])
+    #begin
+      Goods.create(name: params[:name], price: params[:price], remark: params[:remark])
       notice = '业务添加成功'
-    rescue
+    #rescue
       notice = '业务添加失败，稍后重试'
-    end
+    #end
 
     redirect_to :back, notice: notice
   end
@@ -26,18 +26,27 @@ class GoodsController < ApplicationController
   end
 
   def update
-    begin
+    #begin
       goods = Goods.find(params[:id])
-      goods.update_attributes(params.require('goods').permit(:name, :price))
+      goods.update_attributes(params.require('goods').permit(:name, :price, :remark))
       notice = '修改成功'
-    rescue
+    #rescue
       notice = '修改失败'
-    end
+    #end
 
     redirect_to goods_admins_path, notice: notice
   end
 
   def destroy
+    begin
+      good = Goods.find(params[:id])
+      good.destroy
+      notice = '删除成功'
+    rescue
+      notice = '删除失败'
+    end
+
+    redirect_to goods_admins_path, notice: notice
   end
 
   def get_price

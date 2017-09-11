@@ -21,6 +21,13 @@
             <%= f.text_field :price, class: 'form-control', placeholder: '四个单价，以空格隔开，如：10 11 23 13' %>
           </div>
         </div>
+        <div class="form-group">
+          <%= f.label :remark, '说明', class: 'col-sm-1 control-label'%>
+
+          <div class="col-sm-5">
+            <%= f.text_field :remark, class: 'form-control', placeholder: '四个单价，以空格隔开，如：10 11 23 13' %>
+          </div>
+        </div>
       </div>
       <div class="box-footer clearfix">
         <%= link_to  '放弃修改', goods_admins_path, class: 'btn btn-default'%>

@@ -128,6 +128,14 @@ class OrdersController < ApplicationController
     redirect_to :back, notice: '状态变更成功'
   end
 
+  def multiple_orders_new
+
+  end
+
+  def multiple_orders_create
+
+  end
+
   private
   def current_order
     @order = Order.find(params['id'])

@@ -11,7 +11,8 @@
       <table class="table table-hover">
         <tr>
           <th>#</th>
-          <th>商品</th>
+          <th>业务</th>
+          <th>说明</th>
           <th>LV1价格</th>
           <th>LV2价格</th>
           <th>LV3价格</th>
@@ -22,6 +23,9 @@
           <tr>
             <td><%= goods.id %></td>
             <td><%= goods.name %></td>
+            <td>
+              <%= goods.remark %>
+            </td>
             <td><%= goods.get_current_price(1) %></td>
             <td><%= goods.get_current_price(2) %></td>
             <td><%= goods.get_current_price(3) %></td>
@@ -29,6 +33,7 @@
             <td>
               <%= link_to '修改', edit_good_path(goods.id) %>
               <%= link_to '特价信息', goods_special_prices_special_prices_path(goods_id: goods.id) %>
+              <%= link_to '删除', good_path(goods.id), method: 'DELETE', data: { confirm: '确定删除？' } %>
             </td>
           </tr>
         <% end %>
@@ -65,6 +70,13 @@
                 <div class="col-sm-10">
                   <%= text_field_tag :price, nil, class: 'form-control', placeholder: '四个单价，以空格隔开，如：10 11 23 13' %>
                 </div>
+              </div><br><br>
+              <div class="form-group">
+                <%= label_tag :remark, '业务说明', class: 'col-sm-2 control-label'%>
+
+                <div class="col-sm-10">
+                  <%= text_field_tag :remark, nil, class: 'form-control', placeholder: '业务说明' %>
+                </div>
               </div>
             </div>
         </div>
@@ -76,3 +88,7 @@
     </div>
   </div>
 </div>
+
+<script>
+$('#example').tooltip(options)
+</script>

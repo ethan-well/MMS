@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   get 'password_resets/update'
 
-  root to: 'orders#index'
+  root to: 'infos#index'
 
   devise_scope :user do
     get 'sign_in', to: 'users/sessions#new'
@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     end
     collection do
       get 'purchase_history'
+      get 'multiple_orders_new'
+      post 'multiple_orders_create'
     end
   end
 

@@ -29,7 +29,7 @@ class AdminsController < ApplicationController
     begin
       user = User.find(params[:id])
       raise '等级不合法'  unless Level.find(params[:level_id]).present?
-      user.update_attributes(level_id: params[:level_id], balance: params[:balance])
+      user.update_attributes(level_id: params[:level_id], balance: params[:balance], can_invite: params[:can_invite])
       nitice = '用户信息更改成功'
     rescue => ex
       notice = ex.message
