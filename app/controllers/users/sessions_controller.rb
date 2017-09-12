@@ -1,6 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
   layout 'session'
+  before_action :can_sigin_in?, only: [:create]
   before_action :captcha_validated?, only: [:create]
 
   # GET /resource/sign_in
@@ -28,6 +29,13 @@ class Users::SessionsController < Devise::SessionsController
   def captcha_validated?
     unless verify_rucaptcha?
       return redirect_to :back, alert: '验证码输入不正确'
+    end
+  end
+
+  def can_sigin_in?
+    user = User.find_by_email(params['user']['email'])
+    unless user.active
+      return redirect_to :back, alert: '目前不能登录，请联系管理员'
     end
   end
 end

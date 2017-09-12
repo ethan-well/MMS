@@ -36,6 +36,10 @@ class User < ApplicationRecord
     level_id > 1 ? invitation_code : '未开放'
   end
 
+  def active_in_word
+    active ? '可登录' : '不可登录'
+  end
+
   def my_price(good_id)
     @good = Goods.find(good_id)
     current_goods_special_prices(good_id) || @good.get_current_price(self.level_id)
