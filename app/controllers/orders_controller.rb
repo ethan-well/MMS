@@ -42,7 +42,18 @@ class OrdersController < ApplicationController
   def create
     begin
       goods_id = params['order']['goods_id']
-      count = params['order']['count']
+      if params['order']['remark'].present?
+        remark = params['order']['remark']
+        order_info = remark.gsub(' ', '').split(/[\r\n]+/)
+        count = 0
+        order_info.each do |info|
+          info = info.split('----')
+          count += Integer(info[1])
+        end
+      else
+        count = params['order']['count']
+      end
+
       goods = Goods.find(goods_id)
       if goods.present?
         price_current = current_user.my_price(goods.id)
@@ -54,10 +65,8 @@ class OrdersController < ApplicationController
         Order.transaction do
           current_user.update_attribute(:balance, current_user.balance - total_price)
 
-          order =  current_user.orders.create(params.require(:order).permit(:goods_id, :count, :remark, :account))
-          order.price_current = price_current
-          order.total_price = total_price
-          raise '下单失败，请稍后重试！'  unless order.save
+          order =  current_user.orders.create(params.require(:order).permit(:goods_id, :remark, :account))
+          order.update_attributes(price_current: price_current, count: count, total_price: total_price)
         end
       else
         notice = '业务类型不存在，请核对后重新下单'
@@ -65,7 +74,7 @@ class OrdersController < ApplicationController
     rescue => e
       notice = e.message
     end
-    redirect_to action: 'index', notice: notice
+    redirect_to :back, notice: notice
   end
 
   def update
@@ -126,14 +135,6 @@ class OrdersController < ApplicationController
     @order.update_attribute(:status, params[:status])
 
     redirect_to :back, notice: '状态变更成功'
-  end
-
-  def multiple_orders_new
-
-  end
-
-  def multiple_orders_create
-
   end
 
   private

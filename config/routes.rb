@@ -26,8 +26,6 @@ Rails.application.routes.draw do
     end
     collection do
       get 'purchase_history'
-      get 'multiple_orders_new'
-      post 'multiple_orders_create'
     end
   end
 

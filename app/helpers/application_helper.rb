@@ -13,11 +13,13 @@ module ApplicationHelper
       case action_name
       when 'purchase_history'
         '消费记录'
+      when 'new'
+        '业务购买'
       else
         '订单查询'
       end
     when 'infos'
-      '信息管理'
+      '个人中心'
     when 'admins'
       '管理后台'
     when 'special_prices'
