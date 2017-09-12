@@ -42,7 +42,7 @@ class OrdersController < ApplicationController
   def create
     begin
       goods_id = params['order']['goods_id']
-      if params['order']['remark'].present?
+      if params[:multiple_order]
         remark = params['order']['remark']
         order_info = remark.gsub(' ', '').split(/[\r\n]+/)
         count = 0
@@ -68,6 +68,7 @@ class OrdersController < ApplicationController
           order =  current_user.orders.create(params.require(:order).permit(:goods_id, :remark, :account))
           order.update_attributes(price_current: price_current, count: count, total_price: total_price)
         end
+        notice = '下单成功，请前往订单中心查询'
       else
         notice = '业务类型不存在，请核对后重新下单'
       end

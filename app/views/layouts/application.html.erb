@@ -72,7 +72,7 @@
                 <li class="<%= order_controller_action('index')  %>">
                   <%= link_to orders_path do %>
                    <i class="fa fa-circle-o"></i>
-                   订单查询
+                   订单中心
                   <% end %>
                 </li>
                 <li class="<%= order_controller_action('purchase_history')  %>">
@@ -139,7 +139,7 @@
 
         <section class="content">
           <div class="row">
-
+          <%= render 'layouts/errors'%>
           <%= yield %>
 
           </div>

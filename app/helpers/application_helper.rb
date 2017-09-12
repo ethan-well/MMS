@@ -16,7 +16,7 @@ module ApplicationHelper
       when 'new'
         '业务购买'
       else
-        '订单查询'
+        '订单中心'
       end
     when 'infos'
       '个人中心'
