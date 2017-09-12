@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
         total_price = price_current.to_f * count.to_i
 
         if current_user.balance < total_price
-          render redirect_to :back, notice: "余额不足，下单失败。本次需支付#{total_price}元，您账户余额#{current_user.balance}元。请充值后再下单"
+          return redirect_to :back, notice: "余额不足，下单失败。本次需支付#{total_price}元，您账户余额#{current_user.balance}元。请充值后再下单"
         end
         Order.transaction do
           current_user.update_attribute(:balance, current_user.balance - total_price)
