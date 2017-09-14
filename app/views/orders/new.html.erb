@@ -9,8 +9,8 @@
           <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
             <div class="box-body">
               <div class="form-group">
-                <div class="col-sm-1 control-label"></div>
-                <div class="col-sm-4 green-color">
+                <label class="col-sm-1 control-label">业务说明</label>
+                <div class="col-sm-4 red-color">
                   <%= @goods.remark %>
                 </div>
               </div>
@@ -72,12 +72,11 @@
         <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
           <div class="box-body">
             <div class="form-group">
-              <div class="col-sm-1 control-label"></div>
-              <div class="col-sm-4 green-color">
+              <label class="col-sm-1 control-label">业务说明</label>
+              <div class="col-sm-4 red-color">
                 <%= @goods.remark %>
               </div>
             </div>
-            <%= hidden_field_tag :multiple_order, true %>
             <div class="form-group">
               <%= f.label :goods_name, '业务', class: 'col-sm-1 control-label '%>
 
@@ -96,10 +95,10 @@
             </div>
 
             <div class="form-group">
-              <%= f.label :remark, '下单信息', class: 'col-sm-1 control-label'%>
+              <%= label_tag :multiple_order, '下单信息', class: 'col-sm-1 control-label'%>
 
               <div class="col-sm-4">
-                <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: "批量下单信息格式: \n账号----数量，如：\n123455@qq.com----30" %>
+                <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 5, placeholder: "批量下单格式：下单账号----需求数量：例如：\n1234567890----1000\n0987654321----2000"  %>
               </div>
             </div>
           </div>
