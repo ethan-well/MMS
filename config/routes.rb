@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :notices, only: [:index, :update]
+  resources :notices
 
   resources :special_prices do
     collection do

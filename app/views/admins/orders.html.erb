@@ -11,6 +11,7 @@
         <table class="table table-bordered">
           <tr>
             <th style="width: 75px">订单编号</th>
+            <th>下单用户</th>
             <th>下单日期</th>
             <th>业务</th>
             <th>数量</th>
@@ -25,6 +26,7 @@
           <% @orders.each do |order| %>
             <tr>
               <td><%= order.identification_code %></td>
+              <th><%= order.user.email %></th>
               <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
               <td><%= order.goods.name rescue '' %></td>
               <td><%= order.count %></td>

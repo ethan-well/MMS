@@ -34,7 +34,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def can_sigin_in?
     user = User.find_by_email(params['user']['email'])
-    unless user.active
+    if user.present? && !user.active
       return redirect_to :back, alert: '目前不能登录，请联系管理员'
     end
   end

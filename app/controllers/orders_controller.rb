@@ -156,6 +156,8 @@ class OrdersController < ApplicationController
       @order.update_attribute(:status, params[:status])
       user.update_attribute(:balance, user.balance + @order.total_price ) if params[:status] == 'Refund'
     end
+
+    redirect_to :back
   end
 
   private

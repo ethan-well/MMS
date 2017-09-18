@@ -10,6 +10,7 @@ class Order < ApplicationRecord
   after_create :add_identification_code
 
   after_update :update_user_level
+  after_update :deduct_percentage
   #生成订单编号
   def add_identification_code
     id_str = self.id.to_s
@@ -84,6 +85,23 @@ class Order < ApplicationRecord
       next_level = Level.find(current_level_id + 1)
 
       tar_user.update_attribute(:level_id, next_level.id) if total_spend >= next_level.price
+    end
+  end
+
+  def deduct_percentage
+    if status_changed? && status == 'Finished'
+      user = self.user
+      goods = self.goods
+      h_user = user.h_user
+      if h_user.present?
+        current_price = self.current_price
+        count = self.count
+        h_price = goods.get_current_price(h_user.level)
+        if (current_price - h_price) > 0
+          deduct_percentage = count * (current_price - h_price)
+          h_user.update_attribute(:deduct_percentage, deduct_percentage)
+        end
+      end
     end
   end
 end

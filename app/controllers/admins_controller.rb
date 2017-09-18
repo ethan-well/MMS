@@ -46,7 +46,7 @@ class AdminsController < ApplicationController
   end
 
   def notices
-    @notice = Notice.first
+    @notices = Notice.all
   end
 
   def expenses

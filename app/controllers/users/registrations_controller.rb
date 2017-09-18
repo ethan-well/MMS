@@ -6,7 +6,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :captcha_validated?, only: [:create]
   before_action :invitation_code_validated?, only: [:create]
   before_action :can_sigin_up?, only: [:create]
-  before_action :invitation_code_can_invite?, only: [:create]
   # GET /resource/sign_up
   # def new
   #   super
@@ -70,13 +69,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def invitation_code_validated?
-    u = User.find_by_invitation_code(params[:user][:h_invitation_code])
-    unless u.present?
-      return redirect_to :back, alert: '邀请码无效'
-    end
+    if params[:user][:h_invitation_code].present?
+      u = User.find_by_invitation_code(params[:user][:h_invitation_code])
+      unless u.present?
+        return redirect_to :back, alert: '邀请码无效'
+      end
 
-    unless u.can_invite
-      return redirect_to :back, alert: '此邀请码暂时禁用'
+      unless u.can_invite
+        return redirect_to :back, alert: '此邀请码暂时禁用'
+      end
     end
   end
 

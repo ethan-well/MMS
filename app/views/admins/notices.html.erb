@@ -3,15 +3,36 @@
 </div>
 
 <div class="col-md-12">
-  <div class="form-group">
-    <textarea rows="10" cols="50" placeholder="双击进入编辑模式" id="enterprises_notice_value" readonly=true><%= @notice.try(:content) %></textarea>
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">会员信息</h3>
+    </div>
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tr>
+          <th>ID</th>
+          <th>公告</th>
+          <th>发布时间</th>
+          <th>管理</th>
+        </tr>
+        <% @notices.each do |notice| %>
+          <tr>
+            <td><%= notice.id %></td>
+            <td><%= notice.content %></td>
+            <td><%= notice.updated_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td>
+              <%= link_to '编辑', edit_notice_path(notice.id),remote: true  %>
+              <%= link_to '删除', notice_path(notice.id), method: 'DELETE',  data: { confirm: '确定删除？' } %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
   </div>
-
-  <div class="form-group">
-    <button type="button" class="btn btn-default btn-flat send_notice">发布公告</button>
-    <button type="button" class="btn btn-default btn-flat cancel_change">取消更改</button>
-    <button type="button" class="btn btn-default btn-flat clear_notice">清除公告</button>
-  </div>
+  <div id="add_edit_notice_modal"></div>
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
+    发布公告
+  </button>
 </div>
 
 <div class="col-md-12">
@@ -28,6 +49,34 @@
     <% else %>
       <input type="checkbox" id="toggle-recharge" data-toggle="toggle" data-on="可充值" data-off="不可充值" data-onstyle="success" data-offstyle="danger">
     <% end %>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">发布公告</h4>
+      </div>
+      <%= form_for Notice.new, method: 'post', html: {:class => 'form-horizontal'} do |f| %>
+
+        <div class="modal-body">
+            <div class="box-body">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <%= f.text_area :content, class: 'form-control', rows: 5, placeholder: '公告' %>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">放弃</button>
+          <%= f.submit '提交', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
@@ -55,78 +104,4 @@
       }
     })
   });
-
-  var gload_notice = $('textarea#enterprises_notice_value').val();
-  // 双击输入框可编辑输入框内容
-  $('textarea#enterprises_notice_value').dblclick(function(){
-    $('textarea#enterprises_notice_value').prop('readonly', false);
-    $('textarea#enterprises_notice_value').addClass('textarea_active');
-    gload_notice = $('textarea#enterprises_notice_value').val();
-  });
-
-  // 点击'取消更改'，修改撤下
-  $('button.cancel_change').click(function(){
-    $('textarea#enterprises_notice_value').val(gload_notice);
-
-    $('textarea#enterprises_notice_value').removeClass('textarea_active');
-    $('textarea#enterprises_notice_value').prop('readonly', true);
-  });
-
-  // 点击'发送公告'，发送新的公告给用户
-  $('button.send_notice').click(function(){
-    r = confirm('确定发送系统公告？')
-    if(r){
-      notice_value = $('textarea#enterprises_notice_value').val();
-      $.ajax({
-        url: "<%= notice_path(@notice.id) %>",
-        method: 'put',
-        type: 'json',
-        data: {
-          content: notice_value,
-        },
-        success: function(data){
-          if(data['result']){
-            $('textarea#enterprises_notice_value').removeClass('textarea_active');
-            $('textarea#enterprises_notice_value').prop('readonly', true);
-            gload_notice = notice_value;
-            alert('公告发送成功')
-          }else{
-            alert('发送公告失败，请稍后重试发送');
-          }
-        },
-        error: function(){
-          console.log('dddddd');
-        }
-      });
-    }
-  });
-
-  // 点击'清空公告'，清除发送给用户的公告
-  $('button.clear_notice').click(function(){
-    var r = confirm('确定清除系统公告？');
-    if(r){
-      $.ajax({
-        url: "<%= notice_path(@notice.id) %>",
-        method: 'put',
-        type: 'json',
-        data: {
-          content: '',
-        },
-        success: function(data){
-          if(data['result']){
-            $('textarea#enterprises_notice_value').val('');
-            $('textarea#enterprises_notice_value').removeClass('textarea_active');
-            $('textarea#enterprises_notice_value').attr('readonly', true);
-            alert('公告已清除')
-          }else{
-            alert('清空公告失败，请稍后重试');
-          }
-        },
-        error: function(){
-          console.log('dddddd');
-        }
-      });
-    }
-  });
-
 </script>

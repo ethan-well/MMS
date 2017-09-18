@@ -1,4 +1,4 @@
-<% if Notice.first.content.present? %>
+<%  if @notices.present? %>
   <div class="col-md-12">
     <div class="box box-success">
     <div class="box-header with-border">
@@ -9,14 +9,21 @@
       </div>
     </div>
     <div class="box-body">
-      <%= Notice.first.content %>
-      <span class="text-right">
-        &nbsp;&nbsp;&nbsp;—— <%= Notice.first.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
-      </span>
+      <ul>
+        <%  @notices.each do |notice| %>
+          <li>
+            <%= notice.content %>
+            <span class="text-right">
+              &nbsp;&nbsp;&nbsp;—— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>
 <% end %>
+
 <div class="col-md-12">
   <div class="box box-primary">
     <div class="box-header">
@@ -49,6 +56,12 @@
               <span class="form-control border-none"> <%= current_user.invitation_code_in_word %> </span>
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">上级邀请码</label>
+            <div class="col-sm-9padding-left-none">
+              <span class="form-control border-none"> <%= current_user.h_invitation_code %> </span>
+            </div>
+          </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
@@ -67,15 +80,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">消费总额</label>
+            <label class="col-sm-3 control-label">提成</label>
             <div class="col-sm-9 padding-left-none">
-              <span class="form-control border-none"> <%= @total_spend  || 0 %> </span>
+              <span class="form-control border-none"> <%= current_user.deduct_percentage %> </span>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">上级邀请码</label>
-            <div class="col-sm-9padding-left-none">
-              <span class="form-control border-none"> <%= current_user.h_invitation_code %> </span>
+            <label class="col-sm-3 control-label">消费总额</label>
+            <div class="col-sm-9 padding-left-none">
+              <span class="form-control border-none"> <%= @total_spend  || 0 %> </span>
             </div>
           </div>
         </div>

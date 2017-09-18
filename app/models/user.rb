@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: -> { new_record? || changes[:crypted_password] }
 
   validates :email, uniqueness: true
-
+  validates :name, presence: true, uniqueness: true
   has_many :orders
   has_many :special_prices
   belongs_to :level, required: false
@@ -59,5 +59,9 @@ class User < ApplicationRecord
 
   def can_invite_in_word
     can_invite ? '是' : '否'
+  end
+
+  def h_user
+    User.find_by_invitation_code(self.h_invitation_code) rescue nil
   end
 end
