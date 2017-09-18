@@ -45,7 +45,7 @@ class OrdersController < ApplicationController
       goods = Goods.find(goods_id)
       return redirect_to :back, notice: '业务类型不存在，请核对后重新下单' unless goods.present?
 
-      price_current = current_user.my_price(goods.id)
+      price_current = current_user.my_price(goods.id).to_f
 
       # 批量订单
       if params[:multiple_order]
@@ -55,13 +55,8 @@ class OrdersController < ApplicationController
           total_count = 0
           Order.transaction do
             order_info.each do |info|
-              puts 'xx'*30
-              puts info
               info = info.split('----')
-              puts info
               count = Integer(info[1])
-              puts total_count
-              puts count
               total_count += count.to_i
               current_user.orders.create( goods_id: goods_id, price_current: price_current,
                   count: count, total_price: price_current * count, account: info[0] )
@@ -78,7 +73,7 @@ class OrdersController < ApplicationController
       end
 
       count = params['order']['count']
-      total_price = price_current.to_f * count.to_i
+      total_price = price_current * count.to_i
 
       # 普通订单
       return redirect_to :back, notice: "余额不足,请充值后再下单" if current_user.balance < total_price
