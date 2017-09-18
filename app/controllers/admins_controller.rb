@@ -38,7 +38,7 @@ class AdminsController < ApplicationController
   end
 
   def orders
-    @orders = Order.where('status = ?', params['status'])
+    @orders = Order.where('status = ?', params['status']).order('created_at desc')
   end
 
   def users
