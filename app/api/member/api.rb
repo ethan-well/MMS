@@ -223,6 +223,10 @@ module Member
         end
       end
 
+      desc '充值回调'
+      post :pay_back do
+        puts 'pay pay pay'
+      end
     end
 
   end

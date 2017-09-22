@@ -1,0 +1,30 @@
+<div class="col-md-12">
+  <iframe src="http://pay2.58eq.cn/pay/?appid=2017091892&payno=123&pt=pc&back_url=http://119.29.152.254:3000/api/member/pay_back" id="myiframe" scrolling="no"
+width="100%" height="350"  frameborder="0"></iframe>
+</div>
+
+<div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">充值记录</h3>
+      </div>
+      <div class="box-body">
+        <table class="table table-bordered">
+          <tr>
+            <th>充值时间</th>
+            <th>充值金额</th>
+          </tr>
+          <% @recharge_records.each do |recharge_record| %>
+            <tr>
+              <td><%= recharge_record.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+              <td><%= recharge_record.amount %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm inline">
+        </ul>
+      </div>
+    </div>
+</div>

@@ -19,13 +19,15 @@ module ApplicationHelper
         '订单中心'
       end
     when 'infos'
-      '个人中心'
+      '基本信息'
     when 'admins'
       '管理后台'
     when 'special_prices'
       '特价信息'
     when 'goods'
       '业务购买'
+    when 'recharge_records'
+      '充值中心'
     end
   end
 
@@ -48,4 +50,16 @@ module ApplicationHelper
   def order_controller_action_goods(goods_id)
     goods_id == params['goods_id'].to_i ? 'active' : ''
   end
+
+  def user_info_active
+    case controller_name
+    when 'infos'
+      'active'
+    when 'recharge_records'
+      'active'
+    else
+      ''
+    end
+  end
+
 end

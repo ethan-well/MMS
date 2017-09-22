@@ -1,0 +1,3 @@
+class RechargeRecord < ApplicationRecord
+  
+end

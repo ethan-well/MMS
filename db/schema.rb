@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916044546) do
+ActiveRecord::Schema.define(version: 20170922034112) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170916044546) do
     t.text     "content",    limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.string   "title"
   end
 
   create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -79,6 +80,11 @@ ActiveRecord::Schema.define(version: 20170916044546) do
     t.integer  "start_num"
     t.integer  "aims_num"
     t.integer  "current_num"
+  end
+
+  create_table "recharge_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.float   "amount",  limit: 24, default: 0.0
+    t.integer "user_id"
   end
 
   create_table "special_prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

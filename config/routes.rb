@@ -62,4 +62,6 @@ Rails.application.routes.draw do
   resources :levels, only: [:index, :edit, :update]
 
   resources :system_settings, only: [:update]
+
+  resources :recharge_records, only: [:index]
 end

@@ -55,11 +55,30 @@
 
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">主菜单</li>
-            <li class="<%= current_menu('infos') %>" >
-              <%=link_to infos_path do %>
-                <i class="fa fa-book"></i><span>个人中心</span>
-              <% end %>
+            <li class="treeview <%= user_info_active %>">
+              <a href="#">
+                <i class="fa fa fa-th"></i>
+                <span>个人中心</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li class="<%= current_menu('infos') %>">
+                  <%= link_to infos_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   基本信息
+                  <% end %>
+                </li>
+                <li class="<%= current_menu('recharge_records') %>">
+                  <%= link_to recharge_records_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   充值中心
+                  <% end %>
+                </li>
+              </ul>
             </li>
+
             <li class="treeview <%= order_controller_action('index') %> <%= order_controller_action('purchase_history') %>">
               <a href="#">
                 <i class="fa fa fa-th"></i>

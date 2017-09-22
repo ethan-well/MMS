@@ -4,11 +4,12 @@ class NoticesController < ApplicationController
   def index
   end
 
-  def new
+  def show
+    @notice = Notice.find(params[:id])
   end
 
   def create
-    Notice.create(params.require('notice').permit('content'))
+    Notice.create(params.require('notice').permit('content', 'title'))
     redirect_to :back
   end
 
