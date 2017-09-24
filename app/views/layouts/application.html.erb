@@ -64,16 +64,22 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li class="<%= current_menu('infos') %>">
+                <li class="<%= current_controller_action('infos', 'index') %>">
                   <%= link_to infos_path do %>
                    <i class="fa fa-circle-o"></i>
                    基本信息
                   <% end %>
                 </li>
-                <li class="<%= current_menu('recharge_records') %>">
+                <li class="<%= current_controller_action('recharge_records', 'index') %>">
                   <%= link_to recharge_records_path do %>
                    <i class="fa fa-circle-o"></i>
                    充值中心
+                  <% end %>
+                </li>
+                <li class="<%= current_controller_action('infos', 'l_infos') %>">
+                  <%= link_to l_infos_infos_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   下级及提成
                   <% end %>
                 </li>
               </ul>
@@ -160,7 +166,6 @@
           <div class="row">
           <%= render 'layouts/errors'%>
           <%= yield %>
-
           </div>
         </section>
 

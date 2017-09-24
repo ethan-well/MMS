@@ -11,6 +11,8 @@ class Order < ApplicationRecord
 
   after_update :update_user_level
   after_update :deduct_percentage
+
+  has_one :deduct_percentages
   #生成订单编号
   def add_identification_code
     id_str = self.id.to_s
@@ -94,12 +96,15 @@ class Order < ApplicationRecord
       goods = self.goods
       h_user = user.h_user
       if h_user.present?
-        current_price = self.current_price
+        price_current = self.price_current
         count = self.count
-        h_price = goods.get_current_price(h_user.level)
-        if (current_price - h_price) > 0
-          deduct_percentage = count * (current_price - h_price)
-          h_user.update_attribute(:deduct_percentage, deduct_percentage)
+        h_price_current = self.h_price_current
+        if (price_current - h_price_current) > 0
+          deduct_percentage = count * (price_current - h_price_current)
+          DeductPercentage.transaction do
+            h_user.update_attribute(:deduct_percentage, deduct_percentage)
+            DeductPercentage.create(user_id: h_user.id, low_user_id: user.id, order_id: self.id, deduct_percentage: deduct_percentage)
+          end
         end
       end
     end

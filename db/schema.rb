@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922034112) do
+ActiveRecord::Schema.define(version: 20170923093424) do
 
   create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "namespace"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 20170922034112) do
     t.string   "last_sign_in_ip"
     t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "deduct_percentages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "user_id"
+    t.integer "order_id"
+    t.float   "deduct_percentages", limit: 24
+    t.integer "order_user_id"
+    t.integer "low_user_id"
   end
 
   create_table "goods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -80,6 +88,9 @@ ActiveRecord::Schema.define(version: 20170922034112) do
     t.integer  "start_num"
     t.integer  "aims_num"
     t.integer  "current_num"
+    t.integer  "level_crrent"
+    t.integer  "h_level_crrent"
+    t.float    "h_price_current",     limit: 24
   end
 
   create_table "recharge_records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

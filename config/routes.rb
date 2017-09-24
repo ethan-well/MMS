@@ -35,7 +35,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :infos
+  resources :infos do
+    collection do
+      get 'l_infos'
+    end
+  end
 
   resources :admins do
     collection do
@@ -64,4 +68,6 @@ Rails.application.routes.draw do
   resources :system_settings, only: [:update]
 
   resources :recharge_records, only: [:index]
+
+  resources :deduct_percentages, only: [:index]
 end

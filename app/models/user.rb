@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   has_many :orders
   has_many :special_prices
+  has_many :deduct_percentages
   belongs_to :level, required: false
 
   after_create :generate_invitation_code
@@ -50,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def low_level_users
-    User.where('h_invitation_code = ?', self.invitation_code).count
+    User.where('h_invitation_code = ?', self.invitation_code)
   end
 
   def today_spend
@@ -64,4 +65,9 @@ class User < ApplicationRecord
   def h_user
     User.find_by_invitation_code(self.h_invitation_code) rescue nil
   end
+
+  def deduct_percentage_form_user(user_id)
+    self.deduct_percentages.where('low_user_id = ?', user_id).map(&:deduct_percentage).reduce('+')
+  end
+
 end

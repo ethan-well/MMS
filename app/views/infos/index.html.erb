@@ -13,8 +13,8 @@
         <%  @notices.each do |notice| %>
           <li>
             <%= link_to notice.title, notice_path(notice.id), class: 'notice', remote: true %>
-            <span class="text-right">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;—— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
+            <span class="notice_time text-right">
+              —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
             </span>
           </li>
         <% end %>
@@ -69,8 +69,9 @@
             <label class="col-sm-3 control-label">账户余额</label>
             <div class="col-sm-9 padding-left-none">
               <span class="form-control border-none">
-                <%= current_user.balance %> (单位：元)&nbsp;&nbsp;&nbsp;
-                <a class="btn btn-xs btn-primary">充值</a>
+                <%= current_user.balance %>&nbsp;&nbsp;&nbsp;
+                <!-- <a class="btn btn-xs btn-primary">充值</a> -->
+                <%= link_to '充值', recharge_records_path, class: 'btn btn-xs btn-primary' %>
               </span>
             </div>
           </div>
@@ -97,3 +98,11 @@
     </div>
   </div>
 </div>
+
+<style>
+.notice_time{
+  display: inline-block;
+  margin-right: 0px;
+  float: right;
+}
+</style>

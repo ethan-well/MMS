@@ -47,6 +47,7 @@ class OrdersController < ApplicationController
 
       price_current = current_user.my_price(goods.id).to_f
 
+      h_user = current_user.h_user
       # 批量订单
       if params[:multiple_order]
         begin
@@ -58,8 +59,14 @@ class OrdersController < ApplicationController
               info = info.split('----')
               count = Integer(info[1])
               total_count += count.to_i
-              current_user.orders.create( goods_id: goods_id, price_current: price_current,
-                  count: count, total_price: price_current * count, account: info[0] )
+              order = current_user.orders.create( goods_id: goods_id, price_current: price_current,
+                  count: count, total_price: price_current * count, account: info[0],
+                  level_crrent: current_user.level_id )
+
+              if h_user.present?
+                h_price_current = h_user.my_price(goods.id).to_f
+                order.update_attribute(:h_level_crrent, h_user.level_id, h_price_current: h_price_current)
+              end
             end
             multiple_order_total_price = total_count * price_current.to_i
             raise '余额不足，请充值后下单' if current_user.balance < multiple_order_total_price
@@ -82,7 +89,11 @@ class OrdersController < ApplicationController
         current_user.update_attribute(:balance, current_user.balance - total_price)
 
         order =  current_user.orders.create(params.require(:order).permit(:goods_id, :remark, :account))
-        order.update_attributes(price_current: price_current, count: count, total_price: total_price)
+        order.update_attributes(price_current: price_current, count: count, total_price: total_price, level_crrent: current_user.level)
+        if h_user.present?
+          h_price_current = h_user.my_price(goods.id).to_f
+          order.update_attribute(:h_level_crrent, h_user.level_id, h_price_current: h_price_current)
+        end
       end
       notice = '下单成功'
     rescue => e

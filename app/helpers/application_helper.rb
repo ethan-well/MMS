@@ -19,7 +19,12 @@ module ApplicationHelper
         '订单中心'
       end
     when 'infos'
-      '基本信息'
+      case action_name
+      when 'l_infos'
+        '下级及提成'
+      else
+        '基本信息'
+      end
     when 'admins'
       '管理后台'
     when 'special_prices'
@@ -28,6 +33,8 @@ module ApplicationHelper
       '业务购买'
     when 'recharge_records'
       '充值中心'
+    when 'deduct_percentages'
+      '下级及提成'
     end
   end
 
@@ -62,4 +69,11 @@ module ApplicationHelper
     end
   end
 
+  def l_infos
+    controller_name == 'infos' && action_name == 'l_infos' ? 'active' : ''
+  end
+
+  def current_controller_action(controller, action)
+    controller_name == controller && action == action_name ? 'active' : ''
+  end
 end
