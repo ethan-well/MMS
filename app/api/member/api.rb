@@ -223,10 +223,48 @@ module Member
         end
       end
 
+		#if(strtoupper($sign)!=strtoupper(md5($tno.$payno.$money.$md5key)))exit('签名错误');
+      #api/member/pay_back
       desc '充值回调'
-      post :pay_back do
-        puts 'pay pay pay'
+      params do
+        requires :key, type: String, desc: 'api key'
+        requires :tno, type: String, desc: '交易号'
+        requires :payno, type: Integer, desc: 'user id'
+        requires :money, type: Float, desc: '付款金额'
+        requires :sign, type: String, desc: 'sign'
+        requires :typ, type: Integer, desc: 'type'
       end
+      post :pay_back do
+        key = 'abc123'
+        md5key = 'e99a18'
+        error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
+
+        if Digest::MD5.hexdigest(params[:tno] + params[:payno] + params[:money] + params[:md5key]) != params[:sign]
+          error!({result: 'failed', message: 'KEY错误'}, 401) unless u.encrypted_password == password
+        end
+
+        type = case params[:typ].to_i
+               when 1
+                 '手工充值'
+               when 2
+                 '支付宝充值'
+               when 3
+                 '财付通充值'
+               when 4
+                 '手Q充值'
+               when 5
+                 '微信充值'
+               else
+                 '未知'
+               end
+        RechargeRecord.transaction do
+          RechargeRecord.create(number: params[:tno], user_id: params[:payno], amount: params[:money], pay_type: type)
+          user = User.find(params[:payno])
+          user.update_attribute(:balance, uesr.balance + params[:money].to_i)
+        end
+
+      end
+
     end
 
   end
