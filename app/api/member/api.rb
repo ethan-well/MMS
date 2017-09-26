@@ -240,7 +240,7 @@ module Member
         error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
 
         if Digest::MD5.hexdigest(params[:tno] + params[:payno] + params[:money] + params[:md5key]) != params[:sign]
-          error!({result: 'failed', message: 'KEY错误'}, 401) unless u.encrypted_password == password
+          error!({result: 'failed', message: '验证失败'}, 401)
         end
 
         type = case params[:typ].to_i
