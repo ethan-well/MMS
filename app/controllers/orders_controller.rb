@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
   def index
     @orders = current_user.orders.includes(:goods)
     search_order
-    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(5)
+    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
 
   def purchase_history
