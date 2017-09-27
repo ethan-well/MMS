@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :orders
   has_many :special_prices
   has_many :deduct_percentages
+  has_many :recharge_records
   belongs_to :level, required: false
 
   after_create :generate_invitation_code
