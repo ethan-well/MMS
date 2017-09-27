@@ -234,12 +234,13 @@ module Member
         requires :sign, type: String, desc: 'sign'
         requires :typ, type: Integer, desc: 'type'
       end
-      post :pay_back do
+      get :pay_back do
         key = 'abc123'
         md5key = 'e99a18'
         error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
 
-        if Digest::MD5.hexdigest(params[:tno] + params[:payno] + params[:money] + params[:md5key]) != params[:sign]
+        puts Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money].to_s + md5key)
+        if Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money].to_s + md5key) != params[:sign]
           error!({result: 'failed', message: '验证失败'}, 401)
         end
 
@@ -260,7 +261,7 @@ module Member
         RechargeRecord.transaction do
           RechargeRecord.create(number: params[:tno], user_id: params[:payno], amount: params[:money], pay_type: type)
           user = User.find(params[:payno])
-          user.update_attribute(:balance, uesr.balance + params[:money].to_i)
+          user.update_attribute(:balance, user.balance + params[:money])
         end
 
       end
