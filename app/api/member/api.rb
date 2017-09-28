@@ -235,36 +235,41 @@ module Member
         requires :typ, type: Integer, desc: 'type'
       end
       get :pay_back do
-        key = 'abc123'
-        md5key = 'e99a18'
-        error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
+        begin
+          key = 'abc123'
+          md5key = 'e99a18'
+          error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
 
-        puts Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key)
-        if Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key) != params[:sign]
-          error!({result: 'failed', message: '验证失败'}, 401)
+          puts Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key)
+          if Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key) != params[:sign]
+            error!({result: 'failed', message: '验证失败'}, 401)
+          end
+
+          type = case params[:typ].to_i
+                 when 1
+                   '手工充值'
+                 when 2
+                   '支付宝充值'
+                 when 3
+                   '财付通充值'
+                 when 4
+                   '手Q充值'
+                 when 5
+                   '微信充值'
+                 else
+                   '未知'
+                 end
+          RechargeRecord.transaction do
+            params[:money] = params[:money].to_f
+            RechargeRecord.create(number: params[:tno], user_id: params[:payno], amount: params[:money], pay_type: type)
+            user = User.find(params[:payno])
+            user.update_attribute(:balance, user.balance + params[:money])
+          end
+          result = 1
+        rescue
+          result = false
         end
-
-        type = case params[:typ].to_i
-               when 1
-                 '手工充值'
-               when 2
-                 '支付宝充值'
-               when 3
-                 '财付通充值'
-               when 4
-                 '手Q充值'
-               when 5
-                 '微信充值'
-               else
-                 '未知'
-               end
-        RechargeRecord.transaction do
-          params[:money] = params[:money].to_f
-          RechargeRecord.create(number: params[:tno], user_id: params[:payno], amount: params[:money], pay_type: type)
-          user = User.find(params[:payno])
-          user.update_attribute(:balance, user.balance + params[:money])
-        end
-
+        result
       end
 
     end
