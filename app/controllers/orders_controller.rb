@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    begin
+    # begin
       goods_id = params['order']['goods_id']
       goods = Goods.find(goods_id)
       return redirect_to :back, notice: '业务类型不存在，请核对后重新下单' unless goods.present?
@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
       h_user = current_user.h_user
       # 批量订单
       if params[:multiple_order]
-        begin
+        #begin
           infos = params['multiple_order']
           order_info = infos.gsub(' ', '').split(/[\r\n]+/)
           total_count = 0
@@ -65,7 +65,7 @@ class OrdersController < ApplicationController
 
               if h_user.present?
                 h_price_current = h_user.my_price(goods.id).to_f
-                order.update_attribute(:h_level_crrent, h_user.level_id, h_price_current: h_price_current)
+                order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
               end
             end
             multiple_order_total_price = total_count * price_current.to_i
@@ -73,9 +73,9 @@ class OrdersController < ApplicationController
             current_user.update_attribute(:balance, current_user.balance - multiple_order_total_price )
           end
           notice = '下单成功'
-        rescue => ex
-          notice = ex.message
-        end
+      #  rescue => ex
+          #notice = ex.message
+      #  end
         return redirect_to :back, notice: notice
       end
 
@@ -92,13 +92,13 @@ class OrdersController < ApplicationController
         order.update_attributes(price_current: price_current, count: count, total_price: total_price, level_crrent: current_user.level)
         if h_user.present?
           h_price_current = h_user.my_price(goods.id).to_f
-          order.update_attribute(:h_level_crrent, h_user.level_id, h_price_current: h_price_current)
+          order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
         end
       end
       notice = '下单成功'
-    rescue => e
-      notice = e.message
-    end
+    # rescue => e
+      # notice = e.message
+    # end
     redirect_to :back, notice: notice
   end
 
