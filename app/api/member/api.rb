@@ -230,7 +230,7 @@ module Member
         requires :key, type: String, desc: 'api key'
         requires :tno, type: String, desc: '交易号'
         requires :payno, type: Integer, desc: 'user id'
-        requires :money, type: Float, desc: '付款金额'
+        requires :money, type: String, desc: '付款金额'
         requires :sign, type: String, desc: 'sign'
         requires :typ, type: Integer, desc: 'type'
       end
@@ -239,8 +239,8 @@ module Member
         md5key = 'e99a18'
         error!({result: 'failed', message: 'KEY错误'}, 401) unless key == params[:key]
 
-        puts Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money].to_s + md5key)
-        if Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money].to_s + md5key) != params[:sign]
+        puts Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key)
+        if Digest::MD5.hexdigest(params[:tno].to_s + params[:payno].to_s + params[:money] + md5key) != params[:sign]
           error!({result: 'failed', message: '验证失败'}, 401)
         end
 
@@ -259,6 +259,7 @@ module Member
                  '未知'
                end
         RechargeRecord.transaction do
+          params[:money] = params[:money].to_f
           RechargeRecord.create(number: params[:tno], user_id: params[:payno], amount: params[:money], pay_type: type)
           user = User.find(params[:payno])
           user.update_attribute(:balance, user.balance + params[:money])
