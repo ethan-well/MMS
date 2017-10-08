@@ -48,6 +48,11 @@
       <input type="checkbox" id="toggle-recharge" checked data-toggle="toggle" data-on="可充值" data-off="不可充值" data-onstyle="success" data-offstyle="danger">
     <% else %>
       <input type="checkbox" id="toggle-recharge" data-toggle="toggle" data-on="可充值" data-off="不可充值" data-onstyle="success" data-offstyle="danger">
+    <% end %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <% if system_setting.need_invitation_code %>
+      <input type="checkbox" id="toggle-need-invitation-code" checked data-toggle="toggle" data-on="需要验证码" data-off="不需要验证码" data-onstyle="success" data-offstyle="danger">
+    <% else %>
+      <input type="checkbox" id="toggle-need-invitation-code" data-toggle="toggle" data-on="需要验证码" data-off="不需要验证码" data-onstyle="success" data-offstyle="danger">
     <% end %>
   </div>
 </div>
@@ -108,6 +113,18 @@
       type: 'json',
       data: {
         change_info: { can_recharge: state }
+      }
+    })
+  });
+
+  $('#toggle-need-invitation-code').change(function(){
+    state = $(this).prop('checked');
+    $.ajax({
+      url: "<%= system_setting_path(1) %>",
+      method: 'put',
+      type: 'json',
+      data: {
+        change_info: { need_invitation_code: state }
       }
     })
   });

@@ -43,11 +43,36 @@
 </div>
 
 <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%'
+  $(document).ready(function(){
+    $(function () {
+      $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%'
+      });
+    });
+
+    //表单验证
+    $("#new_user").validate({
+      errorPlacement: function(error, element){
+        $(element).parent('div').addClass('has-error');
+        $(element).parent('div').append(error);
+      },
+  		errorElement: 'label',
+      errorClass: 'error',
+      rules: {
+        'user[email]': 'required',
+        'user[password]': 'required',
+        '_rucaptcha': 'required'
+      },
+      messages: {
+        'user[email]': '请输入邮箱',
+        'user[password]': '请输入密码',
+        '_rucaptcha': '请输入验证码'
+      }
     });
   });
+
+
+
 </script>

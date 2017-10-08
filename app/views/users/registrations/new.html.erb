@@ -13,7 +13,12 @@
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（选填）'%>
+        <% system_setting = SystemSetting.first %>
+        <% if system_setting.need_invitation_code %>
+          <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（必填）'%>
+        <% else %>
+          <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（选填）'%>
+        <% end %>
         <span class="glyphicon glyphicon-euro form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
@@ -48,6 +53,8 @@
 </div>
 
 <script>
+$(document).ready(function() {
+
   $(function () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
@@ -55,4 +62,35 @@
       increaseArea: '20%'
     });
   });
+
+  //订单验证
+  $("#new_user").validate({
+    errorPlacement: function(error, element){
+      $(element).parent('div').addClass('has-error');
+      $(element).parent('div').append(error);
+    },
+		errorElement: 'label',
+    errorClass: 'error',
+    rules: {
+      'user[name]': "required",
+      'user[email]': 'required',
+      'user[password]': 'required',
+      'user[password_confirmation]': 'required',
+      '_rucaptcha': {
+        required: true,
+        length: 5
+      }
+    },
+    messages: {
+      'user[name]': "请填写用户名",
+      'user[email]': '请填写邮箱',
+      'user[password]': '请输入密码',
+      'user[password_confirmation]': '请输入确认密码',
+      '_rucaptcha': {
+        required: '必须输入验证码',
+        length: '验证码长度为5'
+      }
+    }
+  });
+});
 </script>
