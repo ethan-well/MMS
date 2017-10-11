@@ -8,16 +8,16 @@
           <tr>
             <th>订单编号</th>
             <th>商品</th>
-            <th>购买数量<th>
+            <th>购买数量</th>
             <th>下级单价</th>
             <th>本人单价</th>
             <th>提成</th>
           </tr>
           <% @deduct_percentages.each do |deduct_percentage| %>
             <tr>
-              - order = deduct_percentage.order
+              <% order = deduct_percentage.order %>
               <td><%= order.identification_code %></td>
-              <td><%= order.name %></td>
+              <td><%= order.goods.name %></td>
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>
               <td><%= order.h_price_current %></td>
