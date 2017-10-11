@@ -80,7 +80,7 @@ class OrdersController < ApplicationController
         return redirect_to :back, notice: notice
       end
 
-      count = params['order']['count']
+      count = Integer(params['order']['count'])
       raise '下单数量至少为1' if count < 1
       total_price = price_current * count.to_i
 
