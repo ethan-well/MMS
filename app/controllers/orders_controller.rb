@@ -58,6 +58,7 @@ class OrdersController < ApplicationController
             order_info.each do |info|
               info = info.split('----')
               count = Integer(info[1])
+              raise '下单数量至少为1' if count < 1
               total_count += count.to_i
               order = current_user.orders.create( goods_id: goods_id, price_current: price_current,
                   count: count, total_price: price_current * count, account: info[0],
@@ -80,6 +81,7 @@ class OrdersController < ApplicationController
       end
 
       count = params['order']['count']
+      raise '下单数量至少为1' if count < 1
       total_price = price_current * count.to_i
 
       # 普通订单
