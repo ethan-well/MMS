@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    # begin
+    begin
       goods_id = params['order']['goods_id']
       goods = Goods.find(goods_id)
       return redirect_to :back, notice: '业务类型不存在，请核对后重新下单' unless goods.present?
@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
       h_user = current_user.h_user
       # 批量订单
       if params[:multiple_order]
-        #begin
+        begin
           infos = params['multiple_order']
           order_info = infos.gsub(' ', '').split(/[\r\n]+/)
           total_count = 0
@@ -74,9 +74,9 @@ class OrdersController < ApplicationController
             current_user.update_attribute(:balance, current_user.balance - multiple_order_total_price )
           end
           notice = '下单成功'
-      #  rescue => ex
-          #notice = ex.message
-      #  end
+        rescue => ex
+          notice = ex.message
+        end
         return redirect_to :back, notice: notice
       end
 
@@ -98,9 +98,9 @@ class OrdersController < ApplicationController
         end
       end
       notice = '下单成功'
-    # rescue => e
-      # notice = e.message
-    # end
+    rescue => e
+      notice = e.message
+    end
     redirect_to :back, notice: notice
   end
 
