@@ -96,13 +96,13 @@ class Order < ApplicationRecord
       goods = self.goods
       h_user = user.h_user
       if h_user.present?
-        price_current = self.price_current
+        price_current = self.price_current || 0
         count = self.count
-        h_price_current = self.h_price_current
+        h_price_current = self.h_price_current || 0
         if (price_current - h_price_current) > 0
           deduct_percentage = count * (price_current - h_price_current)
           DeductPercentage.transaction do
-            current_deduct_percentage = h_user.deduct_percentage.present? ? h_user.deduct_percentage : 0
+            current_deduct_percentage = h_user.deduct_percentage || 0
             h_user.update_attribute(:deduct_percentage, current_deduct_percentage + deduct_percentage)
             DeductPercentage.create(user_id: h_user.id, low_user_id: user.id, order_id: self.id, deduct_percentages: deduct_percentage)
           end
