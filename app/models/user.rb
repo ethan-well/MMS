@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   validates :password, length: { minimum: 3 }, if: -> { new_record? || changes[:crypted_password] }
@@ -11,6 +9,7 @@ class User < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   has_many :orders
   has_many :special_prices
+  has_many :h_set_prices
   has_many :deduct_percentages
   has_many :recharge_records
   belongs_to :level, required: false
@@ -34,6 +33,10 @@ class User < ApplicationRecord
     self.special_prices.find_by_goods_id(goods_id).price rescue nil
   end
 
+  def current_goods_h_set_price(goods_id)
+    self.h_set_prices.find_by_goods_id(goods_id).price rescue nil
+  end
+
   def invitation_code_in_word
     level_id > 1 ? invitation_code : '未开放'
   end
@@ -42,9 +45,9 @@ class User < ApplicationRecord
     active ? '可登录' : '不可登录'
   end
 
-  def my_price(good_id)
-    @good = Goods.find(good_id)
-    current_goods_special_prices(good_id) || @good.get_current_price(self.level_id)
+  def my_price(goods_id)
+    @goods = Goods.find(goods_id)
+    current_goods_h_set_price(goods_id) || current_goods_special_prices(goods_id) || @goods.get_current_price(self.level_id)
   end
 
   def month_ago_spend

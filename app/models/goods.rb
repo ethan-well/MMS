@@ -6,6 +6,7 @@ class Goods < ApplicationRecord
 
   has_many :orders
   has_many :special_prices
+  has_many :h_set_prices
 
   def self.seed
     goods_arr = ['赞', '粉丝', '鲜花']
@@ -15,6 +16,6 @@ class Goods < ApplicationRecord
   end
 
   def get_current_price(level)
-    price.split(' ')[ level - 1 ]
+    Float(price.split(' ')[ level - 1 ])
   end
 end

@@ -82,7 +82,7 @@ class OrdersController < ApplicationController
 
       count = Integer(params['order']['count'])
       raise '下单数量至少为1' if count < 1
-      total_price = price_current * count.to_i
+      total_price = price_current * count
 
       # 普通订单
       return redirect_to :back, notice: "余额不足,请充值后再下单" if current_user.balance < total_price

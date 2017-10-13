@@ -70,4 +70,6 @@ Rails.application.routes.draw do
   resources :recharge_records, only: [:index]
 
   resources :deduct_percentages, only: [:index]
+
+  resources :h_set_prices
 end
