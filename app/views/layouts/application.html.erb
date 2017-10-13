@@ -76,7 +76,7 @@
                    充值中心
                   <% end %>
                 </li>
-                <li class="<%= current_controller_action('infos', 'l_infos') %>">
+                <li class="<%= current_controller_action('infos', 'l_infos') %> <%= current_controller_action('h_set_prices', 'index')%>">
                   <%= link_to l_infos_infos_path do %>
                    <i class="fa fa-circle-o"></i>
                    下级及提成

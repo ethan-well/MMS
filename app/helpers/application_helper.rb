@@ -35,6 +35,8 @@ module ApplicationHelper
       '充值中心'
     when 'deduct_percentages'
       '下级及提成'
+    when 'h_set_prices'
+      '下级代理特价'
     end
   end
 
@@ -63,6 +65,8 @@ module ApplicationHelper
     when 'infos'
       'active'
     when 'recharge_records'
+      'active'
+    when 'h_set_prices'
       'active'
     else
       ''
