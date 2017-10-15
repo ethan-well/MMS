@@ -12,7 +12,7 @@
           </tr>
           <% @h_set_prices.each do |price| %>
             <tr>
-              <td><%= price.goods.name %></td>
+              <td><%= price.goods.name rescue '' %></td>
               <td><%= price.price %></td>
               <td>
                 <%= link_to '编辑', edit_h_set_price_path(price), remote: true %>
