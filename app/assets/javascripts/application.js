@@ -20,6 +20,7 @@
 //= require capture
 //= require bootstrap-toggle.min
 //= require bootstrap-datetimepicker.min
+//= require clipboard.min
 //= require select2.min
 
 

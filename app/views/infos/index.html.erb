@@ -96,7 +96,12 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">邀请下级</label>
             <div class="col-sm-9 padding-left-none">
-              <span class="form-control border-none"><%= invit_link %></span>
+              <span class="form-control border-none">
+                <input id="foo" value="<%= invit_link %>" class="clipboard_input">
+                <button class="btn btn-primary clipboard_button" data-clipboard-target="#foo">
+                  <img src="assets/clippy.svg" alt="Copy to clipboard" class="clipboard_image">
+                </button>
+              </span>
             </div>
           </div>
         </div>
@@ -106,9 +111,23 @@
 </div>
 
 <style>
-.notice_time{
-  display: inline-block;
-  margin-right: 0px;
-  float: right;
-}
+  .notice_time{
+    display: inline-block;
+    margin-right: 0px;
+    float: right;
+  }
+  .clipboard_input{
+    width: 350px;
+  }
+  .clipboard_button{
+    background-color: #FFF;
+    padding: 1px 2px;
+  }
+  .clipboard_image{
+    width: 20px !important;
+  }
 </style>
+
+<script>
+  new Clipboard('.btn');
+</script>

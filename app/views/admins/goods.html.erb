@@ -41,6 +41,11 @@
         <% end %>
       </table>
     </div>
+    <div class="box-footer clearfix">
+      <ul class="pagination pagination-sm inline">
+        <%= paginate @goods %>
+      </ul>
+    </div>
   </div>
   <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
     添加新业务

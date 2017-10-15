@@ -44,6 +44,11 @@
         <% end %>
       </table>
     </div>
+    <div class="box-footer clearfix">
+      <ul class="pagination pagination-sm inline">
+        <%= paginate @users %>
+      </ul>
+    </div>
   </div>
   <div id="add_edit_user_modal"></div>
   <%= link_to '会员级别规则', levels_path %>

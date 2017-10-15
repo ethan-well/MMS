@@ -9,6 +9,7 @@ class AdminsController < ApplicationController
              else
                @goods = Goods.all
              end
+    @goods = @goods.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
 
   def create_goods
@@ -44,6 +45,7 @@ class AdminsController < ApplicationController
   def orders
     @orders = Order.where('status = ?', params['status']).order('created_at desc')
     search_orders
+    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
 
   def users
@@ -53,6 +55,7 @@ class AdminsController < ApplicationController
       else
         User.all
       end
+    @users = @users.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
 
   def notices
