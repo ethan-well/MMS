@@ -80,4 +80,10 @@ module ApplicationHelper
   def current_controller_action(controller, action)
     controller_name == controller && action == action_name ? 'active' : ''
   end
+
+  def invit_link
+    #host = 'http://localhost:3000'
+    host = 'http://119.29.152.254:3000'
+    "#{host}/invites?invitation_code=#{current_user.invitation_code}"
+  end
 end

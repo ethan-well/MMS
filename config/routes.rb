@@ -72,4 +72,6 @@ Rails.application.routes.draw do
   resources :deduct_percentages, only: [:index]
 
   resources :h_set_prices
+  
+  resources :invites, only: [:index]
 end

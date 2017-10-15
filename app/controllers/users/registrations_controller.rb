@@ -7,9 +7,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :invitation_code_validated?, only: [:create]
   before_action :can_sigin_up?, only: [:create]
   # GET /resource/sign_up
-  # def new
-  #   super
-  # end
+  def new
+    @invitation_code = params[:invitation_code]
+    super
+  end
 
   # POST /resource
   def create

@@ -15,10 +15,14 @@
       </div>
       <div class="form-group has-feedback">
         <% system_setting = SystemSetting.first %>
-        <% if system_setting.need_invitation_code %>
-          <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（必填）'%>
-        <% else %>
-          <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（选填）'%>
+        <% if @invitation_code.present? %>
+          <%= f.text_field :h_invitation_code, value: @invitation_code, class: 'form-control' %>
+        <% else%>
+          <% if system_setting.need_invitation_code %>
+            <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（必填）'%>
+          <% else %>
+            <%= f.text_field :h_invitation_code, class: 'form-control', placeholder: '邀请码（选填）'%>
+          <% end %>
         <% end %>
         <span class="glyphicon glyphicon-euro form-control-feedback"></span>
       </div>
