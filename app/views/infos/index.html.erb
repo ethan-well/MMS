@@ -59,8 +59,25 @@
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">上级邀请码</label>
-            <div class="col-sm-9padding-left-none">
+            <div class="col-sm-9 padding-left-none">
               <span class="form-control border-none"> <%= current_user.h_invitation_code %> </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Api认证</label>
+            <div class="col-sm-9 padding-left-none">
+              <span class="form-control border-none md5-password-area dispaly-none">
+                <input id="api-authen" value="<%= current_user.md5_password %>" class="clipboard_input" readonly>
+                <button class="btn btn-default clipboard_button" data-clipboard-target="#api-authen">
+                  复制
+                </button>
+                <span class="hide-md5-password">
+                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                </span>
+              </span>
+              <span class="form-control border-none show-md5-password">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+              </span>
             </div>
           </div>
         </div>
@@ -97,9 +114,9 @@
             <label class="col-sm-3 control-label">邀请下级</label>
             <div class="col-sm-9 padding-left-none">
               <span class="form-control border-none">
-                <input id="foo" value="<%= invit_link %>" class="clipboard_input">
-                <button class="btn btn-primary clipboard_button" data-clipboard-target="#foo">
-                  <img src="assets/clippy.svg" alt="Copy to clipboard" class="clipboard_image">
+                <input id="foo" value="<%= invit_link %>" class="clipboard_input" readonly>
+                <button class="btn btn-default clipboard_button" data-clipboard-target="#foo">
+                  复制
                 </button>
               </span>
             </div>
@@ -116,18 +133,40 @@
     margin-right: 0px;
     float: right;
   }
+
   .clipboard_input{
-    width: 350px;
+    width: 335px;
   }
+
   .clipboard_button{
     background-color: #FFF;
     padding: 1px 2px;
   }
+
   .clipboard_image{
     width: 20px !important;
+  }
+
+  .show-md5-password,
+  .hide-md5-password{
+    cursor: pointer;
+  }
+
+  .dispaly-none{
+    display: none;
   }
 </style>
 
 <script>
   new Clipboard('.btn');
+  $('.show-md5-password').on('click', function(){
+    $(this).addClass('dispaly-none');
+    $('.md5-password-area').removeClass('dispaly-none');
+  });
+
+  $('.hide-md5-password').on('click', function(){
+    $('.md5-password-area').addClass('dispaly-none');
+    $('.show-md5-password').removeClass('dispaly-none');
+  });
+
 </script>

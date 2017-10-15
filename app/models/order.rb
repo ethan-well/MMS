@@ -16,10 +16,7 @@ class Order < ApplicationRecord
 
   #生成订单编号
   def add_identification_code
-    id_str = self.id.to_s
-    len = 8 - id_str.length
-    id_code =  self.created_at.to_i.to_s[-2..-1] + '0'*len + id_str
-    self.update_attribute(:identification_code, id_code)
+    self.update_attribute(:identification_code, 100000 + id)
   end
 
   def is_not_pay?
@@ -58,7 +55,7 @@ class Order < ApplicationRecord
       '已取消，已退款'
     when 'Finished'
       '已完成'
-    when 'dealing'
+    when 'Dealing'
       '处理中'
     when 'RefundFailed'
       '退款失败'

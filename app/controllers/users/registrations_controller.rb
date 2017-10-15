@@ -6,6 +6,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :captcha_validated?, only: [:create]
   before_action :invitation_code_validated?, only: [:create]
   before_action :can_sigin_up?, only: [:create]
+
+  #after_create :generate_md5_password
   # GET /resource/sign_up
   def new
     @invitation_code = params[:invitation_code]

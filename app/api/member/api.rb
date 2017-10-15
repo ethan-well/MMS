@@ -3,10 +3,11 @@ module Member
     format :json
 
     helpers do
-      def authenticate!(user_name, password)
-        u = User.find_by_name(user_name)
+      def authenticate!(user_email, password)
+        u = User.find_by_email(user_email)
         error!({result: 'failed', message: '用户不存在！'}, 404 ) unless u.present?
-        error!({result: 'failed', message: '401 Unauthorized'}, 401) unless u.encrypted_password == password
+        error!({result: 'failed', message: '401 Unauthorized'}, 401) unless u.md5_password == password
+        u
       end
     end
 
@@ -14,16 +15,15 @@ module Member
       # api/member/balance
       desc 'Return user info'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
       end
       post :balance do
-        u = authenticate!(params[:username], params[:password])
-        u.balance
+        u = authenticate!(params[:user_email], params[:password])
         {
           result: 'success',
           message: '查询成功',
-          username: u.user_name,
+          username: u.name,
           level:  u.level_id,
           email: u.email,
           sign_up: u.created_at,
@@ -33,14 +33,15 @@ module Member
 
       desc 'Return order status'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
         requires :id, type: Integer, desc: 'order id'
       end
       post :get_order_info do
         begin
-          u = authenticate!(params[:username], params[:password])
-          order = u.order.find(params[:id])
+          u = authenticate!(params[:user_email], params[:password])
+          order = u.orders.find_by_id(params[:id])
+          raise '订单不存在' unless order.present?
 
           { result: 'success',
             message: '查询订单信息成功',
@@ -63,18 +64,21 @@ module Member
 
       desc 'Return goods info'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User name'
         requires :password, type: String, desc: 'password'
         requires :id, type: Integer, desc: 'order id'
       end
       post :get_goods_info do
         begin
-          authenticate!(params[:username], params[:password])
-          goods = Goods.find(params[:id])
-          { result: 'success',
-            message: '查询商品信息',
+          u = authenticate!(params[:user_email], params[:password])
+          goods = Goods.find_by_id(params[:id])
+          raise '业务不存在' unless goods.present?
+
+          {
+            result: 'success',
+            message: '查询商品信息成功',
             name: goods.name,
-            price: goods.price
+            price: u.my_price(goods.id),
           }
         rescue => ex
           { result: 'failed', message: ex.message }
@@ -83,17 +87,18 @@ module Member
 
       desc 'Return all goods info'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
       end
       post :get_all_goods_info do
-        all_goods = []
         begin
+          u = authenticate!(params[:user_email], params[:password])
+          all_goods = []
           Goods.all.each do |goods|
             goods_info = {
               id: goods.id,
               name: goods.name,
-              price: goods.price
+              price: u.my_price(goods.id)
             }
 
             all_goods << goods_info
@@ -106,38 +111,54 @@ module Member
 
       desc 'Inset order'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
         requires :goods_id, type: Integer, desc: 'goods id'
         requires :count, type: Integer, desc: 'goods count'
+        requires :account, type: String, desc: 'account for'
         requires :remark, type: String, desc: 'remark'
       end
       post :insert_order do
-        u = authenticate!(params[:username], params[:password])
+        u = authenticate!(params[:user_email], params[:password])
         begin
-          goods = Goods.find(params[:goods_id])
+          count = Integer(params[:count])
+          raise '下单数量不能少于1' if count < 1
 
-          price_current = goods.get_current_price(u.level_id)
-          count = params[:count].to_i
+          goods = Goods.find(params[:goods_id])
+          price_current = u.my_price(goods.id)
           total_price =  price_current * count
+          raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if u.balance < total_price
+
           Order.transaction do
-            raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if u.balance < total_price
-            order =  u.orders.create(
-              price_current: price_current,
-              count: count,
-              total_price: total_price,
-              start_num: params[:start_num],
-              aims_num: params[:aims_num],
-              current_num: params[:current_num])
+            order = u.orders.create(
+                      goods_id: goods.id,
+                      remark: params[:remark],
+                      account: params[:account],
+                      price_current: price_current,
+                      count: count,
+                      total_price: total_price,
+                      level_crrent: u.level,
+                      start_num: params[:start_num],
+                      aims_num: params[:aims_num],
+                      current_num: params[:current_num]
+                    )
+
             u.update_attribute(:balance, u.balance - total_price)
+
+            h_user = u.h_user
+            if h_user.present?
+              h_price_current = h_user.my_price(goods.id).to_f
+              order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
+            end
+
+            {
+              result: 'success',
+              message: '下单成功',
+              id: order.id,
+              cost: order.total_price,
+              balance: u.balance
+            }
           end
-          {
-            result: 'success',
-            message: '下单成功',
-            id: order.id,
-            cost: order.total_price,
-            balance: u.balance
-          }
         rescue => ex
           { result: 'failed', message: ex.message }
         end
@@ -145,18 +166,18 @@ module Member
 
       desc 'set order status'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User name'
         requires :password, type: String, desc: 'password'
         requires :id, type: Integer, desc: 'Order id'
-        requires :states, type: Integer, desc: 'order states'
+        requires :states, type: String, desc: 'order states'
       end
       post :set_order_state do
-        u = authenticate!(params[:username], params[:password])
+        u = authenticate!(params[:user_email], params[:password])
         begin
           raise '权限不够' unless u.admin
           order = u.orders.find(params[:id])
           raise '订单信息不存在' unless order.present?
-          order.update_attribute(:status, params[:status])
+          order.update_attribute(:status, params[:states])
 
           { result: 'success', message: '状态更新成功' }
         rescue =>ex

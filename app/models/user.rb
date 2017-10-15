@@ -15,6 +15,7 @@ class User < ApplicationRecord
   belongs_to :level, required: false
 
   after_create :generate_invitation_code
+  after_create :generate_md5_password
 
   def serializable_hash(options = nil)
     super(options).merge(encrypted_password: encrypted_password, confirmed_at: confirmed_at, unconfirmed_email: unconfirmed_email)
@@ -27,6 +28,10 @@ class User < ApplicationRecord
   def generate_invitation_code
     invitation_code = AESCrypt.encrypt(email, encrypted_password)
     self.update_attribute(:invitation_code, invitation_code[0..6] + id.to_s)
+  end
+
+  def generate_md5_password
+    update_attribute(:md5_password, Digest::MD5.hexdigest(email + 'WoNiMaDeYa'))
   end
 
   def current_goods_special_prices(goods_id)
