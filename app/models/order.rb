@@ -13,11 +13,12 @@ class Order < ApplicationRecord
   after_update :deduct_percentage
 
   has_one :deduct_percentages
+
   #生成订单编号
   def add_identification_code
     id_str = self.id.to_s
-    len = 6 - id_str.length
-    id_code =  self.created_at.to_i.to_s + '0'*len + id_str
+    len = 8 - id_str.length
+    id_code =  self.created_at.to_i.to_s[-2..-1] + '0'*len + id_str
     self.update_attribute(:identification_code, id_code)
   end
 
