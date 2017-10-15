@@ -4,7 +4,11 @@ class AdminsController < ApplicationController
   end
 
   def goods
-    @goods = Goods.all
+    @goods = if params[:goods_id].present?
+               @goods = Goods.where(id: params[:goods_id])
+             else
+               @goods = Goods.all
+             end
   end
 
   def create_goods
@@ -39,10 +43,16 @@ class AdminsController < ApplicationController
 
   def orders
     @orders = Order.where('status = ?', params['status']).order('created_at desc')
+    search_orders
   end
 
   def users
-    @users = User.all
+    @users =
+      if params[:user_id].present?
+        User.where(id: params[:user_id])
+      else
+        User.all
+      end
   end
 
   def notices
@@ -66,6 +76,19 @@ class AdminsController < ApplicationController
       @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
       @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
       @user = @user.name
+    end
+  end
+
+  def search_orders
+    filter_params = params.permit(['user_id', 'goods_id', 'account', 'remark'])
+    filter_params.each do |filter_param, value|
+      if value.present?
+        if ['user_id', 'goods_id'].include? filter_param
+          @orders = @orders.where("#{filter_param} = ?", value)
+        else ['account', 'remark'].include? filter_param
+          @orders = @orders.where("#{filter_param} LIKE ?", "%#{value}%")
+        end
+      end
     end
   end
 end

@@ -1,15 +1,17 @@
 <div class="col-md-12">
   <div class="box">
-    <%= form_tag orders_path, method: 'get' do %>
+    <%= form_tag orders_admins_path, method: 'get' do %>
       <div class="box-body">
         <div class="form-group">
+          <%= hidden_field_tag :status, params[:status] %>
           <div class="col-xs-2">
-            <%= label_tag '订单状态' %>
-            <%= select_tag :status, options_from_collection_for_select(Settings.order.status, 'to_s', 'to_chinese', params['status']), class: 'form-control select-status' %>
+            <%= label_tag '用户' %>
+            <%= select_tag :user_id, options_from_collection_for_select(User.all, 'id', 'email', params['user_id']), include_blank: true, class: 'form-control select-user' %>
           </div>
+
           <div class="col-xs-2">
-            <%= label_tag '业务类型'%>
-            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), class: 'form-control select-goods' %>
+            <%= label_tag '业务类型' %>
+            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), include_blank: true, class: 'form-control single-select' %>
           </div>
           <div class="col-xs-2">
             <label for="exampleInputEmail1">下单账号</label>
@@ -20,7 +22,7 @@
             <%= text_field_tag :remark, params['remark'], class: 'form-control', placeholder: '备注信息'%>
           </div>
           <div class="col-xs-2">
-            <label></label>
+            <label ></label>
             <%= submit_tag '查询', class: 'btn btn-block btn-primary btn-flat make-line'%>
           </div>
         </div>
@@ -30,12 +32,12 @@
 </div>
 
 <script type="text/javascript">
-    $(".select-status").select2({
-      placeholder: "订单状态",
+    $(".select-user").select2({
+      placeholder: "选择用户",
       allowClear: true
     });
-    $(".select-goods").select2({
-      placeholder: "业务",
+    $(".single-select").select2({
+      placeholder: "选择业务",
       allowClear: true
     });
 </script>
