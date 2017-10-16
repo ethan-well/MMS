@@ -17,7 +17,7 @@
             <tr>
               <% order = deduct_percentage.order %>
               <td><%= order.identification_code %></td>
-              <td><%= order.goods.name %></td>
+              <td><%= order.goods.name rescue '' %></td>
               <td><%= order.count %></td>
               <td><%= order.price_current %></td>
               <td><%= order.h_price_current %></td>
