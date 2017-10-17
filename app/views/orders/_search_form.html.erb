@@ -5,11 +5,11 @@
         <div class="form-group">
           <div class="col-xs-2">
             <%= label_tag '订单状态' %>
-            <%= select_tag :status, options_from_collection_for_select(Settings.order.status, 'to_s', 'to_chinese', params['status']), class: 'form-control select-status' %>
+            <%= select_tag :status, options_from_collection_for_select(Settings.order.status, 'to_s', 'to_chinese', params['status']), include_blank: true, class: 'form-control select-status' %>
           </div>
           <div class="col-xs-2">
             <%= label_tag '业务类型'%>
-            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), class: 'form-control select-goods' %>
+            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), include_blank: true, class: 'form-control select-goods' %>
           </div>
           <div class="col-xs-2">
             <label for="exampleInputEmail1">下单账号</label>

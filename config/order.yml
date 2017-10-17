@@ -1,6 +1,6 @@
 defaults: &defaults
   order:
-    status: ['Waiting', 'Dealing', 'Finished', 'Cancel']
+    status: ['Waiting', 'Dealing', 'Finished', 'Refund']
 
 development:
   <<: *defaults

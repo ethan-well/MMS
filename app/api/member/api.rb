@@ -31,21 +31,21 @@ module Member
          }
       end
 
-      desc 'Return order status'
+      desc 'Return order info'
       params do
         requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
-        requires :id, type: Integer, desc: 'order id'
+        requires :id, type: String, desc: 'order id'
       end
       post :get_order_info do
         begin
           u = authenticate!(params[:user_email], params[:password])
-          order = u.orders.find_by_id(params[:id])
+          order = u.orders.find_by_identification_code(params[:id])
           raise '订单不存在' unless order.present?
 
           { result: 'success',
             message: '查询订单信息成功',
-            order_id: order.id,
+            order_id: order.identification_code,
             status: order.status,
             order_time: order.created_at,
             goods: order.goods.name,
@@ -154,7 +154,7 @@ module Member
             {
               result: 'success',
               message: '下单成功',
-              id: order.id,
+              id: order.identification_code,
               cost: order.total_price,
               balance: u.balance
             }
@@ -168,16 +168,21 @@ module Member
       params do
         requires :user_email, type: String, desc: 'User name'
         requires :password, type: String, desc: 'password'
-        requires :id, type: Integer, desc: 'Order id'
+        requires :id, type: String, desc: 'Order id'
         requires :states, type: String, desc: 'order states'
       end
       post :set_order_state do
         u = authenticate!(params[:user_email], params[:password])
+        raise '权限不够' unless u.admin
         begin
           raise '权限不够' unless u.admin
-          order = u.orders.find(params[:id])
+          order = Order.find_by_identification_code(params[:id].to_s)
           raise '订单信息不存在' unless order.present?
-          order.update_attribute(:status, params[:states])
+          raise '状态错误' unless Settings.order.status.include?(params[:states])
+          Order.transaction do
+            order.update_attribute(:status, params[:states])
+            u.update_attribute(:balance, user.balance + order.total_price ) if params[:states] == 'Refund'
+          end
 
           { result: 'success', message: '状态更新成功' }
         rescue =>ex
@@ -187,7 +192,7 @@ module Member
 
       desc 'get orders info'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User name'
         requires :password, type: String, desc: 'password'
         requires :states, type: Integer, desc: 'order states'
         requires :goods_id, type: Integer, desc: 'order states'
@@ -195,14 +200,14 @@ module Member
       post :get_order_info_throught_goods_id do
         begin
           u = authenticate!(params[:username], params[:password])
-          raise '权限不够' unless u.admin
+          raise '用户不存在' unless u.present?
           goods = Goods.find(params[:goods_id])
           raise '类型不存在' unless goods.present?
-          orders = goods.orders.order('created_at desc').limit(params[:num])
+          orders = Order.where('goods_id = ? AND user_id = ?', goods.id, u.id).order('created_at desc')
           all_info = []
           orders.each do |order|
             info = {
-                    order_id: order.id,
+                    order_id: order.identification_code,
                     status: order.status,
                     order_time: order.created_at,
                     total_price: order.total_price,
@@ -222,17 +227,17 @@ module Member
 
       desc 'Refund'
       params do
-        requires :username, type: String, desc: 'User name'
+        requires :user_email, type: String, desc: 'User email'
         requires :password, type: String, desc: 'password'
-        requires :id, type: Integer, desc: 'order id'
+        requires :id, type: String, desc: 'order id'
       end
       post :redund do
         begin
-          u = authenticate!(params[:username], params[:password])
+          u = authenticate!(params[:user_email], params[:password])
           raise '权限不够' unless u.admin
-          order = Order.find(params[:id])
+          order = Order.find_by_identification_code(params[:id])
           raise '订单不存在' unless order.present?
-          raise '订单状态异常不能退款' unless order.status == 'Waiting'
+          raise '已经退款,不可重复退款' if order.status == 'Refund'
           Order.transaction do
             user = order.user
             user.update_attribute(:balance, user.balance + order.total_price)
@@ -240,7 +245,34 @@ module Member
           end
           { result: 'success', message: '退款成功' }
         rescue => ex
-          { result: 'failed', message: '退款失败' }
+          { result: 'failed', message: ex.message }
+        end
+      end
+
+      desc 'set three count'
+      params do
+        requires :user_email, type: String, desc: 'User email'
+        requires :password, type: String, desc: 'password'
+        requires :id, type: String, desc: 'order id'
+        requires :start_num, type: String, desc: 'start num'
+        requires :aims_num, type: String, desc: 'aims num'
+        requires :current_num, type: String, desc: 'current num'
+      end
+      post :set_tree_count do
+        begin
+          u = authenticate!(params[:user_email], params[:password])
+          raise '权限不够' unless u.admin
+          order = Order.find_by_identification_code(params[:id])
+          raise '订单不存在' unless order.present?
+          order.update_attributes(start_num: params[:start_num], aims_num: params[:aims_num], current_num: params[:current_num])
+          result = {
+            start_num: params[:start_num],
+            aims_num: params[:aims_num],
+            current_num: params[:current_num]
+          }
+          { result: 'success', message: '设置成功', data: result }
+        rescue => ex
+          { result: 'failed', message: ex.message }
         end
       end
 

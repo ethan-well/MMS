@@ -7,7 +7,7 @@ class String
       '处理中'
     when 'Finished'
       '已完成'
-    when 'Cancel'
+    when 'Refund'
       '已经退款'
     else
       itself

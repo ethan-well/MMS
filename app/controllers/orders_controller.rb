@@ -1,8 +1,6 @@
 class OrdersController < ApplicationController
-  before_action :current_order, only: [:cancel, :finished, :edit]
-  before_action :validate_user, only: [:cancel, :finished]
-  before_action :validate_can_edit, only: [:edit]
-  before_action :is_admin?, only: [:admin_change_status]
+  before_action :current_order, only: [:edit, :update]
+  before_action :is_admin?, only: [:admin_change_status, :update, :edit]
 
   def index
     @orders = current_user.orders.includes(:goods)
@@ -31,7 +29,6 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
-    puts params[:goods_id]
     @goods = Goods.find(params[:goods_id])
   end
 
@@ -106,7 +103,6 @@ class OrdersController < ApplicationController
 
   def update
     begin
-      @order = Order.find(params[:id])
       goods = Goods.find(params[:order][:goods_id])
       count = params[:order][:count]
       if @order.is_paied?
@@ -127,39 +123,10 @@ class OrdersController < ApplicationController
     redirect_to action: 'index', notice: notice
   end
 
-  def cancel
-    # begin
-      if @order.can_cancel?
-        @order.update_attribute(:status, 'Canceled')
-        notice = '订单已取消'
-      else
-        notice = '订单取消失败, 当前订单不可取消'
-      end
-    # rescue
-      notice = '订单取消失败，请刷新页面后重试'
-    # end
-
-    redirect_to :back, notice: notice
-  end
-
-  def finished
-    begin
-      if @order.can_make_finished?
-        @order.update_attribute(:status, 'Finished')
-        notice = '订单已完成'
-      else
-        notice = '当前订单状态不能变更为以完成'
-      end
-    rescue
-      notice = '变更状态失败，请刷新页面后重试'
-    end
-
-    redirect_to :back, notice: notice
-  end
-
   def admin_change_status
     @order = Order.find(params[:id])
     user = @order.user
+    return redirect_to :back, notice: '订单状态已经退款，状态不能改变' if @order.status == 'Refund'
     Order.transaction do
       @order.update_attribute(:status, params[:status])
       user.update_attribute(:balance, user.balance + @order.total_price ) if params[:status] == 'Refund'
@@ -171,14 +138,6 @@ class OrdersController < ApplicationController
   private
   def current_order
     @order = Order.find(params['id'])
-  end
-
-  def validate_user
-    return redirect_to :back, notice: '权限错误！' if @order.user_id != current_user.id
-  end
-
-  def validate_can_edit
-    return redirect_to :back, notice: '当前订单不可以修改！' if !@order.can_edit?
   end
 
   def search_order
