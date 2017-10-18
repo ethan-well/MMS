@@ -48,7 +48,7 @@ module Member
             order_id: order.identification_code,
             status: order.status,
             order_time: order.created_at,
-            goods: order.goods.name,
+            goods: order.goods.try(:name),
             goods_num: order.count,
             total_price: order.total_price,
             account: order.account,
@@ -56,6 +56,43 @@ module Member
             start_num: order.start_num,
             aims_num: order.aims_num,
             current_num: order.current_num
+          }
+        rescue => ex
+          {result: 'failed', message: ex.message}
+        end
+      end
+
+      desc 'get my orders info'
+      params do
+        requires :user_email, type: String, desc: 'User email'
+        requires :password, type: String, desc: 'password'
+      end
+      post :get_my_all_orders_info do
+        begin
+          u = authenticate!(params[:user_email], params[:password])
+          orders = u.orders
+          infos = []
+          orders.each do |order|
+            info =
+              {
+                order_id: order.identification_code,
+                status: order.status,
+                order_time: order.created_at,
+                goods: order.goods.try(:name),
+                goods_num: order.count,
+                total_price: order.total_price,
+                account: order.account,
+                remark: order.remark,
+                start_num: order.start_num,
+                aims_num: order.aims_num,
+                current_num: order.current_num
+              }
+            infos << info
+          end
+
+          { result: 'success',
+            message: '查询订单信息成功',
+            data: infos
           }
         rescue => ex
           {result: 'failed', message: ex.message}
@@ -194,22 +231,25 @@ module Member
       params do
         requires :user_email, type: String, desc: 'User name'
         requires :password, type: String, desc: 'password'
-        requires :states, type: Integer, desc: 'order states'
-        requires :goods_id, type: Integer, desc: 'order states'
       end
-      post :get_order_info_throught_goods_id do
+      post :get_orders_info_wanted do
         begin
-          u = authenticate!(params[:username], params[:password])
-          raise '用户不存在' unless u.present?
-          goods = Goods.find(params[:goods_id])
-          raise '类型不存在' unless goods.present?
-          orders = Order.where('goods_id = ? AND user_id = ?', goods.id, u.id).order('created_at desc')
+          u = authenticate!(params[:user_email], params[:password])
+          raise '权限不够' unless u.admin
+
+          orders = Order.where(nil)
+          orders = orders.where(goods_id: params[:goods_id]) if params[:goods_id].present?
+          orders = orders.where(status: params[:states]) if params[:states].present?
+          orders = orders.where(user_id: params[:user_id]) if params[:user_id].present?
+
           all_info = []
           orders.each do |order|
             info = {
                     order_id: order.identification_code,
                     status: order.status,
                     order_time: order.created_at,
+                    goods_id: order.goods.try(:id),
+                    goods_name: order.goods.try(:name),
                     total_price: order.total_price,
                     account: order.account,
                     remark: order.remark,
@@ -242,6 +282,7 @@ module Member
             user = order.user
             user.update_attribute(:balance, user.balance + order.total_price)
             order.update_attribute(:status, 'Refund')
+            order.update_attribute(:remark, params[:remark]) if params[:remark].present?
           end
           { result: 'success', message: '退款成功' }
         rescue => ex
@@ -273,6 +314,45 @@ module Member
           { result: 'success', message: '设置成功', data: result }
         rescue => ex
           { result: 'failed', message: ex.message }
+        end
+      end
+
+      desc 'get expenses info'
+      params do
+        requires :user_email, type: String, desc: 'User email'
+        requires :password, type: String, desc: 'password'
+      end
+      post :get_expenses_info do
+        begin
+          u = authenticate!(params[:user_email], params[:password])
+          raise '权限不够' unless u.admin
+          if params[:user_id].blank?
+            user = '所有用户'
+            finished_orders = Order.where('status = ?', 'Finished')
+            total_spend = finished_orders.map(&:total_price).reduce(:+)
+            month_ago_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
+            today_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+            custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+          else
+            user = User.find(params[:user_id])
+            finished_orders = user.orders.where('status =?', 'Finished')
+            total_spend = finished_orders.map(&:total_price).reduce(:+)
+            month_ago_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
+            today_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+            custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+            user = user.name
+          end
+          info =
+            {
+              user: user,
+              total_spend: total_spend,
+              month_ago_spend: month_ago_spend,
+              today_spend: today_spend,
+              custom_query_spend: custom_query_spend
+            }
+          { result: 'success', message: '查询成功', data: info }
+        rescue => ex
+          { result: 'success', message: ex.message }
         end
       end
 
