@@ -188,7 +188,7 @@ module Member
               h_price_current = h_user.my_price(goods.id).to_f
               order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
             end
-
+            u = User.find(u.id)
             {
               result: 'success',
               message: '下单成功',
