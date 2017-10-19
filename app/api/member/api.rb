@@ -348,8 +348,7 @@ module Member
               user: user,
               total_spend: total_spend,
               month_ago_spend: month_ago_spend,
-              today_spend: today_spend,
-              custom_query_spend: custom_query_spend
+              today_spend: today_spend
             }
           { result: 'success', message: '查询成功', data: info }
         rescue => ex
