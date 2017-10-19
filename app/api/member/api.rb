@@ -71,6 +71,7 @@ module Member
         begin
           u = authenticate!(params[:user_email], params[:password])
           orders = u.orders
+          orders = orders.where(goods_id: params[:goods_id]) if params[:goods_id].present?
           infos = []
           orders.each do |order|
             info =
