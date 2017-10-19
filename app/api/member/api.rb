@@ -272,7 +272,7 @@ module Member
         requires :password, type: String, desc: 'password'
         requires :id, type: String, desc: 'order id'
       end
-      post :redund do
+      post :refund do
         begin
           u = authenticate!(params[:user_email], params[:password])
           raise '权限不够' unless u.admin
@@ -333,14 +333,14 @@ module Member
             total_spend = finished_orders.map(&:total_price).reduce(:+)
             month_ago_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
             today_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
-            custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+            # custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
           else
             user = User.find(params[:user_id])
             finished_orders = user.orders.where('status =?', 'Finished')
             total_spend = finished_orders.map(&:total_price).reduce(:+)
             month_ago_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
             today_spend = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
-            custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+            # custom_query_spend = finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
             user = user.name
           end
           info =
