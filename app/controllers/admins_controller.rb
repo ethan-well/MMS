@@ -15,12 +15,12 @@ class AdminsController < ApplicationController
   def create_goods
     begin
       Goods.create(params.require(:goods).permit(:name, :price))
-      notice = '业务添加成功'
+      flash[:notice] = '业务添加成功'
     rescue
-      notice = '业务添加失败，稍后重试'
+      flash[:alert] = '业务添加失败，稍后重试'
     end
 
-    redirect_to :back, notice: notice
+    redirect_to :back
   end
 
   def edit_user
@@ -35,11 +35,11 @@ class AdminsController < ApplicationController
       user = User.find(params[:id])
       raise '等级不合法'  unless Level.find(params[:level_id]).present?
       user.update_attributes(level_id: params[:level_id], balance: params[:balance], can_invite: params[:can_invite], active: params[:active])
-      nitice = '用户信息更改成功'
+      flash[:nitice] = '用户信息更改成功'
     rescue => ex
-      notice = ex.message
+      flash[:alert] = ex.message
     end
-    return redirect_to :back, notice: notice
+    return redirect_to :back
   end
 
   def orders

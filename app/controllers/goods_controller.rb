@@ -7,14 +7,20 @@ class GoodsController < ApplicationController
   end
 
   def create
-    #begin
+    begin
+      raise '价格不能为空' if params[:price].nil?
+      price_arr = params[:price].split(' ')
+      raise '价格格式错误' if  price_arr.length < 4
+      price_arr.each do |price|
+        Integer(price)
+      end
       Goods.create(name: params[:name], price: params[:price], remark: params[:remark])
-      notice = '业务添加成功'
-    #rescue
-      notice = '业务添加失败，稍后重试'
-    #end
+      flash[:notice] = '业务添加成功'
+    rescue => ex
+      flash[:alert] = ex.message
+    end
 
-    redirect_to :back, notice: notice
+    redirect_to :back
   end
 
   def show
@@ -26,27 +32,27 @@ class GoodsController < ApplicationController
   end
 
   def update
-    #begin
+    begin
       goods = Goods.find(params[:id])
       goods.update_attributes(params.require('goods').permit(:name, :price, :remark))
-      notice = '修改成功'
-    #rescue
-      notice = '修改失败'
-    #end
+      flash[:notice] = '修改成功'
+    rescue
+      flash[:alert] = '修改失败'
+    end
 
-    redirect_to goods_admins_path, notice: notice
+    redirect_to goods_admins_path
   end
 
   def destroy
     begin
       good = Goods.find(params[:id])
       good.destroy
-      notice = '删除成功'
+      flash[:notice] = '删除成功'
     rescue
-      notice = '删除失败'
+      flash[:alert] = '删除失败'
     end
 
-    redirect_to goods_admins_path, notice: notice
+    redirect_to goods_admins_path
   end
 
   def get_price

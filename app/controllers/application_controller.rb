@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   def is_admin?
     unless current_user.admin
-      redirect_to :back, notice: '抱歉，权限不够！'
+      redirect_to :back, alert: '抱歉，权限不够！'
     end
   end
 end

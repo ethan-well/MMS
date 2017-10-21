@@ -9,11 +9,11 @@ class SpecialPricesController < ApplicationController
   def create
     begin
       SpecialPrice.create(params.require(:special_price).permit(:price, :remark, :user_id, :goods_id))
-      notice = '创建成功'
+      flash[:notice] = '创建成功'
     rescue
-      notice = '创建失败'
+      flash[:alert] = '创建失败'
     end
-    redirect_to :back, notice: notice
+    redirect_to :back
   end
 
   def user_special_prices
@@ -30,11 +30,11 @@ class SpecialPricesController < ApplicationController
     begin
       special_price = SpecialPrice.find(params[:id])
       special_price.destroy
-      notice = '删除成功'
+      flash[:notice] = '删除成功'
     rescue
-      notice = '删除失败'
+      flash[:alert] = '删除失败'
     end
-    redirect_to :back, notice: notice
+    redirect_to :back
   end
 
   def edit
@@ -45,9 +45,9 @@ class SpecialPricesController < ApplicationController
     begin
       @special_price = SpecialPrice.find(params[:id])
       @special_price.update_attributes(params.require(:special_price).permit(:price, :remark, :user_id, :goods_id))
-      notice = '修改成功'
+      flash[:notice] = '修改成功'
     rescue
-      notice = '修改失败'
+      flash[:alert] = '修改失败'
     end
     redirect_to action: 'user_special_prices', user_id: params[:special_price][:user_id]
   end
