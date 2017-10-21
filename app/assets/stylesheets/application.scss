@@ -57,7 +57,16 @@ img.rucaptcha-image{
   max-width: 100px;
   word-break: break-all;
 }
-.base-th,
-.base-td{
-  width: 75px;
+
+.goods-th,
+.goods-td{
+  max-width: 100px;
+}
+.count-th{
+  width: 45px;
+}
+
+.status-th,
+.status-td{
+  width: 80px;
 }

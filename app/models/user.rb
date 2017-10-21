@@ -31,7 +31,7 @@ class User < ApplicationRecord
   end
 
   def generate_md5_password
-    update_attribute(:md5_password, Digest::MD5.hexdigest(email + 'WoNiMaDeYa'))
+    update_attribute(:md5_password, Digest::MD5.hexdigest(email + 'WoNiMaDeYa' + created_at.to_s))
   end
 
   def current_goods_special_prices(goods_id)

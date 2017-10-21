@@ -218,6 +218,8 @@ module Member
           raise '订单信息不存在' unless order.present?
           raise '状态错误' unless Settings.order.status.include?(params[:states])
           Order.transaction do
+            order.update_attribute(:remark, params[:remark]) if params[:remark].present?
+            order.update_attribute(:account, params[:account]) if params[:account].present?
             order.update_attribute(:status, params[:states])
             u.update_attribute(:balance, user.balance + order.total_price ) if params[:states] == 'Refund'
           end
@@ -251,7 +253,9 @@ module Member
                     order_time: order.created_at,
                     goods_id: order.goods.try(:id),
                     goods_name: order.goods.try(:name),
+                    goods_count: order.count,
                     total_price: order.total_price,
+                    order_user: order.user.email,
                     account: order.account,
                     remark: order.remark,
                     start_num: order.start_num,

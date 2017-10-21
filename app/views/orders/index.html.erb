@@ -9,32 +9,32 @@
         <table class="table table-bordered">
           <tr>
             <th style="width: 75px">订单编号</th>
+            <th class="goods-th">业务</th>
+            <th class="count-th">下单账号</th>
+            <th class="count-th">数量</th>
+            <th class="count-th">单价</th>
+            <th class="count-th">总价</th>
+            <th class="count-th">初始</th>
+            <th class="count-th">目标</th>
+            <th class="count-th">当前</th>
             <th style="width: 150px">下单时间</th>
-            <th>业务</th>
-            <th>数量</th>
-            <th class="base-th">单价</th>
-            <th>总金额</th>
-            <td class="base-th">下单账号</td>
             <th class="order-remark-th">备注</th>
-            <th class="base-th">初始数量</th>
-            <th class="base-th">目标数量</th>
-            <th class="base-th">当前数量</th>
-            <th>状态</th>
+            <th class="status-th">状态</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
               <td><%= order.identification_code %></td>
+              <td class="goods-td"><%= order.goods.name rescue ''%></td>
+              <td class="count-td"><%= order.account %></td>
+              <td class="count-td"><%= order.count %></td>
+              <td class="count-td"><%= order.price_current %></td>
+              <td class="count-td"><%= order.total_price %></td>
+              <td class="count-td"><%= order.start_num %></td>
+              <td class="count-td"><%= order.aims_num %></td>
+              <td class="count-td"><%= order.current_num %></td>
               <td style="width: 150px"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td><%= order.goods.name rescue ''%></td>
-              <td><%= order.count %></td>
-              <td class="base-td"><%= order.price_current %></td>
-              <td><%= order.total_price %></td>
-              <td class="base-td"><%= order.account %></td>
               <td class="order-remark-th"><%= order.remark %></td>
-              <td class="base-td"><%= order.start_num %></td>
-              <td class="base-td"><%= order.aims_num %></td>
-              <td class="base-td"><%= order.current_num %></td>
-              <td><%= order.status_in_word %></td>
+              <td class="status-td"><%= order.status_in_word %></td>
             </tr>
           <% end %>
         </table>

@@ -1,5 +1,5 @@
 class NoticesController < ApplicationController
-  before_action :is_admin?
+  before_action :is_admin?, except: [:show]
 
   def index
   end
