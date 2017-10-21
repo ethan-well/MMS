@@ -101,7 +101,9 @@ class Order < ApplicationRecord
           deduct_percentage = count * (price_current - h_price_current)
           DeductPercentage.transaction do
             current_deduct_percentage = h_user.deduct_percentage || 0
+            current_balance = h_user.balance
             h_user.update_attribute(:deduct_percentage, current_deduct_percentage + deduct_percentage)
+            h_user.update_attribute(:balance, current_balance + deduct_percentage)
             DeductPercentage.create(user_id: h_user.id, low_user_id: user.id, order_id: self.id, deduct_percentages: deduct_percentage)
           end
         end

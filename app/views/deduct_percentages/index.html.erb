@@ -15,6 +15,7 @@
           </tr>
           <% @deduct_percentages.each do |deduct_percentage| %>
             <tr>
+              <% order = deduct_percentage.order %>
               <td><%= order.identification_code %></td>
               <td><%= order.goods.name rescue '' %></td>
               <td><%= order.count %></td>
