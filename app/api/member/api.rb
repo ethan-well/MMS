@@ -221,7 +221,7 @@ module Member
             order.update_attribute(:remark, params[:remark]) if params[:remark].present?
             order.update_attribute(:account, params[:account]) if params[:account].present?
             order.update_attribute(:status, params[:states])
-            u.update_attribute(:balance, user.balance + order.total_price ) if params[:states] == 'Refund'
+            u.update_attribute(:balance, u.balance + order.total_price ) if params[:states] == 'Refund'
           end
 
           { result: 'success', message: '状态更新成功' }
