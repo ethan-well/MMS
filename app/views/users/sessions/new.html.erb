@@ -1,9 +1,22 @@
 <div class="login-box">
   <div class="login-box-body">
     <p class="login-box-msg">请登录</p>
+    <div>
+      <% if flash[:alert] %>
+        <div class="alert alert-warning alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <p class="flash-error"><%= flash[:alert] %></p>
+        </div>
+      <% end %>
+      <% if flash[:notice] %>
+        <div class="alert alert-success alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <p class="flash-notice"><%= flash[:notice] %></p>
+        </div>
+      <% end %>
+   </div>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <%= render 'layouts/errors'%>
       <div class="form-group has-feedback">
         <%= f.email_field :email, class: 'form-control', autofocus: true %>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -72,7 +85,4 @@
       }
     });
   });
-
-
-
 </script>
