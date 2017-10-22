@@ -4,6 +4,8 @@ class InfosController < ApplicationController
     @total_spend = current_user.total_spend
     @orders_count = current_user.orders.count
     @notices = Notice.all
+    @notices_alert = Notice.where(is_alert: true)
+    @has_alert = Notice.exists?(is_alert: true)
   end
 
   def l_infos

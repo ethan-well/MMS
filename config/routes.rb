@@ -55,7 +55,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :notices
+  resources :notices do
+    collection do
+      post 'alert_show'
+    end
+  end
 
   resources :special_prices do
     collection do

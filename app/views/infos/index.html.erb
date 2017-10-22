@@ -17,6 +17,9 @@
               —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
             </span>
           </li>
+          <div class="notice-content">
+            <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
+          </div>
         <% end %>
       </ul>
     </div>
@@ -172,6 +175,41 @@
   </div>
 </div>
 
+<div class="modal fade" id="alert-notice">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">系统消息</h4>
+      </div>
+        <div class="modal-body">
+            <div class="box-body">
+              <ul>
+                <% @notices_alert.each do |notice| %>
+                  <div class="col-sm-12 notice-item">
+                    <li>
+                      <%= link_to notice.title, notice_path(notice.id), class: 'notice', remote: true %>
+                      <span class="notice_time text-right">
+                        —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
+                      </span>
+                    </li>
+                    <div class="notice-content">
+                      <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
+                    </div>
+                  </div>
+                <% end %>
+              </ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">知道了</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
 <style>
   .notice_time{
     display: inline-block;
@@ -203,6 +241,10 @@
 </style>
 
 <script>
+  if ("<%= @has_alert %>" === 'true') {
+    $('#alert-notice').modal('show');
+  }
+
   new Clipboard('.btn');
   $('.show-md5-password').on('click', function(){
     $(this).addClass('dispaly-none');
