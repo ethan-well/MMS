@@ -10,7 +10,7 @@
             <div class="box-body">
               <div class="form-group">
                 <label class="col-sm-1 control-label">业务说明</label>
-                <div class="col-sm-4 red-color">
+                <div class="col-sm-4 red-color goods-remark">
                   <%= @goods.remark %>
                 </div>
               </div>
@@ -73,7 +73,7 @@
           <div class="box-body">
             <div class="form-group">
               <label class="col-sm-1 control-label">业务说明</label>
-              <div class="col-sm-4 red-color">
+              <div class="col-sm-4 red-color goods-remark">
                 <%= @goods.remark %>
               </div>
             </div>
@@ -113,8 +113,54 @@
     </div>
   </div>
 </div>
+
+<div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">当前业务历史订单</h3>
+      </div>
+      <div class="box-body">
+        <table class="table table-bordered">
+          <tr>
+            <th style="width: 75px">订单编号</th>
+            <th class="count-th">下单账号</th>
+            <th class="count-th">数量</th>
+            <th class="count-th">单价</th>
+            <th class="count-th">总价</th>
+            <th class="count-th">初始数量</th>
+            <th class="count-th">目标数量</th>
+            <th class="count-th">当前数量</th>
+            <th style="width: 150px">下单时间</th>
+            <th class="order-remark-th">备注</th>
+            <th class="status-th">状态</th>
+          </tr>
+          <% @orders.each do |order| %>
+            <tr>
+              <td><%= order.identification_code %></td>
+              <td class="count-td"><%= order.account %></td>
+              <td class="count-td"><%= order.count %></td>
+              <td class="count-td"><%= order.price_current %></td>
+              <td class="count-td"><%= order.total_price %></td>
+              <td class="count-td"><%= order.start_num %></td>
+              <td class="count-td"><%= order.aims_num %></td>
+              <td class="count-td"><%= order.current_num %></td>
+              <td style="width: 150px"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td class="order-remark-th"><%= order.remark %></td>
+              <td class="status-td"><%= order.status_in_word %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+      <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm inline">
+          <%= paginate @orders %>
+        </ul>
+      </div>
+    </div>
+</div>
+
 <script>
-$(document).ready(function() {
+  $(document).ready(function() {
 
   price = $('.goods-price').val();
   $('.order-goods-num').bind('input propertychange', function(){

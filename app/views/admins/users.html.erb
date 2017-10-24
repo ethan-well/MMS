@@ -34,8 +34,20 @@
             <td><%= user.orders.count %></td>
             <td><%= user.total_spend %></td>
             <td><%= user.invitation_code_in_word %></td>
-            <td><%= user.active_in_word %></td>
-            <td><%= user.can_invite_in_word %></td>
+            <td>
+              <% if user.active %>
+                <input type="checkbox" class="can-login" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% else %>
+                <input type="checkbox" class="can-login" user-id="<%= user.id %>" data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% end %>
+            </td>
+            <td>
+              <% if user.can_invite %>
+                <input type="checkbox" class="can-invite" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% else %>
+                <input type="checkbox" class="can_invite" user-id="<%= user.id %>" data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% end %>
+            </td>
             <td>
               <%= link_to '特价', user_special_prices_special_prices_path(user_id: user.id) %>
               <%= link_to '编辑', edit_user_admins_path(user_id: user.id), remote: true  %>
@@ -53,3 +65,8 @@
   <div id="add_edit_user_modal"></div>
   <%= link_to '会员级别规则', levels_path %>
 </div>
+
+<style>
+  .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
+  .toggle.ios .toggle-handle { border-radius: 20px; }
+</style>

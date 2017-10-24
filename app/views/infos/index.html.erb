@@ -8,16 +8,17 @@
         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
       </div>
     </div>
-    <div class="box-body">
-      <ul>
-        <%  @notices.each do |notice| %>
-          <li>
-            <%= link_to notice.title, notice_path(notice.id), class: 'notice', remote: true %>
+    <div class="box-body notice-all">
+      <ul class="notice-item">
+        <% @notices.each do |notice| %>
+          <li class="notice-title">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <%= notice.title %>
             <span class="notice_time text-right">
               —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
             </span>
           </li>
-          <div class="notice-content">
+          <div class="notice-content dispaly-none">
             <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
           </div>
         <% end %>
@@ -90,7 +91,6 @@
             <div class="col-sm-9 padding-left-none">
               <span class="form-control border-none">
                 <%= current_user.balance %>&nbsp;&nbsp;&nbsp;
-                <!-- <a class="btn btn-xs btn-primary">充值</a> -->
                 <%= link_to '充值', recharge_records_path, class: 'btn btn-xs btn-primary' %>
               </span>
             </div>
@@ -189,7 +189,7 @@
                 <% @notices_alert.each do |notice| %>
                   <div class="col-sm-12 notice-item">
                     <li>
-                      <%= link_to notice.title, notice_path(notice.id), class: 'notice', remote: true %>
+                      <%= notice.title %>
                       <span class="notice_time text-right">
                         —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
                       </span>
@@ -238,9 +238,40 @@
   .dispaly-none{
     display: none;
   }
+
+  .notice-content{
+    padding-left: 13px;
+  }
+
+  ul{
+    padding-left: 0px;
+  }
+  ul li{
+    list-style-type: none;
+    padding: 5px 0px 5px 0px;
+    cursor: pointer;
+  }
+
+  .notice-all{
+    padding-left: 30px;
+  }
 </style>
 
 <script>
+  $('.notice-title').on('click', function(){
+    var notice_content = $(this).next('.notice-content');
+    var icon = $(this).find('i')
+    if(notice_content.hasClass('dispaly-none')){
+      icon.removeClass('fa-angle-right');
+      icon.addClass('fa-angle-down');
+      notice_content.removeClass('dispaly-none');
+    }else{
+      icon.addClass('fa-angle-right');
+      icon.removeClass('fa-angle-down');
+      notice_content.addClass('dispaly-none');
+    }
+  });
+
   if ("<%= @has_alert %>" === 'true') {
     $('#alert-notice').modal('show');
   }

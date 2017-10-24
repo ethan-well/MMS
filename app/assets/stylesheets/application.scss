@@ -63,10 +63,14 @@ img.rucaptcha-image{
   max-width: 100px;
 }
 .count-th{
-  width: 45px;
+  width: 75px;
 }
 
 .status-th,
 .status-td{
-  width: 80px;
+  max-width: 145px !important;
+}
+
+.goods-remark{
+  padding-top: 7px;
 }

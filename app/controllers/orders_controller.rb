@@ -30,6 +30,8 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     @goods = Goods.find(params[:goods_id])
+    @orders = current_user.orders.where(goods_id: @goods.id)
+    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
 
   def edit
