@@ -19,9 +19,12 @@ class InfosController < ApplicationController
       raise '密码不能为空' unless params[:password].present?
       raise '两次输入密码不一致' unless params[:password] == params[:password_confirmation]
       raise '密码不能少于六位' unless params[:password].length >= 6
+
       current_user.password = params[:password]
       current_user.password_confirmation = params[:password_confirmation]
+      current_user.md5_password = Digest::MD5.hexdigest(current_user.email + 'WoNiMaDeYa' + Time.now.to_s)
       current_user.save!
+
       flash[:notice] = '密码更改成功，请用新密码登录'
       return redirect_to new_user_session_path
     rescue => ex
