@@ -18,21 +18,21 @@
                 </div>
               </div><br><br>
               <div class="form-group">
-                <%= label_tag :balance, '账户余额', class: 'col-sm-2 control-label '%>
-                <div class="col-sm-10">
-                  <%= text_field_tag :balance, @user.balance, class: 'form-control goods-id' %>
+                <%= label_tag :current_balance, '账户余额', class: 'col-sm-2 control-label '%>
+                <div class="col-sm-3">
+                  <%= text_field_tag :balance, @user.balance, readonly: true, class: 'form-control current-balance' %>
                 </div>
-              </div><br><br>
-              <div class="form-group">
-                <%= label_tag :can_invite, '可邀请', class: 'col-sm-2 control-label '%>
-                <div class="col-sm-10">
-                  <%= select_tag :can_invite , options_for_select([true, false], @user.can_invite), class: 'form-control goods-id' %>
+                <div class="col-sm-1 operater">
+                  +
                 </div>
-              </div><br><br>
-              <div class="form-group">
-                <%= label_tag :active, '可登录', class: 'col-sm-2 control-label '%>
-                <div class="col-sm-10">
-                  <%= select_tag :active, options_for_select([true, false], @user.can_invite), class: 'form-control goods-id' %>
+                <div class="col-sm-3">
+                  <%= text_field_tag :balance, 0, class: 'form-control change-balance' %>
+                </div>
+                <div class="col-sm-1 operater">
+                  =
+                </div>
+                <div class="col-sm-3">
+                  <%= text_field_tag :target_balance, @user.balance, readonly: true, class: 'form-control target-balance' %>
                 </div>
               </div><br><br>
             </div>
@@ -45,3 +45,27 @@
     </div>
   </div>
 </div>
+
+<style>
+  .operater{
+    padding: 0px;
+    padding-top: 4px;
+    width: 22px;
+    text-align: center;
+  }
+</style>
+
+<script>
+$(document).ready(function() {
+  current_balance = $('.current-balance').val();
+  $('.change-balance').bind('input propertychange', function(){
+      change_balance = $(this).val();
+      target_balance = parseFloat(current_balance) + parseInt(change_balance);
+      if(isNaN(target_balance)){
+        $('.target-balance').val('输入有误');
+      }else {
+        $('.target-balance').val(target_balance);
+      }
+  });
+});
+</script>

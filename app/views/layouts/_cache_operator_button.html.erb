@@ -1,0 +1,24 @@
+<div id="cache-button-list">
+</div>
+
+
+<style>
+.close-cache-button:hover{
+    color: red;
+}
+</style>
+
+<script>
+  for(let i=0; i < sessionStorage.length; i++){
+    key = sessionStorage.key(i);
+    value = sessionStorage.getItem(key);
+    if(key != 'active_link'){
+      $('#cache-button-list').append(value);
+    }
+  }
+  $('.close-cache-button').on('click', function(){
+    var key = $(this).attr('key');
+    $(this).parent('button.cache-button').remove();
+    sessionStorage.removeItem(key);
+  });
+</script>

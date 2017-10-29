@@ -6,4 +6,7 @@ class UsersController < ApplicationController
   def update
 
   end
+
+  def my_
+  end
 end

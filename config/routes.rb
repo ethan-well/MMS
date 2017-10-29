@@ -52,6 +52,8 @@ Rails.application.routes.draw do
       get 'expenses'
       get 'edit_user'
       post 'update_user'
+      get 'types'
+      post 'can_log_in_or_invite'
     end
   end
 
@@ -72,11 +74,13 @@ Rails.application.routes.draw do
 
   resources :system_settings, only: [:update]
 
-  resources :recharge_records, only: [:index]
+  resources :recharge_records, only: [:index, :new]
 
   resources :deduct_percentages, only: [:index]
 
   resources :h_set_prices
 
   resources :invites, only: [:index]
+
+  resources :goods_types
 end

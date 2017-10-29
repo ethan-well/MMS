@@ -53,24 +53,43 @@ img.rucaptcha-image{
   color: red;
 }
 
-.order-remark-th{
-  max-width: 100px;
-  word-break: break-all;
-}
-
-.goods-th,
-.goods-td{
-  max-width: 100px;
-}
-.count-th{
+.order-id-td,
+.order-id-th{
   width: 75px;
 }
 
-.status-th,
-.status-td{
-  max-width: 145px !important;
+.same-width{
+  width: 160px;
+  word-break: break-all;
+}
+
+#alert-notice .modal-footer{
+  border: none !important;
+}
+
+#alert-notice .notice-item{
+  border-top: none !important;
+  border-bottom: 1px solid #170b0b;
+}
+
+.navbar-in-header{
+  width: auto;
+  height: 100%;
+  text-align: center;
+  padding: 15px;
+  float: right;
+  color: #ffffff;
+}
+
+.link_active{
+  color: green;
 }
 
 .goods-remark{
-  padding-top: 7px;
+  margin-top: 5px;
+}
+
+.cache_button{
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

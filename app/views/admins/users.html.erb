@@ -45,7 +45,7 @@
               <% if user.can_invite %>
                 <input type="checkbox" class="can-invite" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
               <% else %>
-                <input type="checkbox" class="can_invite" user-id="<%= user.id %>" data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
+                <input type="checkbox" class="can-invite" user-id="<%= user.id %>" data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
               <% end %>
             </td>
             <td>
@@ -70,3 +70,34 @@
   .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
   .toggle.ios .toggle-handle { border-radius: 20px; }
 </style>
+
+<script>
+  $('.can-login').change(function(){
+    state = $(this).prop('checked');
+    id = $(this).attr('user-id');
+
+    $.ajax({
+      url: "<%= can_log_in_or_invite_admins_path %>",
+      method: 'post',
+      type: 'json',
+      data: {
+        id: id,
+        change_info: { active: state }
+      }
+    })
+  });
+
+  $('.can-invite').change(function(){
+    state = $(this).prop('checked');
+    id = $(this).attr('user-id');
+    $.ajax({
+      url: "<%= can_log_in_or_invite_admins_path %>",
+      method: 'post',
+      type: 'json',
+      data: {
+        id: id,
+        change_info: { can_invite: state }
+      }
+    })
+  });
+</script>

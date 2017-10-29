@@ -184,25 +184,17 @@
         <h4 class="modal-title">系统消息</h4>
       </div>
         <div class="modal-body">
-            <div class="box-body">
-              <ul>
-                <% @notices_alert.each do |notice| %>
-                  <div class="col-sm-12 notice-item">
-                    <li>
-                      <%= notice.title %>
-                      <span class="notice_time text-right">
-                        —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
-                      </span>
-                    </li>
-                    <div class="notice-content">
-                      <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
-                    </div>
-                  </div>
-                <% end %>
-              </ul>
-            </div>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <% @notices_alert.each do |notice| %>
+                <tr>
+                  <td class="notice-item"> <%= sanitize notice.content.gsub(/\r\n/, '<br>') %></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer text-center">
           <button type="button" class="btn btn-default" data-dismiss="modal">知道了</button>
         </div>
     </div>
@@ -239,13 +231,16 @@
     display: none;
   }
 
-  .notice-content{
-    padding-left: 13px;
+  ul.notice-item .notice-content{
+    background: #f6f6f6;
+    padding: 10px 0px 10px 8px;
+    margin-left: 13px;
   }
 
   ul{
     padding-left: 0px;
   }
+
   ul li.notice-title{
     list-style-type: none;
     padding: 5px 0px 5px 0px;
@@ -259,16 +254,31 @@
 
 <script>
   $('.notice-title').on('click', function(){
+    $('ul.notice-item .notice-content').addClass('dispaly-none');
+    $('li.notice-title i').removeClass('fa-angle-down');
+    $('li.notice-title i').addClass('fa-angle-right');
+
     var notice_content = $(this).next('.notice-content');
+    var current_is_opened = notice_content.hasClass('opened')
+
+    $('ul.notice-item .notice-content').removeClass('opened');
+
+    if(current_is_opened){
+      notice_content.addClass('opened');
+    }
+
     var icon = $(this).find('i')
-    if(notice_content.hasClass('dispaly-none')){
-      icon.removeClass('fa-angle-right');
-      icon.addClass('fa-angle-down');
-      notice_content.removeClass('dispaly-none');
-    }else{
+
+    if(notice_content.hasClass('opened')){
       icon.addClass('fa-angle-right');
       icon.removeClass('fa-angle-down');
       notice_content.addClass('dispaly-none');
+      notice_content.removeClass('opened');
+    }else{
+      icon.removeClass('fa-angle-right');
+      icon.addClass('fa-angle-down');
+      notice_content.removeClass('dispaly-none');
+      notice_content.addClass('opened');
     }
   });
 

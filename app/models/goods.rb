@@ -3,10 +3,10 @@ class Goods < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :price, presence: true
 
-
   has_many :orders
   has_many :special_prices
   has_many :h_set_prices
+  belongs_to :goods_type
 
   def self.seed
     goods_arr = ['赞', '粉丝', '鲜花']

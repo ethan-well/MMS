@@ -86,4 +86,10 @@ module ApplicationHelper
     host = 'http://119.29.152.254:3000'
     "#{host}/invites?invitation_code=#{current_user.invitation_code}"
   end
+
+  def current_goods_type(type_id)
+    if controller_name == 'orders' && action_name == 'new'
+      Goods.find(params[:goods_id]).goods_type_id == type_id ? 'active' : ''
+    end
+  end
 end

@@ -4,7 +4,11 @@
       <div class="box-body">
         <div class="form-group">
           <div class="col-xs-2">
-            <%= label_tag '业务类型' %>
+            <%= label_tag '分类' %>
+            <%= select_tag :goods_type_id, options_from_collection_for_select(GoodsType.all, 'id', 'name', params['goods_type_id']), include_blank: true, class: 'form-control single-select-type' %>
+          </div>
+          <div class="col-xs-2">
+            <%= label_tag '业务' %>
             <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), include_blank: true, class: 'form-control single-select' %>
           </div>
           <div class="col-xs-2">
@@ -18,6 +22,10 @@
 </div>
 
 <script type="text/javascript">
+    $(".single-select-type").select2({
+      placeholder: "选择分类",
+      allowClear: true
+    });
     $(".single-select").select2({
       placeholder: "选择业务",
       allowClear: true

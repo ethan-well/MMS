@@ -4,13 +4,20 @@ class AdminsController < ApplicationController
   end
 
   def goods
-    @goods = if params[:goods_id].present?
-               @goods = Goods.where(id: params[:goods_id])
-             else
-               @goods = Goods.all
-             end
+    @goods = Goods.all
+    if params[:goods_id].present?
+       @goods =  @goods.where(id: params[:goods_id])
+     elsif params[:goods_type_id].present?
+       @goods =  @goods.where(goods_type_id: params[:goods_type_id])
+     end
     @goods = @goods.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
+
+  def types
+    @types = GoodsType.all
+    @types = @types.order(created_at: :desc).page(params[:page] || 1).per(20)
+  end
+
 
   def create_goods
     begin
@@ -34,7 +41,12 @@ class AdminsController < ApplicationController
     begin
       user = User.find(params[:id])
       raise '等级不合法'  unless Level.find(params[:level_id]).present?
-      user.update_attributes(level_id: params[:level_id], balance: params[:balance], can_invite: params[:can_invite], active: params[:active])
+      balance = Integer(params[:balance])
+      user.update_attributes(level_id: params[:level_id])
+      User.transaction do
+        recharge_records =  RechargeRecord.create(user_id: user.id, amount: balance, pay_type: '管理员加款')
+        user.update_attribute(:balance, user.balance + balance)
+      end
       flash[:nitice] = '用户信息更改成功'
     rescue => ex
       flash[:alert] = ex.message
@@ -56,6 +68,11 @@ class AdminsController < ApplicationController
         User.all
       end
     @users = @users.order(created_at: :desc).page(params[:page] || 1).per(20)
+  end
+
+  def can_log_in_or_invite
+    u = User.find_by_id(params[:id])
+    u.update_attributes(params[:change_info].to_hash)
   end
 
   def notices

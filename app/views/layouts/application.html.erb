@@ -30,13 +30,15 @@
                 <ul class="dropdown-menu">
                   <li class="user-footer">
                     <div class="pull-right">
-                      <%#= link_to '退出', logout_path, clase: 'btn btn-default btn-flat' %>
                       <a href="/sign_out" class="btn btn-default btn-flat">退出</a>
                     </div>
                   </li>
                 </ul>
               </li>
             </ul>
+          </div>
+          <div class="navbar-in-header">
+            余额：<%= current_user.balance %>，
           </div>
         </nav>
       </header>
@@ -70,10 +72,16 @@
                    基本信息
                   <% end %>
                 </li>
+                <li class="<%= current_controller_action('recharge_records', 'new') %>">
+                  <%= link_to new_recharge_record_path do %>
+                   <i class="fa fa-circle-o"></i>
+                   充值中心
+                  <% end %>
+                </li>
                 <li class="<%= current_controller_action('recharge_records', 'index') %>">
                   <%= link_to recharge_records_path do %>
                    <i class="fa fa-circle-o"></i>
-                   充值中心
+                   充值记录
                   <% end %>
                 </li>
                 <li class="<%= current_controller_action('infos', 'l_infos') %> <%= current_controller_action('h_set_prices', 'index')%>">
@@ -118,17 +126,29 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <% Goods.all.each do |goods| %>
-                  <li class="<%= order_controller_action_goods(goods.id) %>">
-                    <%= link_to new_order_path(goods_id: goods.id) do %>
-                     <i class="fa fa-circle-o"></i>
-                     <%= goods.name %>
-                    <% end %>
+                <% GoodsType.all.each do |type| %>
+                  <li class="treeview <%= current_goods_type(type.id) %>">
+                    <a href="#"><i class="fa fa-folder"></i><%= type.name %>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                    </a>
+                    <ul class="treeview-menu">
+                      <% goods = Goods.where(goods_type_id: type.id) %>
+                      <% goods.each do |goods| %>
+                        <li class="show-cache <%= order_controller_action_goods(goods.id) %>">
+                          <%= link_to new_order_path(goods_id: goods.id) do %>
+                           <i class="fa fa-circle-o"></i>
+                           <%= goods.name %>
+                          <% end %>
+                        </li>
+                      <% end %>
+                    </ul>
                   </li>
                 <% end %>
               </ul>
             </li>
-            </li>
+
             <% if current_user.admin %>
               <li class="<%= current_menu('admins') %>" >
                 <%=link_to orders_admins_path(status: 'Waiting') do %>
@@ -162,6 +182,12 @@
           </ol>
         </section>
 
+        <section>
+          <div class="col-sm-12 cache_button">
+            <%= render 'layouts/cache_operator_button'%>
+          </div>
+        </section>
+
         <section class="content">
           <div class="row">
           <%= render 'layouts/errors'%>
@@ -174,3 +200,34 @@
     </div>
   </body>
 </html>
+
+<script>
+  $('.show-cache').on('click', function(){
+    var a_tag = $(this).find('a')
+    var link = $.trim(a_tag.attr('href'));
+    var text = $.trim(a_tag.text());
+    var key = link
+    var html =  '<button class="btn  btn-default btn-flat cache-button">' +
+                  `<a class="cache-link" href="${link}">` +
+                    `${text}&nbsp;&nbsp;&nbsp;` +
+                  '</a>' +
+                  `<i class="fa fa-times close-cache-button" key="${key}" aria-hidden="true"></i>` +
+                '</button>'
+    sessionStorage.setItem(key, html);
+    sessionStorage.setItem('active_link', link);
+  });
+
+  $('a.cache-link').on('click', function(){
+    sessionStorage.setItem('active_link', $(this).attr('href'))
+  });
+
+  all_cache_buttons = $('#cache-button-list').find('button.cache-button');
+
+  all_cache_buttons.removeClass('btn-success');
+  all_cache_buttons.addClass('btn-default');
+
+  active_link = sessionStorage.getItem('active_link');
+  current_button = $(`.cache-button a[href="${active_link}"]`).parent('button.cache-button');
+  current_button.removeClass('btn-default');
+  current_button.addClass('btn-success');
+</script>

@@ -22,6 +22,7 @@
 //= require bootstrap-datetimepicker.min
 //= require clipboard.min
 //= require select2.min
+//= require generate_button
 
 
 $('doucument').ready({

@@ -109,7 +109,6 @@
   $('.notice-alert-show').change(function(){
     state = $(this).prop('checked');
     id = $(this).attr('notice-id');
-    console.log(id);
 
     $.ajax({
       url: "<%= alert_show_notices_path %>",

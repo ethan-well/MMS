@@ -12,37 +12,29 @@
       <div class="box-body">
         <table class="table table-bordered">
           <tr>
-            <th style="width: 75px">ID</th>
-            <th>下单用户</th>
-            <th>业务</th>
-            <th>下单账号</th>
-            <th class="count-th">数量</th>
-            <th class="count-th">单价</th>
-            <th class="count-th">总价</th>
-            <th class="count-th">初始</th>
-            <th class="count-th">目标</th>
-            <th class="count-th">当前</th>
-            <th>下单日期</th>
-            <th>备注</th>
-            <th class="status-th">状态</th>
-            <th class="operation-th">操作</th>
+            <th class="order-id-th">ID</th>
+            <th class="same-width">下单用户</th>
+            <th class="same-width">业务</th>
+            <th class="same-width">下单账号</th>
+            <th class="same-width">数量/单价/总价</th>
+            <th class="same-width">初始/目标/当前</th>
+            <th class="same-width">下单日期</th>
+            <th class="same-width">备注</th>
+            <th class="same-width">状态</th>
+            <th class="same-width">操作</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
-              <td><%= order.identification_code %></td>
-              <td><%= order.user.email %></td>
-              <td><%= order.goods.name rescue '' %></td>
-              <td class="count-td"><%= order.account %></td>
-              <td class="count-td"><%= order.count %></td>
-              <td class="count-td"><%= order.price_current %></td>
-              <td class="count-td"><%= order.total_price %></td>
-              <td class="count-td"><%= order.start_num %></td>
-              <td class="count-td"><%= order.aims_num %></td>
-              <td class="count-td"><%= order.current_num %></td>
-              <td><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td><%= order.remark %></td>
-              <td class="status-td"><%= order.status_in_word_admin %></td>
-              <td class="operation-th">
+              <td class="order-id-th"><%= order.identification_code %></td>
+              <td class="same-width"><%= order.user.email %></td>
+              <td class="same-width"><%= order.goods.name rescue '' %></td>
+              <td class="same-width"><%= order.account %></td>
+              <td class="same-width"><%= "#{order.count}/#{order.price_current}/#{order.total_price}"%> </td>
+              <td class="same-width"><%= "#{order.start_num}/#{order.aims_num}/#{order.current_num}"  %></td>
+              <td class="same-width"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td class="same-width"><%= order.remark %></td>
+              <td class="same-width"><%= order.status_in_word_admin %></td>
+              <td class="same-width">
                 <%= render :partial => 'operation_link', :locals =>{ order_id: order.id, status: order.status } %>
               </td>
             </tr>
@@ -58,7 +50,11 @@
 </div>
 
 <style>
-  .link_active{
-    color: green;
+  .box-body{
+    width: 100%;
+    overflow: auto;
+  }
+  table.table{
+    overflow: auto;
   }
 </style>

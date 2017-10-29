@@ -14,7 +14,7 @@ class Order < ApplicationRecord
 
   has_one :deduct_percentages
 
-  #生成订单编号
+  #生成订单号
   def add_identification_code
     self.update_attribute(:identification_code, 100000 + id)
   end
