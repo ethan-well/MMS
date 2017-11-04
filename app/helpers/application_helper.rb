@@ -92,4 +92,20 @@ module ApplicationHelper
       Goods.find(params[:goods_id]).goods_type_id == type_id ? 'active' : ''
     end
   end
+
+  def user_level_info
+    current_level = Level.find_by_id(current_user.level_id)
+    total_spend = current_user.total_spend
+    if current_user.level_id < 4
+      last_leve_price = Level.find_by_id(current_user.level_id + 1).price
+      info = %Q(
+                  级别：[<span class="level-info"> LV#{current_user.level_id} </span>]
+                  距[LV#{current_user.level_id + 1}]差：[<span class="level-info">#{last_leve_price - total_spend}</span>]元
+                )
+    else
+      info = %Q(级别：[<span class="level-info"> LV#{current_user.level_id} </span>])
+    end
+
+    return info
+  end
 end
