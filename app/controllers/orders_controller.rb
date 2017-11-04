@@ -73,10 +73,12 @@ class OrdersController < ApplicationController
             raise '余额不足，请充值后下单' if current_user.balance < multiple_order_total_price
             current_user.update_attribute(:balance, current_user.balance - multiple_order_total_price )
           end
-          flash[:notice] = '下单成功'
+          message = '下单成功'
         rescue => ex
-          flash[:alert] = ex.message
+          message = ex.message
         end
+
+        flash[:message] = message
         return redirect_to :back
       end
 
@@ -97,11 +99,12 @@ class OrdersController < ApplicationController
           order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
         end
       end
-      flash[:notice] = '下单成功'
+      message = '下单成功'
     rescue => ex
-      flash[:alert] = ex.message
+      message = ex.message
     end
-    redirect_to :back
+    flash[:message] = message
+    return redirect_to :back
   end
 
   def update

@@ -1,3 +1,4 @@
+<%= flash[:message] %>
 <div class="col-md-12">
   <div class="nav-tabs-custom">
     <ul class="nav nav-tabs pull-left">
@@ -174,6 +175,10 @@
 </style>
 <script>
   $(document).ready(function() {
+
+  if ("<%= flash[:message].present? %>" == 'true') {
+    alert("<%= flash[:message] %>");
+  }
 
   price = $('.goods-price').val();
   $('.order-goods-num').bind('input propertychange', function(){
