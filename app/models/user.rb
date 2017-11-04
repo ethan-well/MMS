@@ -42,6 +42,10 @@ class User < ApplicationRecord
     self.h_set_prices.find_by_goods_id(goods_id).price rescue nil
   end
 
+  def current_goods_h_set_price_obj(goods_id)
+    self.h_set_prices.find_by_goods_id(goods_id)
+  end
+
   def invitation_code_in_word
     level_id > 1 ? invitation_code : '未开放'
   end
@@ -52,7 +56,15 @@ class User < ApplicationRecord
 
   def my_price(goods_id)
     @goods = Goods.find(goods_id)
-    current_goods_h_set_price(goods_id) || current_goods_special_prices(goods_id) || @goods.get_current_price(self.level_id)
+    price_first = current_goods_h_set_price(goods_id)
+    price_second = current_goods_special_prices(goods_id)
+    price_third = @goods.get_current_price(self.level_id)
+
+    if price_first.present? && price_first < price_third
+      price_second || price_third
+    else
+      price_first || price_second || price_third
+    end
   end
 
   def month_ago_spend

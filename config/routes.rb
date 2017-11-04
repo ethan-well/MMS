@@ -79,7 +79,11 @@ Rails.application.routes.draw do
 
   resources :deduct_percentages, only: [:index]
 
-  resources :h_set_prices
+  resources :h_set_prices do
+    collection do
+      post 'create_or_update'
+    end
+  end
 
   resources :invites, only: [:index]
 

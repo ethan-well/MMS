@@ -94,9 +94,10 @@ class Order < ApplicationRecord
       goods = self.goods
       h_user = user.h_user
       if h_user.present?
-        price_current = self.price_current || 0
+        price_current = self.price_current
         count = self.count
-        h_price_current = self.h_price_current || 0
+        h_price_current = self.h_price_current
+        return unless price_current.present? && h_price_current.present?
         if (price_current - h_price_current) > 0
           deduct_percentage = count * (price_current - h_price_current)
           DeductPercentage.transaction do

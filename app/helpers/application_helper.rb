@@ -108,4 +108,8 @@ module ApplicationHelper
 
     return info
   end
+
+  def get_on_used_notice(system_price, special_price)
+    special_price.present? && special_price < system_price ? '不能低于系统价格，请重新填写' : ''
+  end
 end

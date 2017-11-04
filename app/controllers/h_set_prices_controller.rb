@@ -1,31 +1,36 @@
 class HSetPricesController < ApplicationController
   def index
+    @goods = Goods.all
     @user = current_user.low_level_users.find_by_id(params[:user_id])
     return redirect_to :back, alert: '用户不存在' unless @user.present?
-
-    @h_set_prices = HSetPrice.where(user_id: params[:user_id])
+    @goods = @goods.page(params[:page] || 0).per(20)
   end
 
-  def create
+  def create_or_update
     begin
-      @user = current_user.low_level_users.find_by_id(params[:h_set_price][:user_id])
+      @user = current_user.low_level_users.find_by_id(params[:user_id])
       raise '用户不存在' unless @user.present?
 
-      goods = Goods.find_by_id(params[:h_set_price][:goods_id])
+      goods = Goods.find_by_id(params[:goods_id])
       raise '业务类型不存在' unless goods
 
-      price = Float(params[:h_set_price][:price])
+      price = Float(params[:special_price])
       current_level_price =  goods.get_current_price(@user.level_id)
       raise "价格不能低于#{current_level_price}" if price < current_level_price
+      raise "价格不能高于系统价格三倍" if price > goods.get_current_price(@user.level_id) * 3
 
-      raise '该业务已经设置特价' if HSetPrice.exists?(user_id: @user.id, goods_id: goods.id)
-
-      HSetPrice.create(params.require(:h_set_price).permit(:user_id, :goods_id, :price))
+      if HSetPrice.exists?(user_id: @user.id, goods_id: goods.id)
+        h_set_price = HSetPrice.where(user_id: @user.id, goods_id: goods.id).first
+        h_set_price.update_attribute(:price, price)
+      else
+        HSetPrice.create(user_id: @user.id, goods_id: goods.id, price: price)
+      end
+      data = { result: 'success', message: '添加成功' }
     rescue => ex
-      return redirect_to :back, alert: ex.message
+      data = { result: 'failed', message: ex.message }
     end
 
-    return redirect_to :back, notice: '特价添加成功'
+    return render json: data
   end
 
   def edit
