@@ -14,9 +14,6 @@
           <li class="notice-title">
             <i class="fa fa-angle-right" aria-hidden="true"></i>
             <%= notice.title %>
-            <span class="notice_time text-right">
-              —— <%= notice.updated_at.strftime('%Y-%m-%d %H:%M:%S') %>
-            </span>
           </li>
           <div class="notice-content dispaly-none">
             <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>

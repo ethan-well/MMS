@@ -20,7 +20,8 @@
           <th>LV2价格</th>
           <th>LV3价格</th>
           <th>LV4价格</th>
-          <td>管理</td>
+          <th>下架</th>
+          <th>管理</th>
         </tr>
         <% @goods.each do |goods| %>
           <tr>
@@ -34,6 +35,13 @@
             <td><%= goods.get_current_price(2) %></td>
             <td><%= goods.get_current_price(3) %></td>
             <td><%= goods.get_current_price(4) %></td>
+            <td>
+              <% if goods.on_sale %>
+                <input type="checkbox" class="manage-on-sale" goods-id="<%= goods.id %>" checked data-toggle="toggle" data-on="已上架" data-off='已下架' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% else %>
+                <input type="checkbox" class="manage-on-sale" goods-id="<%= goods.id %>" data-toggle="toggle" data-on="已上架" data-off='已下架' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% end %>
+            </td>
             <td>
               <%= link_to '修改', edit_good_path(goods.id) %>
               <%= link_to '特价信息', goods_special_prices_special_prices_path(goods_id: goods.id) %>
@@ -108,4 +116,23 @@
   .goods-type-info{
     margin-top: 30px;
   }
+
+  .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
+  .toggle.ios .toggle-handle { border-radius: 20px; }
 </style>
+
+<script>
+  $('.manage-on-sale').change(function(){
+    state = $(this).prop('checked');
+    id = $(this).attr('goods-id');
+    $.ajax({
+      url: "<%= manage_on_sale_orders_path %>",
+      method: 'post',
+      type: 'json',
+      data: {
+        id: id,
+        on_sale: state
+      }
+    })
+  });
+</script>

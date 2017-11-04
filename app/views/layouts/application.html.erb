@@ -38,7 +38,7 @@
             </ul>
           </div>
           <div class="navbar-in-header">
-            余额：<%= current_user.balance %>，
+            余额：<%= current_user.balance %>
           </div>
         </nav>
       </header>
@@ -134,7 +134,7 @@
                       </span>
                     </a>
                     <ul class="treeview-menu">
-                      <% goods = Goods.where(goods_type_id: type.id) %>
+                      <% goods = Goods.where(goods_type_id: type.id).where(on_sale: true) %>
                       <% goods.each do |goods| %>
                         <li class="show-cache <%= order_controller_action_goods(goods.id) %>">
                           <%= link_to new_order_path(goods_id: goods.id) do %>

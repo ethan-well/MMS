@@ -7,6 +7,7 @@ module Member
         u = User.find_by_email(user_email)
         error!({result: 'failed', message: '用户不存在！'}, 404 ) unless u.present?
         error!({result: 'failed', message: '401 Unauthorized'}, 401) unless u.md5_password == password
+        error!({result: 'failed', message: '禁止操作，联系管理员激活账号！'}, 401) unless u.action
         u
       end
     end
@@ -163,6 +164,8 @@ module Member
           raise '下单数量不能少于1' if count < 1
 
           goods = Goods.find(params[:goods_id])
+          raise '商品已下架' unless goods.on_sale
+
           price_current = u.my_price(goods.id)
           total_price =  price_current * count
           raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if u.balance < total_price

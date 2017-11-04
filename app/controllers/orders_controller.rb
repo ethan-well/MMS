@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :current_order, only: [:edit, :update]
-  before_action :is_admin?, only: [:admin_change_status, :update, :edit]
+  before_action :is_admin?, only: [:admin_change_status, :update, :edit, :manage_on_sale]
 
   def index
     @orders = current_user.orders.includes(:goods)
@@ -30,6 +30,7 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     @goods = Goods.find(params[:goods_id])
+    is_on_sale?(@goods.on_sale)
     @orders = current_user.orders.where(goods_id: @goods.id)
     @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
@@ -41,9 +42,9 @@ class OrdersController < ApplicationController
   def create
     begin
       goods_id = params['order']['goods_id']
-      goods = Goods.find(goods_id)
-      return redirect_to :back, notice: '业务类型不存在，请核对后重新下单' unless goods.present?
-
+      goods = Goods.find_by_id(goods_id)
+      return redirect_to :back, notice: '业务不存在，请核对后重新下单' unless goods.present?
+      is_on_sale?(goods.on_sale)
       price_current = current_user.my_price(goods.id).to_f
 
       h_user = current_user.h_user
@@ -137,6 +138,11 @@ class OrdersController < ApplicationController
     redirect_to :back
   end
 
+  def manage_on_sale
+    goods = Goods.find(params[:id])
+    goods.update_attribute(:on_sale, params[:on_sale])
+  end
+
   private
   def current_order
     @order = Order.find(params['id'])
@@ -154,5 +160,9 @@ class OrdersController < ApplicationController
         end
       end
     end
+  end
+
+  def is_on_sale?(on_sale)
+    redirect_to :orders, alert: '商品已经下架' unless on_sale
   end
 end

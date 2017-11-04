@@ -67,6 +67,7 @@ img.rucaptcha-image{
   min-width: 160px;
   max-width: 200px;
 }
+
 .order-id-td,
 .order-id-th{
   width: 75px;
@@ -111,4 +112,31 @@ img.rucaptcha-image{
 .alert-success{
   background-color: #d2d6de !important;
   border-color: #d2d6de !important;
+}
+
+button.cache-button{
+  a{
+    color: #333;
+  }
+}
+
+textarea#multiple_order{
+  margin-bottom: 7px;
+}
+
+.order-create-action{
+  margin-bottom: 30px;
+  padding-left: 335px;
+}
+
+.can-not-recharge{
+  height: 265px;
+  margin: 0 auto;
+  border: 1px solid #C8D6FD;
+  padding-top: 90px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  font-size: 26px;
+  text-align: center;
 }

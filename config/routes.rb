@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     end
     collection do
       get 'purchase_history'
+      post 'manage_on_sale'
     end
   end
 

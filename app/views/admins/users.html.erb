@@ -42,7 +42,9 @@
               <% end %>
             </td>
             <td>
-              <% if user.can_invite %>
+              <% if user.level_id == 1 %>
+                不可邀请会员
+              <% elsif user.can_invite %>
                 <input type="checkbox" class="can-invite" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">
               <% else %>
                 <input type="checkbox" class="can-invite" user-id="<%= user.id %>" data-toggle="toggle" data-on="可邀请下级" data-off='不可邀请下级' data-style="ios" data-onstyle="success" data-offstyle="danger">

@@ -1,6 +1,6 @@
 class InfosController < ApplicationController
   def index
-    @goods = Goods.all
+    @goods = Goods.where(on_sale: true)
     @total_spend = current_user.total_spend
     @orders_count = current_user.orders.count
     @notices = Notice.all
