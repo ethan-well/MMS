@@ -50,7 +50,7 @@ class Order < ApplicationRecord
   def status_in_word
     case status
     when 'Waiting'
-      '下单成功，等待处理'
+      '等待处理'
     when 'Refund'
       '取消退款'
     when 'Finished'

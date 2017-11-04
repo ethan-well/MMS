@@ -53,6 +53,20 @@ img.rucaptcha-image{
   color: red;
 }
 
+.one-col-td,
+.one-col-th{
+  min-width: 50px;
+}
+.two-col-td,
+.two-col-th{
+  width: auto;
+}
+
+.status-td,
+.status-th{
+  min-width: 160px;
+  max-width: 200px;
+}
 .order-id-td,
 .order-id-th{
   width: 75px;
