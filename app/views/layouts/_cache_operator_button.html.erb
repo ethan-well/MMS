@@ -9,16 +9,23 @@
 </style>
 
 <script>
-  for(let i=0; i < sessionStorage.length; i++){
-    key = sessionStorage.key(i);
-    value = sessionStorage.getItem(key);
-    if(key != 'active_link'){
-      $('#cache-button-list').append(value);
+  cache_button_list = sessionStorage.getItem('cache_button_list');
+  if (cache_button_list) {
+    cache_button_arr = cache_button_list.split(',');
+    for (let button of cache_button_arr){
+      $('#cache-button-list').append(button);
     }
   }
+
   $('.close-cache-button').on('click', function(){
-    var key = $(this).attr('key');
+    var link = $(this).attr('key');
     $(this).parent('button.cache-button').remove();
-    sessionStorage.removeItem(key);
+    links_arr = sessionStorage.getItem('links_list').split(',');
+    buttons_arr = sessionStorage.getItem('cache_button_list').split(',');
+    index = links_arr.indexOf(link);
+    buttons_arr.splice(index, 1);
+    links_arr.splice(index, 1);
+    sessionStorage.setItem('cache_button_list', buttons_arr);
+    sessionStorage.setItem('links_list', links_arr);
   });
 </script>

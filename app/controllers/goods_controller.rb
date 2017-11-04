@@ -11,12 +11,12 @@ class GoodsController < ApplicationController
       raise '价格不能为空' if params[:price].nil?
       price_arr = params[:price].split(' ')
       raise '价格格式错误' if  price_arr.length < 4
-      raise '类型不能为空' if params[:goods_type_id].nil?
-      raise '类型不存在' unless GoodsType.find_by_id(params[:goods_type_id])
+      raise '类型不能为空' if params[:type_id].nil?
+      raise '类型不存在' unless GoodsType.find_by_id(params[:type_id])
       price_arr.each do |price|
         Integer(price)
       end
-      Goods.create(goods_type_id: params[:goods_type_id],name: params[:name], price: params[:price], remark: params[:remark])
+      Goods.create(goods_type_id: params[:type_id],name: params[:name], price: params[:price], remark: params[:remark])
       flash[:notice] = '业务添加成功'
     rescue => ex
       flash[:alert] = ex.message

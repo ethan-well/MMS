@@ -206,20 +206,34 @@
     var a_tag = $(this).find('a')
     var link = $.trim(a_tag.attr('href'));
     var text = $.trim(a_tag.text());
-    var key = link
     var html =  '<button class="btn  btn-default btn-flat cache-button">' +
                   `<a class="cache-link" href="${link}">` +
                     `${text}&nbsp;&nbsp;&nbsp;` +
                   '</a>' +
-                  `<i class="fa fa-times close-cache-button" key="${key}" aria-hidden="true"></i>` +
+                  `<i class="fa fa-times close-cache-button" key=${link} aria-hidden="true"></i>` +
                 '</button>'
-    sessionStorage.setItem(key, html);
+    cache_button_list = sessionStorage.getItem('cache_button_list');
+    cache_button_arr = [];
+    links_arr = [];
+    if (cache_button_list) {
+      cache_button_arr = cache_button_list.split(',');
+      links_arr = sessionStorage.getItem('links_list').split(',');
+    }
+    index = cache_button_arr.indexOf(html);
+    if (index < 0) {
+      cache_button_arr.push(html);
+      links_arr.push(link);
+    }
+
+    sessionStorage.setItem('cache_button_list', cache_button_arr);
+    sessionStorage.setItem('links_list', links_arr);
     sessionStorage.setItem('active_link', link);
   });
 
   $('a.cache-link').on('click', function(){
     sessionStorage.setItem('active_link', $(this).attr('href'))
   });
+
 
   all_cache_buttons = $('#cache-button-list').find('button.cache-button');
 
