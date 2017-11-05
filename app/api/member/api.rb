@@ -7,7 +7,7 @@ module Member
         u = User.find_by_email(user_email)
         error!({result: 'failed', message: '用户不存在！'}, 404 ) unless u.present?
         error!({result: 'failed', message: '401 Unauthorized'}, 401) unless u.md5_password == password
-        error!({result: 'failed', message: '禁止操作，联系管理员激活账号！'}, 401) unless u.action
+        error!({result: 'failed', message: '禁止操作，联系管理员激活账号！'}, 401) unless u.active
         u
       end
     end
