@@ -75,7 +75,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     system_setting = SystemSetting.first
     if system_setting.need_invitation_code?
       return redirect_to :back, alert: '必须输入邀请码' unless params[:user][:h_invitation_code].present?
+    end
 
+    if params[:user][:h_invitation_code].present?
       u = User.find_by_invitation_code(params[:user][:h_invitation_code])
       unless u.present?
         return redirect_to :back, alert: '邀请码无效'
