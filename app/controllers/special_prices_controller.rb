@@ -6,19 +6,28 @@ class SpecialPricesController < ApplicationController
     @special_prices = @goods.special_prices
   end
 
-  def create
+  def create_or_update
     begin
-      SpecialPrice.create(params.require(:special_price).permit(:price, :remark, :user_id, :goods_id))
-      flash[:notice] = '创建成功'
-    rescue
-      flash[:alert] = '创建失败'
+      goods = Goods.find_by_id(params[:goods_id])
+      raise '商品不存在' unless goods.present?
+      special_price = SpecialPrice.where(user_id: params[:user_id], goods_id: params[:goods_id]).first
+      if special_price.present?
+        special_price.update_attribute(:price, params[:price])
+      else
+        SpecialPrice.create(user_id: params[:user_id], goods_id: params[:goods_id], price: params[:price])
+      end
+      data = { result: 'success', message: '保存成功' }
+    rescue => ex
+      data = { result: 'failed', message: ex.message }
     end
-    redirect_to :back
+    render json: data
   end
 
   def user_special_prices
+    @goods = Goods.all
     @user = User.find(params[:user_id])
     @special_prices = @user.special_prices.includes(:goods)
+    @goods = @goods.page(params[:page] || 1).per(20)
   end
 
   def goods_special_prices

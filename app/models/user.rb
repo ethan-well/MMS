@@ -38,6 +38,10 @@ class User < ApplicationRecord
     self.special_prices.find_by_goods_id(goods_id).price rescue nil
   end
 
+  def current_goods_special_price_obj(goods_id)
+    self.special_prices.find_by_goods_id(goods_id)
+  end
+
   def current_goods_h_set_price(goods_id)
     self.h_set_prices.find_by_goods_id(goods_id).price rescue nil
   end

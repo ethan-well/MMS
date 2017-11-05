@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     collection do
       get 'user_special_prices'
       get 'goods_special_prices'
+      post 'create_or_update'
     end
   end
 
