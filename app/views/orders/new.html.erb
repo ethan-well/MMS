@@ -63,7 +63,7 @@
             <div class="order-create-action clearfix">
               <ul class="pagination pagination-sm no-margin pull-left">
                 <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
-                <%= f.submit '提交订单', data: {confirm: '提交订单，将直接从账户余额中扣除对应金额，请保证余额充足'},class: 'btn btn-primary' %>
+                <%= f.submit '提交订单', class: 'btn btn-primary' %>
               </ul>
             </div>
           <% end %>
