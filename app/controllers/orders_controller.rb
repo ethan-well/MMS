@@ -46,7 +46,7 @@ class OrdersController < ApplicationController
       return redirect_to :back, notice: '业务不存在，请核对后重新下单' unless goods.present?
       is_on_sale?(goods.on_sale)
       price_current = current_user.my_price(goods.id).to_f
-
+      
       h_user = current_user.h_user
       # 批量订单
       if params[:multiple_order]
