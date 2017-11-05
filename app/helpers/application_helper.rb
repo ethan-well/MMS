@@ -95,7 +95,7 @@ module ApplicationHelper
 
   def user_level_info
     current_level = Level.find_by_id(current_user.level_id)
-    total_spend = current_user.total_spend
+    total_spend = current_user.total_spend || 0
     if current_user.level_id < 4
       last_leve_price = Level.find_by_id(current_user.level_id + 1).price
       info = %Q(
