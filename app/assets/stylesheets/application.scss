@@ -49,17 +49,28 @@ img.rucaptcha-image{
   color: green;
 }
 
+.count-th,
+.count-td{
+  width: 100px;
+}
+
 .notice{
   color: red;
 }
 
 .one-col-td,
 .one-col-th{
-  min-width: 50px;
+  width: 75px;
 }
+
 .two-col-td,
 .two-col-th{
-  width: auto;
+  width: 150px;
+}
+
+.order-time-td,
+.order-tine-th{
+  width: 160px;
 }
 
 .status-td,
@@ -73,8 +84,13 @@ img.rucaptcha-image{
   width: 75px;
 }
 
+.goods-th,
+.goods-td{
+  width: 100px;
+}
+
 .same-width{
-  width: 160px;
+  width: 140px;
   word-break: break-all;
 }
 
@@ -102,6 +118,16 @@ img.rucaptcha-image{
 
 .goods-remark{
   margin-top: 5px;
+}
+
+.remark-td,
+.remark-th{
+  width: 116px;
+}
+
+.account-td,
+.account-th{
+  width: 200px;
 }
 
 .cache_button{
@@ -143,4 +169,10 @@ textarea#multiple_order{
 
 .level-info{
   color: #f39c12;
+}
+
+.box-title{
+  font-size: 18px !important;
+  color: #444 !important;
+  font-weight: bold !important;
 }

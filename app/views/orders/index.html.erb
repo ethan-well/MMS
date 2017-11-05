@@ -9,26 +9,26 @@
         <table class="table table-bordered">
           <tr>
             <th class="order-id-th">订单号</th>
-            <th class="same-width">业务</th>
-            <th class="same-width">下单账号</th>
+            <th class="goods-th">业务</th>
+            <th class="account-th">下单账号</th>
             <th class="count-th">数量</th>
             <th class="two-col-th">单价/总价</th>
             <th class="same-width">初始/目标/当前</th>
-            <th class="same-width">下单时间</th>
-            <th class="status-th">备注</th>
-            <th class="two-col-th">状态</th>
+            <th class="order-time-th">下单时间</th>
+            <th class="remark-th">备注</th>
+            <th class="one-col-th">状态</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
               <td class="order-id-td"><%= order.identification_code %></td>
-              <td class="same-width"><%= order.goods.name rescue ''%></td>
-              <td class="same-width"><%= order.account %></td>
+              <td class="goods-td"><%= order.goods.name rescue ''%></td>
+              <td class="account-td"><%= order.account %></td>
               <td class="count-td"><%= order.count %></td>
               <td class="two-col-th"><%= "#{order.price_current}/#{order.total_price}"  %></td>
               <td class="same-width"><%= "#{order.start_num}/#{order.aims_num}/#{order.current_num}"  %></td>
-              <td class="same-width"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td class="status-td"><%= order.remark %></td>
-              <td class="two-col-td"><%= order.status_in_word %></td>
+              <td class="order-time-td"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td class="remark-td"><%= order.remark %></td>
+              <td class="one-col-td"><%= order.status_in_word %></td>
             </tr>
           <% end %>
         </table>

@@ -1,31 +1,3 @@
-<%  if @notices.present? %>
-  <div class="col-md-12">
-    <div class="box box-success">
-    <div class="box-header with-border">
-      <h3 class="box-title">系统公告！</h3>
-
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-      </div>
-    </div>
-    <div class="box-body notice-all">
-      <ul class="notice-item">
-        <% @notices.each do |notice| %>
-          <li class="notice-title">
-            <i class="fa fa-angle-right" aria-hidden="true"></i>
-            <%= notice.title %>
-          </li>
-          <div class="notice-content dispaly-none">
-            <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
-          </div>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-  <div id="show_notice"></div>
-</div>
-<% end %>
-
 <div class="col-md-12" style="margin-bottom: 20px;">
   <div class="row">
       <div class="col-md-4 col-sm-6 col-xs-12">
@@ -197,6 +169,33 @@
     </div>
   </div>
 </div>
+<%  if @notices.present? %>
+  <div class="col-md-12">
+    <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title">系统公告！</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div>
+    <div class="box-body notice-all">
+      <ul class="notice-item">
+        <% @notices.each do |notice| %>
+          <li class="notice-title">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <%= notice.title %>
+          </li>
+          <div class="notice-content dispaly-none">
+            <%= sanitize notice.content.gsub(/\r\n/, '<br>') %>
+          </div>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <div id="show_notice"></div>
+</div>
+<% end %>
 
 
 <style>

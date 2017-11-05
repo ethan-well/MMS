@@ -59,12 +59,14 @@
                   <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '选填' %>
                 </div>
               </div>
-            </div>
-            <div class="order-create-action clearfix">
-              <ul class="pagination pagination-sm no-margin pull-left">
-                <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
-                <%= f.submit '提交订单', class: 'btn btn-primary' %>
-              </ul>
+              <div class="form-group">
+                <div class="col-sm-5">
+                  <div class="pull-right">
+                    <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
+                    <%= f.submit '提交订单', class: 'btn btn-primary' %>
+                  </div>
+                </div>
+              </div>
             </div>
           <% end %>
         </div>
@@ -101,12 +103,14 @@
                 <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 12, placeholder: "批量下单格式：下单账号----需求数量：例如：\n1234567890----1000\n0987654321----2000"  %>
               </div>
             </div>
-          </div>
-          <div class="order-create-action clearfix">
-            <ul class="pagination pagination-sm no-margin pull-left">
-              <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
-              <%= f.submit '批量订单', data: {confirm: '提交该批量订单，将直接从账户余额中扣除对应金额，请保证余额充足'},class: 'btn btn-primary' %>
-            </ul>
+            <div class="form-group">
+              <div class="col-sm-5">
+                <div class="pull-right">
+                  <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
+                  <%= f.submit '批量订单', class: 'btn btn-primary' %>
+                </div>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
@@ -136,7 +140,7 @@
               <td class="order-id-td"><%= order.identification_code %></td>
               <td class="two-col-th"><%= order.account %></td>
               <td class="one-col-td"><%= order.count %></td>
-              <td class="two-col-td"><%=  "#{order.price_current}#{order.total_price}" %></td>
+              <td class="two-col-td"><%=  "#{order.price_current}/#{order.total_price}" %></td>
               <td class="two-col-td"><%= "#{order.start_num}/#{order.aims_num}/#{order.current_num}" %></td>
               <td class="two-col-td"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
               <td class="same-width"><%= order.remark %></td>

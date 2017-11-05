@@ -20,7 +20,7 @@
             <th class="two-col-th">单价/总价</th>
             <th class="same-width">初始/目标/当前</th>
             <th class="same-width">下单日期</th>
-            <th class="status-th">备注</th>
+            <th class="remark-th">备注</th>
             <th class="same-width">操作</th>
           </tr>
           <% @orders.each do |order| %>
@@ -33,7 +33,7 @@
               <td class="two-col-td"><%= "#{order.price_current}/#{order.total_price}" %> </td>
               <td class="same-width"><%= "#{order.start_num}/#{order.aims_num}/#{order.current_num}"  %></td>
               <td class="same-width"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
-              <td class="status-td"><%= order.remark %></td>
+              <td class="remark-td"><%= order.remark %></td>
               <td class="same-width">
                 <%= render :partial => 'operation_link', :locals =>{ order_id: order.id, status: order.status } %>
               </td>
