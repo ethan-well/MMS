@@ -200,8 +200,7 @@
     rules: {
       'order[goods_id]': "required",
       'order[price_current]': {
-        required: true,
-        number:true
+        required: true
       },
       'order[count]': {
         required: true,
@@ -213,8 +212,7 @@
     messages: {
       'order[goods_id]': "请选择业务",
       'order[price_current]': {
-        required: '单价必须填写',
-        number: '单价必须是数字'
+        required: '单价必须填写'
       },
       'order[count]':{
         required: '数量不能为空',
