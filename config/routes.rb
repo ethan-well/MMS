@@ -55,6 +55,8 @@ Rails.application.routes.draw do
       post 'update_user'
       get 'types'
       post 'can_log_in_or_invite'
+      get 'edit_user_password'
+      post 'update_user_password'
     end
   end
 

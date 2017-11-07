@@ -18,7 +18,6 @@ class AdminsController < ApplicationController
     @types = @types.order(created_at: :desc).page(params[:page] || 1).per(20)
   end
 
-
   def create_goods
     begin
       Goods.create(params.require(:goods).permit(:name, :price))
@@ -110,5 +109,27 @@ class AdminsController < ApplicationController
         end
       end
     end
+  end
+
+  def edit_user_password
+    @user = User.find(params[:user_id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_user_password
+    begin
+      user = User.find_by_id(params[:id])
+      raise '用户不存在' unless user.present?
+      user.password = params[:password]
+      user.password_confirmation = params[:password_confirmation]
+      user.md5_password = Digest::MD5.hexdigest(current_user.email + 'WoNiMaDeYa' + Time.now.to_s)
+      user.save!
+      flash[:notice] = '密码更改成功！'
+    rescue => ex
+      flash[:alert] = ex.message
+    end
+    redirect_to :back
   end
 end

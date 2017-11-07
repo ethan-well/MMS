@@ -53,6 +53,8 @@
             <td>
               <%= link_to '特价', user_special_prices_special_prices_path(user_id: user.id) %>
               <%= link_to '编辑', edit_user_admins_path(user_id: user.id), remote: true  %>
+              <%= link_to '密码重置', edit_user_password_admins_path(user_id: user.id), remote: true  %>
+
             </td>
           </tr>
         <% end %>
@@ -65,6 +67,7 @@
     </div>
   </div>
   <div id="add_edit_user_modal"></div>
+  <div id="add_edit_user_password_modal"></div>
   <%= link_to '会员级别规则', levels_path %>
 </div>
 

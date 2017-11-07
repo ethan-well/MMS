@@ -247,6 +247,8 @@ module Member
           orders = orders.where(goods_id: params[:goods_id]) if params[:goods_id].present?
           orders = orders.where(status: params[:states]) if params[:states].present?
           orders = orders.where(user_id: params[:user_id]) if params[:user_id].present?
+          limit = params[:limit] || 200
+          orders = orders.limit(limit)
 
           all_info = []
           orders.each do |order|

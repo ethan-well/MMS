@@ -81,8 +81,9 @@ module ApplicationHelper
     controller_name == controller && action == action_name ? 'active' : ''
   end
 
-  def invit_link
+  def invit_link_in_world
     #host = 'http://localhost:3000'
+    return '未开放' if current_user.level.number == 1
     host = 'http://119.29.152.254:3000'
     "#{host}/invites?invitation_code=#{current_user.invitation_code}"
   end

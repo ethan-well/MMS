@@ -79,7 +79,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if params[:user][:h_invitation_code].present?
       u = User.find_by_invitation_code(params[:user][:h_invitation_code])
-      unless u.present?
+      unless u.present? && u.level.number > 1
         return redirect_to :back, alert: '邀请码无效'
       end
 
