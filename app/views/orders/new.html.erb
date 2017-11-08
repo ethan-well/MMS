@@ -186,11 +186,11 @@
   price = $('.goods-price').val();
   $('.order-goods-num').bind('input propertychange', function(){
       num = $(this).val();
-      total_price = parseFloat(price) * parseInt(num);
+      total_price = (parseFloat(price) * parseInt(num)).toFixed(10);
       if(isNaN(total_price)){
         $('.order-total-price').html('总金额');
       }else {
-        $('.order-total-price').html(total_price);
+        $('.order-total-price').html(total_price.replace(/\.?0*$/, ""));
       }
   });
   //订单验证

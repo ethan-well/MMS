@@ -31,10 +31,10 @@
             <td>
               <%= goods.remark %>
             </td>
-            <td><%= goods.get_current_price(1) %></td>
-            <td><%= goods.get_current_price(2) %></td>
-            <td><%= goods.get_current_price(3) %></td>
-            <td><%= goods.get_current_price(4) %></td>
+            <td><%= price_to_humam(goods.get_current_price(1)) %></td>
+            <td><%= price_to_humam(goods.get_current_price(2)) %></td>
+            <td><%= price_to_humam(goods.get_current_price(3)) %></td>
+            <td><%= price_to_humam(goods.get_current_price(4)) %></td>
             <td>
               <% if goods.on_sale %>
                 <input type="checkbox" class="manage-on-sale" goods-id="<%= goods.id %>" checked data-toggle="toggle" data-on="已上架" data-off='已下架' data-style="ios" data-onstyle="success" data-offstyle="danger">

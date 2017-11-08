@@ -64,11 +64,12 @@ class User < ApplicationRecord
     price_second = current_goods_special_prices(goods_id)
     price_third = @goods.get_current_price(self.level_id)
 
-    if price_first.present? && price_first < price_third
-      price_second || price_third
-    else
-      price_first || price_second || price_third
-    end
+    price = if price_first.present? && price_first < price_third
+              price_second || price_third
+            else
+              price_first || price_second || price_third
+            end
+    ("%.10f" % price).sub(/\.?0*$/, "")
   end
 
   def month_ago_spend
