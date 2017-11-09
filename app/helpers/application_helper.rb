@@ -95,34 +95,20 @@ module ApplicationHelper
   end
 
   def user_level_info
-    current_level = Level.find_by_id(current_user.level_id)
-    total_spend = current_user.total_spend || 0
-    price_arr = Level.all.order('number desc').pluck(:price)
-    level_id = current_user.level_id
+     current_level = Level.find_by_id(current_user.level_id)
+     total_spend = current_user.total_spend || 0
+     if current_user.level_id < 4
+       last_leve_price = Level.find_by_id(current_user.level_id + 1).price
+       info = %Q(
+                   级别：[<span class="level-info"> LV#{current_user.level_id} </span>]
+                   距[LV#{current_user.level_id + 1}]差：[<span class="level-info">#{last_leve_price - total_spend}</span>]元
+                 )
+     else
+       info = %Q(级别：[<span class="level-info"> LV#{current_user.level_id} </span>])
+     end
 
-    if total_spend >= price_arr[0]
-      current_user.update_attribute(:level_id, 4)
-    elsif total_spend >= price_arr[1]
-      current_user.update_attribute(:level_id, 3)
-      price_need = price_arr[0] - total_spend
-    elsif total_spend >= price_arr[2]
-      current_user.update_attribute(:level_id, 2)
-      price_need = price_arr[1] - total_spend
-    else
-      price_need = price_arr[2] - total_spend
-    end
-
-    if current_user.level_id < 4
-      info = %Q(
-                  级别：[<span class="level-info"> LV#{current_user.level_id} </span>]
-                  距[LV#{current_user.level_id + 1}]差：[<span class="level-info">#{price_need}</span>]元
-                )
-    else
-      info = %Q(级别：[<span class="level-info"> LV#{current_user.level_id} </span>])
-    end
-
-    return info
-  end
+     return info
+   end
 
   def get_on_used_notice(system_price, special_price)
     special_price.present? && special_price < system_price ? '不能低于系统价格，请重新填写' : ''
