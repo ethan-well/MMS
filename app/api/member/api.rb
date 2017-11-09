@@ -73,6 +73,9 @@ module Member
           u = authenticate!(params[:user_email], params[:password])
           orders = u.orders
           orders = orders.where(goods_id: params[:goods_id]) if params[:goods_id].present?
+          limit = params[:limit] || 200
+          orders = orders.limit(limit)
+
           infos = []
           orders.each do |order|
             info =
