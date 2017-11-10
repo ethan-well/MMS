@@ -40,11 +40,14 @@ class AdminsController < ApplicationController
     begin
       user = User.find(params[:id])
       raise '等级不合法'  unless Level.find(params[:level_id]).present?
-      balance = Integer(params[:balance])
+      raise '设置的等级不能低于用户当前等级' unless params[:level_id].to_i < user.level_id
+      balance = Float(params[:balance])
       user.update_attributes(level_id: params[:level_id])
-      User.transaction do
-        recharge_records =  RechargeRecord.create(user_id: user.id, amount: balance, pay_type: '管理员加款')
-        user.update_attribute(:balance, user.balance + balance)
+      if balance > 0
+        User.transaction do
+          recharge_records =  RechargeRecord.create(user_id: user.id, amount: balance, pay_type: '管理员加款')
+          user.update_attribute(:balance, user.balance + balance)
+        end
       end
       flash[:nitice] = '用户信息更改成功'
     rescue => ex

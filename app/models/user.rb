@@ -93,7 +93,7 @@ class User < ApplicationRecord
   end
 
   def deduct_percentage_form_user(user_id)
-    self.deduct_percentages.where('low_user_id = ?', user_id).map(&:deduct_percentages).reduce('+')
+    self.deduct_percentages.where(low_user_id: user_id).map(&:deduct_percentages).reduce('+')
   end
 
 end
