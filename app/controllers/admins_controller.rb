@@ -40,7 +40,7 @@ class AdminsController < ApplicationController
     begin
       user = User.find(params[:id])
       raise '等级不合法'  unless Level.find(params[:level_id]).present?
-      raise '设置的等级不能低于用户当前等级' unless params[:level_id].to_i < user.level_id
+      raise '设置的等级不能低于用户当前等级' if params[:level_id].to_i < user.level_id
       balance = Float(params[:balance])
       user.update_attributes(level_id: params[:level_id])
       if balance > 0
