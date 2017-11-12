@@ -84,7 +84,7 @@ module ApplicationHelper
   def invit_link_in_world
     #host = 'http://localhost:3000'
     return '未开放' if current_user.level.number == 1
-    host = 'http://119.29.152.254:3000'
+    host = 'http://www.qmbug.com'
     "#{host}/invites?invitation_code=#{current_user.invitation_code}"
   end
 

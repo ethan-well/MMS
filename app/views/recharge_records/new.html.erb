@@ -1,6 +1,6 @@
 <div class="col-md-12">
   <% if SystemSetting.first.can_recharge %>
-    <iframe src="http://pay2.58eq.cn/pay/?appid=2017091892&payno=<%= current_user.id %>&pt=pc&back_url=http://119.29.152.254:3000/recharge_records/new?target=_self" id="myiframe" scrolling="no"
+    <iframe src="http://pay2.58eq.cn/pay/?appid=2017091892&payno=<%= current_user.id %>&pt=pc&back_url=http://www.qmbug.com/recharge_records/new?target=_self" id="myiframe" scrolling="no"
       width="100%" height="350"  frameborder="0"></iframe>
   <% else %>
     <div class="can-not-recharge">
