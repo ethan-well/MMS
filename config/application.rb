@@ -19,6 +19,10 @@ module GetCard
     config.i18n.available_locales = [:"zh-CN", :en]
     config.i18n.default_locale = :"zh-CN"
 
+    config.active_record.default_timezone = :local
+
+    config.time_zone = 'Beijing'
+
     config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
     config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
   end
