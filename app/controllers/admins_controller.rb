@@ -43,12 +43,11 @@ class AdminsController < ApplicationController
       raise '设置的等级不能低于用户当前等级' if params[:level_id].to_i < user.level_id
       balance = Float(params[:balance])
       user.update_attributes(level_id: params[:level_id])
-      if balance > 0
-        User.transaction do
-          recharge_records =  RechargeRecord.create(user_id: user.id, amount: balance, pay_type: '管理员加款')
-          user.update_attribute(:balance, user.balance + balance)
-        end
+      User.transaction do
+        recharge_records =  RechargeRecord.create(user_id: user.id, amount: balance, pay_type: '管理员加款')
+        user.update_attribute(:balance, user.balance + balance)
       end
+
       flash[:nitice] = '用户信息更改成功'
     rescue => ex
       flash[:alert] = ex.message
