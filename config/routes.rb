@@ -78,7 +78,11 @@ Rails.application.routes.draw do
 
   resources :system_settings, only: [:update]
 
-  resources :recharge_records, only: [:index, :new]
+  resources :recharge_records, only: [:index, :new] do
+    collection do
+      get 'call_back'
+    end
+  end
 
   resources :deduct_percentages, only: [:index]
 

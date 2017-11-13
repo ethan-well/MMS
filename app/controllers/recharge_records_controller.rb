@@ -7,4 +7,8 @@ class RechargeRecordsController < ApplicationController
   def new
 
   end
+
+  def call_back
+    render :new
+  end
 end
