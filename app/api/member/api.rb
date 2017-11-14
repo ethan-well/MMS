@@ -187,8 +187,8 @@ module Member
                       current_num: params[:current_num]
                     )
 
-            u.update_attribute(:balance, u.balance - total_price)
-
+            u.balance = u.balance - total_price
+            u.save!
             h_user = u.h_user
             if h_user.present?
               h_price_current = h_user.my_price(goods.id).to_f
