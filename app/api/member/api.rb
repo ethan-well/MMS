@@ -169,7 +169,7 @@ module Member
           goods = Goods.find(params[:goods_id])
           raise '商品已下架' unless goods.on_sale
 
-          price_current = u.my_price(goods.id)
+          price_current = u.my_price(goods.id).to_f
           total_price =  price_current * count
           raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if u.balance < total_price
 
