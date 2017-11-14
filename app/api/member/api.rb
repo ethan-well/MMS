@@ -171,10 +171,11 @@ module Member
 
           price_current = u.my_price(goods.id).to_f
           total_price =  price_current * count
-          raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if u.balance < total_price
 
           Order.transaction do
-            order = u.orders.create(
+            user = User.lock.find(u.id)
+            raise "本次需要支付#{total_price}元，余额不足，请充值后再下单" if user.balance < total_price
+            order = user.orders.create(
                       goods_id: goods.id,
                       remark: params[:remark],
                       account: params[:account],
@@ -186,7 +187,7 @@ module Member
                       aims_num: params[:aims_num],
                       current_num: params[:current_num]
                     )
-            user = User.lock.find(u.id)
+
             user.balance -= total_price
             user.save!
             h_user = user.h_user
