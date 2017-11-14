@@ -186,21 +186,20 @@ module Member
                       aims_num: params[:aims_num],
                       current_num: params[:current_num]
                     )
-
-            u.balance = u.balance - total_price
-            u.save!
-            h_user = u.h_user
+            user = User.lock.find(u.id)
+            user.balance -= total_price
+            user.save!
+            h_user = user.h_user
             if h_user.present?
               h_price_current = h_user.my_price(goods.id).to_f
               order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
             end
-            u = User.find(u.id)
             {
               result: 'success',
               message: '下单成功',
               id: order.identification_code,
               cost: order.total_price,
-              balance: u.balance
+              balance: user.balance
             }
           end
         rescue => ex
