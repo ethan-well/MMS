@@ -219,7 +219,8 @@ module Member
         u = authenticate!(params[:user_email], params[:password])
         raise '权限不够' unless u.admin
         begin
-          raise '权限不够' unless u.admin
+          user = User.lock.find(u.id)
+          raise '权限不够' unless user.admin
           order = Order.find_by_identification_code(params[:id].to_s)
           raise '订单信息不存在' unless order.present?
           raise '状态错误' unless Settings.order.status.include?(params[:states])
@@ -227,9 +228,8 @@ module Member
             order.update_attribute(:remark, params[:remark]) if params[:remark].present?
             order.update_attribute(:account, params[:account]) if params[:account].present?
             order.update_attribute(:status, params[:states])
-            u.update_attribute(:balance, u.balance + order.total_price ) if params[:states] == 'Refund'
+            user.update_attribute(:balance, user.balance + order.total_price ) if params[:states] == 'Refund'
           end
-
           { result: 'success', message: '状态更新成功' }
         rescue =>ex
           { result: 'failed', message: ex.message }
@@ -292,7 +292,7 @@ module Member
           raise '订单不存在' unless order.present?
           raise '已经退款,不可重复退款' if order.status == 'Refund'
           Order.transaction do
-            user = order.user
+            user = User.lock.find(order.user_id)
             user.update_attribute(:balance, user.balance + order.total_price)
             order.update_attribute(:status, 'Refund')
             order.update_attribute(:remark, params[:remark]) if params[:remark].present?

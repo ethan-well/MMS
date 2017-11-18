@@ -47,7 +47,6 @@ class OrdersController < ApplicationController
       is_on_sale?(goods.on_sale)
       price_current = current_user.my_price(goods.id).to_f
 
-      h_user = current_user.h_user
       # 批量订单
       if params[:multiple_order]
         begin
@@ -55,14 +54,16 @@ class OrdersController < ApplicationController
           order_info = infos.gsub(' ', '').split(/[\r\n]+/)
           total_count = 0
           Order.transaction do
+            user = User.lock.find(current_user.id)
+            h_user = user.h_user
             order_info.each do |info|
               info = info.split('----')
               count = Integer(info[1])
               raise '下单数量至少为1' if count < 1
               total_count += count.to_i
-              order = current_user.orders.create( goods_id: goods_id, price_current: price_current,
+              order = user.orders.create( goods_id: goods_id, price_current: price_current,
                   count: count, total_price: price_current * count, account: info[0],
-                  level_crrent: current_user.level_id )
+                  level_crrent: user.level_id )
 
               if h_user.present?
                 h_price_current = h_user.my_price(goods.id).to_f
@@ -70,8 +71,8 @@ class OrdersController < ApplicationController
               end
             end
             multiple_order_total_price = total_count * price_current.to_f
-            raise '余额不足，请充值后下单' if current_user.balance < multiple_order_total_price
-            current_user.update_attribute(:balance, current_user.balance - multiple_order_total_price )
+            raise '余额不足，请充值后下单' if user.balance < multiple_order_total_price
+            user.update_attribute(:balance, user.balance - multiple_order_total_price )
           end
           message = '下单成功'
         rescue => ex
@@ -87,13 +88,14 @@ class OrdersController < ApplicationController
       total_price = price_current * count
 
       # 普通订单
-      return redirect_to :back, notice: "余额不足,请充值后再下单" if current_user.balance < total_price
-
       Order.transaction do
-        current_user.update_attribute(:balance, current_user.balance - total_price)
+        user = User.lock.find(current_user.id)
+        raise "余额不足,请充值后再下单" if user.balance < total_price
+        user.update_attribute(:balance, user.balance - total_price)
 
-        order =  current_user.orders.create(params.require(:order).permit(:goods_id, :remark, :account))
-        order.update_attributes(price_current: price_current, count: count, total_price: total_price, level_crrent: current_user.level)
+        order =  user.orders.create(params.require(:order).permit(:goods_id, :remark, :account))
+        order.update_attributes(price_current: price_current, count: count, total_price: total_price, level_crrent: user.level)
+        h_user = user.h_user
         if h_user.present?
           h_price_current = h_user.my_price(goods.id).to_f
           order.update_attributes(h_level_crrent: h_user.level_id, h_price_current: h_price_current)
@@ -131,9 +133,9 @@ class OrdersController < ApplicationController
 
   def admin_change_status
     @order = Order.find(params[:id])
-    user = @order.user
     return redirect_to :back, notice: '订单状态已经退款，状态不能改变' if @order.status == 'Refund'
     Order.transaction do
+      user = User.lock.find(@order.user_id)
       @order.update_attribute(:status, params[:status])
       user.update_attribute(:balance, user.balance + @order.total_price ) if params[:status] == 'Refund'
     end
