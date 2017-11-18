@@ -390,6 +390,10 @@ module Member
             error!({result: 'failed', message: '验证失败'}, 401)
           end
 
+          if RechargeRecord.find_by_number(params[:payno]).present?
+            error!({result: 'failed', message: '已支付'}, 401)
+          end
+
           type = case params[:typ].to_i
                  when 1
                    '手工充值'
