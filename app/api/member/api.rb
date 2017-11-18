@@ -390,7 +390,7 @@ module Member
             error!({result: 'failed', message: '验证失败'}, 401)
           end
 
-          if RechargeRecord.find_by_number(params[:payno]).present?
+          if RechargeRecord.find_by_number(params[:tno]).present?
             error!({result: 'failed', message: '已支付'}, 401)
           end
 
