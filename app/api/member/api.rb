@@ -74,7 +74,7 @@ module Member
           orders = u.orders
           orders = orders.where(goods_id: params[:goods_id]) if params[:goods_id].present?
           limit = params[:limit] || 200
-          orders = orders.limit(limit)
+          orders = orders.order('updated_at DESC').limit(limit)
 
           infos = []
           orders.each do |order|
