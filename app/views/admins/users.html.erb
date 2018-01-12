@@ -25,7 +25,8 @@
           <th>管理</th>
         </tr>
         <% @users.each do |user| %>
-          <tr>
+          <% cache user do %>
+            <tr>
             <td><%= user.id %></td>
             <td><%= user.email %></td>
             <th><%= user.balance %></th>
@@ -54,9 +55,9 @@
               <%= link_to '特价', user_special_prices_special_prices_path(user_id: user.id) %>
               <%= link_to '编辑', edit_user_admins_path(user_id: user.id), remote: true  %>
               <%= link_to '密码重置', edit_user_password_admins_path(user_id: user.id), remote: true  %>
-
             </td>
           </tr>
+          <% end %>
         <% end %>
       </table>
     </div>

@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   validates :total_price, presence: true
   validates :status, presence: true
 
-  belongs_to :user
+  belongs_to :user, touch: true
   belongs_to :goods
 
   after_create :add_identification_code

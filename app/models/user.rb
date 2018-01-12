@@ -22,7 +22,7 @@ class User < ApplicationRecord
   end
 
   def total_spend
-    orders.where('status = ?', 'Finished').map(&:total_price).reduce(:+)
+    orders.where('status = ?', 'Finished').sum(:total_price)
   end
 
   def generate_invitation_code
