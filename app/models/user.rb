@@ -73,7 +73,7 @@ class User < ApplicationRecord
   end
 
   def month_ago_spend
-    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', Date.today - 1.month, Date.today).map(&:total_price).reduce(:+)
+    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', Date.today - 1.month, Date.today).sum(:total_price)
   end
 
   def low_level_users
@@ -81,7 +81,7 @@ class User < ApplicationRecord
   end
 
   def today_spend
-    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
+    orders.where('status = ?', 'Finished').where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).sum(:total_price)
   end
 
   def can_invite_in_word
@@ -93,7 +93,7 @@ class User < ApplicationRecord
   end
 
   def deduct_percentage_form_user(user_id)
-    self.deduct_percentages.where(low_user_id: user_id).map(&:deduct_percentages).reduce('+')
+    self.deduct_percentages.where(low_user_id: user_id).sum(:deduct_percentages)
   end
 
 end

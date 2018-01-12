@@ -12,17 +12,17 @@ class OrdersController < ApplicationController
     if params[:id].blank?
       @goods = '所有商品'
       @finished_orders = current_user.orders.where('status = ?', 'Finished')
-      @total_spend = @finished_orders.map(&:total_price).reduce(:+)
-      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
-      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
-      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+      @total_spend = @finished_orders.sum(:total_price)
+      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).sum(:total_price)
+      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).sum(:total_price)
+      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).sum(:total_price)
     else
       @goods = Goods.find(params[:id])
       @finished_orders = current_user.orders.where('goods_id = ?', params[:id]).where('status =?', 'Finished')
-      @total_spend = @finished_orders.map(&:total_price).reduce(:+)
-      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).map(&:total_price).reduce(:+)
-      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).map(&:total_price).reduce(:+)
-      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).map(&:total_price).reduce(:+)
+      @total_spend = @finished_orders.sum(:total_price)
+      @month_ago_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).sum(:total_price)
+      @today_spend = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).sum(:total_price)
+      @custom_query_spend = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time]).sum(:total_price)
       @goods = @goods.name
     end
   end
