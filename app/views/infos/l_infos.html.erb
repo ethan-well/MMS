@@ -15,7 +15,7 @@
             <tr>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
-              <td><%#= current_user.deduct_percentage_form_user(user.id) %></td>
+              <td><%= current_user.deduct_percentage_form_user(user.id) %></td>
               <td>
                 <%= link_to '提成记录', deduct_percentages_path(user_id: user.id) %>
                 <%= link_to '特价', h_set_prices_path(user_id: user.id) %>
