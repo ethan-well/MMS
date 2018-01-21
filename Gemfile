@@ -54,6 +54,8 @@ group :development, :test do
 
   #test controller
   gem 'rails-controller-testing'
+  
+  gem 'pry-rails', '~> 0.3.6'
 end
 
 group :development do

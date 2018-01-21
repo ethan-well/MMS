@@ -51,13 +51,15 @@ class OrdersController < ApplicationController
       if params[:multiple_order]
         begin
           infos = params['multiple_order']
-          order_info = infos.gsub(' ', '').split(/[\r\n]+/)
+          order_info = infos.strip.split(/[\r\n]+/)
+          raise '下单失败：一次最大支持50条订单批量提交！' if order_info.count > 2
           total_count = 0
           Order.transaction do
             user = User.lock.find(current_user.id)
             h_user = user.h_user
             order_info.each do |info|
-              info = info.split('----')
+              info = info.split(' '*4)
+              raise '订单格式错误：每行一条，必须用连续四个空隔分隔！' if info.count != 2
               count = Integer(info[1])
               raise '下单数量至少为1' if count < 1
               total_count += count.to_i
