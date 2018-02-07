@@ -1,66 +1,61 @@
 <div class="col-md-12">
-  <div class="nav-tabs-custom">
-    <ul class="nav nav-tabs pull-left">
-      <li class="active"><a href="#revenue-chart" data-toggle="tab">单个订单</a></li>
-      <li><a href="#sales-chart" data-toggle="tab">批量订单</a></li>
-    </ul>
-    <div class="tab-content no-padding">
-      <div class="chart tab-pane active" id="revenue-chart" style="position: relative;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="goods-info">
+        <div class="goods-name">
+          <%= @goods.name  %>：
+        </div>
+        <div class="goods-remrk red-color">
+          <%= sanitize @goods.remark.gsub(/\r\n/, '<br>') %>
+        </div>
+      </div>
+    </div>
+    <div class="clear-float"></div>
+    <div class="col-md-6">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <p class="box-title-custom text-yellow">单个订单区域</p>
+        </div>
+        <div class="box-body text-center">
           <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
             <div class="box-body">
               <div class="form-group">
-                <label class="col-sm-1 control-label">业务说明</label>
-                <div class="col-sm-4 red-color goods-remark">
-                  <%= @goods.remark %>
-                </div>
+                <%= f.hidden_field :goods_id, value: @goods.id %>
               </div>
               <div class="form-group">
-                <%= f.label :goods_name, '业务', class: 'col-sm-1 control-label '%>
-
-                <div class="col-sm-4">
-                  <%= text_field_tag :goods_name, @goods.name, readonly: true, class: 'form-control goods-id' %>
-                  <%= f.hidden_field :goods_id, value: @goods.id %>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <%= f.label :price_current, '单价', class: 'col-sm-1 control-label'%>
-
+                <%= f.label :price_current, '单价', class: 'col-sm-2 control-label'%>
                 <div class="col-sm-4">
                   <%= f.text_field :price_current, value: current_user.my_price(@goods.id), class: 'form-control goods-price', readonly: true %>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <%= f.label :count, '购买数量', class: 'col-sm-1 control-label' %>
-
-                <div class="col-sm-4">
-                  <%= f.text_field :count, value: nil, class: "form-control order-goods-num", placeholder: '填写购买数量'%>
-                </div>
-              </div>
-              <div class="form-group">
-                <%= f.label :total_price, '总金额', class: 'col-sm-1 control-label'%>
-
+                <%= f.label :total_price, '总金额', class: 'col-sm-2 control-label'%>
                 <div class="col-sm-4">
                   <div class="external-event bg-light-blue ui-draggable ui-draggable-handle order-total-price" style="position: relative;">总金额</div>
                 </div>
               </div>
               <div class="form-group">
-                <%= f.label :account, '下单账号', class: 'col-sm-1 control-label'%>
+                <%= f.label :count, '购买数量', class: 'col-sm-2 control-label' %>
 
-                <div class="col-sm-4">
+                <div class="col-sm-10">
+                  <%= f.text_field :count, value: nil, class: "form-control order-goods-num", placeholder: '填写购买数量'%>
+                </div>
+              </div>
+              <div class="form-group">
+                <%= f.label :account, '下单账号', class: 'col-sm-2 control-label'%>
+
+                <div class="col-sm-10">
                   <%= f.text_field :account, value: nil, class: "form-control", placeholder: '填写下单账号'%>
                 </div>
               </div>
               <div class="form-group">
-                <%= f.label :remark, '备注', class: 'col-sm-1 control-label'%>
+                <%= f.label :remark, '备注', class: 'col-sm-2 control-label'%>
 
-                <div class="col-sm-4">
+                <div class="col-sm-10">
                   <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '选填' %>
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-5">
+                <div class="col-sm-12">
                   <div class="pull-right">
                     <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
                     <%= f.submit '提交订单', class: 'btn btn-primary' %>
@@ -70,48 +65,40 @@
             </div>
           <% end %>
         </div>
-      <div class="chart tab-pane" id="sales-chart" style="position: relative;">
-        <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
-          <div class="box-body">
-            <div class="form-group">
-              <label class="col-sm-1 control-label">业务说明</label>
-              <div class="col-sm-4 red-color goods-remark">
-                <%= @goods.remark %>
-              </div>
-            </div>
-            <div class="form-group">
-              <%= f.label :goods_name, '业务', class: 'col-sm-1 control-label '%>
+      </div>
+    </div>
 
-              <div class="col-sm-4">
-                <%= text_field_tag :goods_name, @goods.name, readonly: true, class: 'form-control goods-id' %>
+    <div class="col-md-6">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <p class="box-title-custom text-yellow">批量订单区域</p>
+        </div>
+        <div class="box-body text-center">
+          <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
+            <div class="box-body">
+              <div class="form-group">
                 <%= f.hidden_field :goods_id, value: @goods.id %>
               </div>
-            </div>
+              <div class="form-group">
+                <div class="col-sm-2">
+                  <%= label_tag :multiple_order, '下单信息', class: 'control-label'%>
+                </div>
 
-            <div class="form-group">
-              <%= f.label :price_current, '单价', class: 'col-sm-1 control-label'%>
-
-              <div class="col-sm-4">
-                <%= f.text_field :price_current, value: current_user.my_price(@goods.id), class: 'form-control goods-price', readonly: true %>
+                <div class="col-sm-10">
+                  <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 12, placeholder: "批量任务语法（一次最大支持50条订单批量提交）\n每行一条，必须用连续四个空隔分隔，注意下单参数必需完整！例如：\n1234567890    1000\n0987654321    2000" %>
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <%= label_tag :multiple_order, '下单信息', class: 'col-sm-1 control-label'%>
-
-              <div class="col-sm-4">
-                <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 12, placeholder: "批量任务语法（一次最大支持50条订单批量提交）\n每行一条，必须用连续四个空隔分隔，注意下单参数必需完整！例如：\n1234567890    1000\n0987654321    2000" %>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-5">
-                <div class="pull-right">
-                  <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
-                  <%= f.submit '批量订单', class: 'btn btn-primary' %>
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <div class="pull-right">
+                    <%= link_to '取消', new_order_path(goods_id: @goods.id), class: 'btn btn-default' %>
+                    <%= f.submit '批量订单', class: 'btn btn-primary' %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
@@ -173,6 +160,30 @@
   .two-col-th,
   .two-col-td{
     width: 120px;
+  }
+
+  .box-title-custom{
+    margin: inherit;
+  }
+
+  .goods-name {
+    float: left;
+    max-width: 20%;
+    padding-top: 5px;
+  }
+
+  .goods-info {
+    font-size: 18px;
+  }
+
+  .goods-remrk {
+    float: left;
+    max-width: 80%;
+    font-style:italic;
+    padding: 5px;
+  }
+  .clear-float{
+    clear: both;
   }
 </style>
 <script>
