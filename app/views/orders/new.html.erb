@@ -2,19 +2,20 @@
   <div class="row">
     <div class="col-md-12">
       <div class="goods-info">
-        <div class="goods-name">
-          <%= @goods.name  %>：
-        </div>
-        <div class="goods-remrk red-color">
+        <span class="fa-custom">
+          <i class="fa fa-exclamation"></i>
+          注意
+        </span>
+        <span>
           <%= sanitize @goods.remark.gsub(/\r\n/, '<br>') %>
-        </div>
+        </span>
       </div>
     </div>
     <div class="clear-float"></div>
     <div class="col-md-6">
       <div class="box box-solid">
         <div class="box-header with-border">
-          <p class="box-title-custom text-yellow">单个订单区域</p>
+          <p class="box-title-custom">单个订单区域</p>
         </div>
         <div class="box-body text-center">
           <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
@@ -71,7 +72,7 @@
     <div class="col-md-6">
       <div class="box box-solid">
         <div class="box-header with-border">
-          <p class="box-title-custom text-yellow">批量订单区域</p>
+          <p class="box-title-custom">批量订单区域</p>
         </div>
         <div class="box-body text-center">
           <%= form_for Order.new, html: {:class => 'form-horizontal'} do |f| %>
@@ -173,15 +174,20 @@
   }
 
   .goods-info {
-    font-size: 18px;
+    background-color: #f39c12;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
   }
 
-  .goods-remrk {
-    float: left;
-    max-width: 80%;
-    font-style:italic;
-    padding: 5px;
+  .fa-custom {
+    background-color: #dd4b39;
+    border-radius: 3px;
+    padding: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
+
   .clear-float{
     clear: both;
   }
