@@ -52,13 +52,13 @@
                   <%= f.text_field :account, value: nil, class: "form-control", placeholder: '填写下单账号'%>
                 </div>
               </div>
-              <div class="form-group">
-                <%= f.label :remark, '备注', class: 'col-sm-2 control-label'%>
+              <!-- <div class="form-group">
+                <%#= f.label :remark, '备注', class: 'col-sm-2 control-label'%>
 
                 <div class="col-sm-10">
-                  <%= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '选填' %>
+                  <%#= f.text_area :remark, class: 'form-control', rows: 5, placeholder: '选填' %>
                 </div>
-              </div>
+              </div> -->
               <div class="form-group">
                 <div class="col-sm-12">
                   <div class="pull-right">
@@ -84,13 +84,13 @@
               <div class="form-group">
                 <%= f.hidden_field :goods_id, value: @goods.id %>
               </div>
-              <div class="form-group">
+              <div class="form-group multiple-order-info">
                 <div class="col-sm-2">
                   <%= label_tag :multiple_order, '下单信息', class: 'control-label'%>
                 </div>
 
                 <div class="col-sm-10">
-                  <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 12, placeholder: "批量任务语法（一次最大支持50条订单批量提交）\n每行一条，必须用连续四个空隔分隔，注意下单参数必需完整！例如：\n1234567890    1000\n0987654321    2000" %>
+                  <%= text_area_tag :multiple_order, nil, class: 'form-control', rows: 6, placeholder: "批量任务语法（一次最大支持50条订单批量提交）\n每行一条，必须用连续四个空隔分隔，注意下单参数必需完整！例如：\n1234567890    1000\n0987654321    2000" %>
                 </div>
               </div>
               <div class="form-group">
@@ -198,6 +198,10 @@
 
   .no-border{
     border: 0px;
+  }
+
+  .multiple-order-info{
+    margin-bottom: 5px;
   }
 </style>
 <script>
