@@ -134,4 +134,38 @@ class AdminsController < ApplicationController
     end
     redirect_to :back
   end
+
+  def sale_infos
+    if params[:goods_id].blank?
+      @goods = '所有商品'
+      @finished_orders = Order.where('status = ?', 'Finished')
+
+      @total_spend = @finished_orders.sum(:total_price)
+      @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+      @month_ago_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now)
+      @month_ago_spend = @month_ago_finished_orders.sum(:total_price)
+      @month_ago_deduct_percentage = DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+      @today_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
+      @today_spend = @today_finished_orders.sum(:total_price)
+      @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
+    else
+      @goods = Goods.find(params[:goods_id])
+      @finished_orders = @goods.orders.where('status =?', 'Finished')
+
+      @total_spend = @finished_orders.sum(:total_price)
+      @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+      @month_ago_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now)
+      @month_ago_spend = @month_ago_finished_orders.sum(:total_price)
+      @month_ago_deduct_percentage = DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+      @today_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
+      @today_spend = @today_finished_orders.sum(:total_price)
+      @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+      @goods = @goods.name
+    end
+  end
 end

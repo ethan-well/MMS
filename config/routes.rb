@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       post 'can_log_in_or_invite'
       get 'edit_user_password'
       post 'update_user_password'
+      get 'sale_infos'
     end
   end
 

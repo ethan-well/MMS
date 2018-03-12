@@ -10,9 +10,9 @@ class Order < ApplicationRecord
   after_create :add_identification_code
 
   after_update :update_user_level
-  after_update :deduct_percentage
+  after_update :execute_deduct_percentage
 
-  has_one :deduct_percentages
+  has_one :deduct_percentage
 
   #生成订单号
   def add_identification_code
@@ -88,7 +88,7 @@ class Order < ApplicationRecord
     end
   end
 
-  def deduct_percentage
+  def execute_deduct_percentage
     if status_changed? && status == 'Finished'
       user = self.user
       goods = self.goods
@@ -111,4 +111,7 @@ class Order < ApplicationRecord
       end
     end
   end
+
+
+
 end

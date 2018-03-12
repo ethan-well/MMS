@@ -1,0 +1,25 @@
+<div class="col-md-12">
+  <div class="box">
+    <%= form_tag sale_infos_admins_path, method: 'get' do %>
+      <div class="box-body">
+        <div class="form-group">
+          <div class="col-xs-2">
+            <%= label_tag '商品' %>
+            <%= select_tag :goods_id, options_from_collection_for_select(Goods.all, 'id', 'name', params['goods_id']), include_blank: true, class: 'form-control select-goods' %>
+          </div>
+          <div class="col-xs-2">
+            <label ></label>
+            <%= submit_tag '查询', class: 'btn btn-block btn-primary btn-flat make-line'%>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $(".select-goods").select2({
+      placeholder: "选择业务",
+      allowClear: true
+    });
+</script>
