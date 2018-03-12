@@ -138,8 +138,8 @@ class AdminsController < ApplicationController
   def sale_infos
     if params[:goods_id].blank?
       @goods = '所有商品'
-      @finished_orders = Order.where('status = ?', 'Finished')
 
+      @finished_orders = Order.where('status = ?', 'Finished')
       @total_spend = @finished_orders.sum(:total_price)
       @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
 
@@ -152,8 +152,8 @@ class AdminsController < ApplicationController
       @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
     else
       @goods = Goods.find(params[:goods_id])
-      @finished_orders = @goods.orders.where('status =?', 'Finished')
 
+      @finished_orders = @goods.orders.where('status =?', 'Finished')
       @total_spend = @finished_orders.sum(:total_price)
       @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
 
