@@ -150,6 +150,11 @@ class AdminsController < ApplicationController
       @today_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
       @today_spend = @today_finished_orders.sum(:total_price)
       @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
+
+
+      @custom_query_orders = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time])
+      @custom_query_spend = @custom_query_orders.sum(:total_price)
+      @custom_query_deduct_percentage = DeductPercentage.where(order_id: @custom_query_orders.pluck(:id)).sum(:deduct_percentages)
     else
       @goods = Goods.find(params[:goods_id])
 
@@ -165,6 +170,9 @@ class AdminsController < ApplicationController
       @today_spend = @today_finished_orders.sum(:total_price)
       @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
 
+      @custom_query_orders = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time])
+      @custom_query_spend = @custom_query_orders.sum(:total_price)
+      @custom_query_deduct_percentage = DeductPercentage.where(order_id: @custom_query_orders.pluck(:id)).sum(:deduct_percentages)
       @goods = @goods.name
     end
   end

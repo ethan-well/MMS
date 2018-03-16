@@ -22,6 +22,9 @@
 
           <th>今日销量</th>
           <th>今日提成</th>
+
+          <th>销量：<%= custom_query_time(params[:start_time], params[:end_time]) %></th>
+          <th>提成：<%= custom_query_time(params[:start_time], params[:end_time]) %></th>
         </tr>
         <tr>
           <td><%= @goods %></td>
@@ -34,6 +37,9 @@
 
           <td><%= @today_spend  %></td>
           <td><%= @today_deduct_percentage %></td>
+
+          <td><%= @custom_query_spend %></td>
+          <td><%= @custom_query_deduct_percentage %></td>
         </tr>
       </table>
     </div>
