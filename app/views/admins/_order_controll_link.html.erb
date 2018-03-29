@@ -2,4 +2,5 @@
 <%= link_to '处理中订单', orders_admins_path(status: 'Dealing'), class: "btn  btn-flat #{current_status_order?('Dealing')}"%>
 <%= link_to '已退款订单', orders_admins_path(status: 'Refund'), class: "btn  btn-flat #{current_status_order?('Refund')}" %>
 <%= link_to '已完成订单', orders_admins_path(status: 'Finished'), class: "btn  btn-flat #{current_status_order?('Finished')}" %>
+<%= link_to '待退款订单', orders_admins_path(status: 'InRefund'), class: "btn  btn-flat #{current_status_order?('InRefund')}" %>
 <%#= link_to '退款失败订单', orders_admins_path(status: 'CancelFailed'), class: "btn  btn-flat #{current_status_order?('CancelFailed')}" %>

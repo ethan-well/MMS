@@ -17,6 +17,7 @@
             <th class="order-time-th">下单时间</th>
             <th class="remark-th">备注</th>
             <th class="one-col-th">状态</th>
+            <th class="one-col-th">操作</th>
           </tr>
           <% @orders.each do |order| %>
             <tr>
@@ -29,6 +30,14 @@
               <td class="order-time-td"><%= order.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
               <td class="remark-td"><%= order.remark %></td>
               <td class="one-col-td"><%= order.status_in_word %></td>
+              <td class="one-col-td">
+                <% if order.is_waiting? %>
+                  <%= link_to '退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '退款后订单对应金额直接退还到账号余额，确定退款？' } %>
+                <% end %>
+                <% if order.is_dealing? %>
+                  <%= link_to '申请退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '管理员处理后，直接退还到账号余额，确定申请退款？' } %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </table>

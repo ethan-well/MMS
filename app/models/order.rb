@@ -14,17 +14,26 @@ class Order < ApplicationRecord
 
   has_one :deduct_percentage
 
+
+  def can_refund?
+    self.status == 'Waiting' || self.status == 'Dealing'
+  end
+
+  def can_admin_refund?
+    self.status == 'Waiting' || self.status == 'Dealing' || self.status == 'InRefund'
+  end
+
   #生成订单号
   def add_identification_code
     self.update_attribute(:identification_code, 100000 + id)
   end
 
-  def is_not_pay?
-    self.status == 'Waiting'
-  end
-
   def is_paied?
     self.status == 'Paied'
+  end
+
+  def is_dealing?
+    self.status == 'Dealing'
   end
 
   def is_canceled?
@@ -35,7 +44,7 @@ class Order < ApplicationRecord
     self.status == 'Finished'
   end
 
-  def can_cancel?
+  def is_waiting?
     self.status == 'Waiting'
   end
 
@@ -52,7 +61,9 @@ class Order < ApplicationRecord
     when 'Waiting'
       '等待处理'
     when 'Refund'
-      '取消退款'
+      '已经退款'
+    when 'InRefund'
+      '退款处理中'
     when 'Finished'
       '已完成'
     when 'Dealing'
@@ -72,6 +83,8 @@ class Order < ApplicationRecord
       '已完成'
     when 'Refund'
       '已经退款'
+    when 'InRefund'
+      '等待退款'
     when 'RefundFailed'
       '退款失败'
     end

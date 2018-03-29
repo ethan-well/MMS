@@ -95,7 +95,8 @@ module Member
             infos << info
           end
 
-          { result: 'success',
+          {
+            result: 'success',
             message: '查询订单信息成功',
             data: infos
           }
@@ -222,13 +223,18 @@ module Member
           user = User.lock.find(u.id)
           raise '权限不够' unless user.admin
           order = Order.find_by_identification_code(params[:id].to_s)
+          order_owner = order.user
           raise '订单信息不存在' unless order.present?
           raise '状态错误' unless Settings.order.status.include?(params[:states])
+          raise '订单不可退款' if params[:states] == 'Refund' && !order.can_admin_refund?
           Order.transaction do
             order.update_attribute(:remark, params[:remark]) if params[:remark].present?
             order.update_attribute(:account, params[:account]) if params[:account].present?
             order.update_attribute(:status, params[:states])
-            user.update_attribute(:balance, user.balance + order.total_price ) if params[:states] == 'Refund'
+            if  params[:states] == 'Refund'
+              RechargeRecord.create(user_id: order_owner.id, amount: order.total_price, pay_type: "管理员退款：订单#{order.identification_code}")
+              user.update_attribute(:balance, order_owner.balance + order_owner.total_price )
+            end
           end
           { result: 'success', message: '状态更新成功' }
         rescue =>ex
@@ -295,6 +301,7 @@ module Member
             user = User.lock.find(order.user_id)
             user.update_attribute(:balance, user.balance + order.total_price)
             order.update_attribute(:status, 'Refund')
+            user.recharge_records.create(amount: order.total_price, pay_type: "管理员退款：订单 #{order.identification_code}")
             order.update_attribute(:remark, params[:remark]) if params[:remark].present?
           end
           { result: 'success', message: '退款成功' }

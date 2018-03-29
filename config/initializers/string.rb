@@ -9,6 +9,8 @@ class String
       '已完成'
     when 'Refund'
       '已经退款'
+    when 'InRefund'
+      '申请退款中'
     else
       itself
     end

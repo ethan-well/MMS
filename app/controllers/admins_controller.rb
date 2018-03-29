@@ -173,6 +173,7 @@ class AdminsController < ApplicationController
       @custom_query_orders = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time])
       @custom_query_spend = @custom_query_orders.sum(:total_price)
       @custom_query_deduct_percentage = DeductPercentage.where(order_id: @custom_query_orders.pluck(:id)).sum(:deduct_percentages)
+
       @goods = @goods.name
     end
   end

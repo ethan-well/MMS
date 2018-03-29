@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       post 'cancel'
       post 'finished'
       post 'admin_change_status'
+      post 'request_refund'
     end
     collection do
       get 'purchase_history'

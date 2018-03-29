@@ -133,9 +133,32 @@ class OrdersController < ApplicationController
     redirect_to action: 'index'
   end
 
+  def request_refund
+    order = current_user.orders.find(params[:id])
+    return redirect_to :back, alert: '不可退款' unless order.can_refund?
+    balance = Float(order.total_price)
+    begin
+      if order.is_waiting?
+        Order.transaction do
+          order.update_attribute(:status, 'Refund')
+          current_user.recharge_records.create(amount: balance, pay_type: "订单：#{order.identification_code} 退款")
+          current_user.update_attribute(:balance, current_user.balance + balance)
+        end
+        msg = '退款成功，退款已加入账户余额！'
+      elsif order.is_dealing?
+        order.update_attribute(:status, 'InRefund')
+        msg = '退款申请提交成功，等待审核！'
+      end
+    rescue
+      msg = '操作失败，请稍后重试'
+    end
+    redirect_to :back, notice: msg
+  end
+
   def admin_change_status
     @order = Order.find(params[:id])
-    return redirect_to :back, notice: '订单状态已经退款，状态不能改变' if @order.status == 'Refund'
+    return redirect_to :back, alert: '订单状态已经退款，状态不能改变' if @order.status == 'Refund'
+    return redirect_to :back, alert: '当前订单不能退款' if params[:status] == 'Refund' && !@order.can_admin_refund?
     Order.transaction do
       user = User.lock.find(@order.user_id)
       @order.update_attribute(:status, params[:status])
