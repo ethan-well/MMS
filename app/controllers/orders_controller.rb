@@ -134,6 +134,7 @@ class OrdersController < ApplicationController
   end
 
   def request_refund
+    return redirect_to :back, alert: '不允许退款'
     order = current_user.orders.find(params[:id])
     return redirect_to :back, alert: '不可退款' unless order.can_refund?
     balance = Float(order.total_price)

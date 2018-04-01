@@ -32,10 +32,10 @@
               <td class="one-col-td"><%= order.status_in_word %></td>
               <td class="one-col-td">
                 <% if order.is_waiting? %>
-                  <%= link_to '退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '退款后订单对应金额直接退还到账号余额，确定退款？' } %>
+                  <%#= link_to '退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '退款后订单对应金额直接退还到账号余额，确定退款？' } %>
                 <% end %>
                 <% if order.is_dealing? %>
-                  <%= link_to '申请退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '管理员处理后，直接退还到账号余额，确定申请退款？' } %>
+                  <%#= link_to '申请退款', request_refund_order_path(order.id), method: 'POST', data: { confirm: '管理员处理后，直接退还到账号余额，确定申请退款？' } %>
                 <% end %>
               </td>
             </tr>

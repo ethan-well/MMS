@@ -430,6 +430,5 @@ module Member
       end
 
     end
-
   end
 end
