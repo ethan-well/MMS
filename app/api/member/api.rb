@@ -234,7 +234,7 @@ module Member
             order.update_attribute(:status, params[:states])
             if params[:states] == 'Refund'
               RechargeRecord.create(user_id: order_owner.id, amount: order.total_price, pay_type: "管理员退款：订单#{order.identification_code}")
-              order_owner.update_attribute(:balance, order_owner.balance + order_owner.total_price )
+              order_owner.update_attribute(:balance, order_owner.balance + order.total_price )
             end
           end
           { result: 'success', message: '状态更新成功' }
