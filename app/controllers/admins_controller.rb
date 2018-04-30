@@ -140,35 +140,85 @@ class AdminsController < ApplicationController
       @goods = '所有商品'
 
       @finished_orders = Order.where('status = ?', 'Finished')
-      @total_spend = @finished_orders.sum(:total_price)
-      @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @total_spend =
+        Rails.cache.fetch("all_orders_total_spend", expires_in: 12.hours) do
+          @finished_orders.sum(:total_price).to_f
+        end
+      @total_deduct_percentage =
+        Rails.cache.fetch("all_orders_deduct_percentage", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
 
-      @month_ago_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now)
-      @month_ago_spend = @month_ago_finished_orders.sum(:total_price)
-      @month_ago_deduct_percentage = DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @month_ago_finished_orders =
+        Rails.cache.fetch("all_orders_month_ago_finished_orders", expires_in: 12.hours) do
+          @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
+        end
+      @month_ago_spend =
+        Rails.cache.fetch("all_orders_month_ago_spend", expires_in: 12.hours) do
+          @month_ago_finished_orders.sum(:total_price).to_f
+        end
 
-      @today_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
-      @today_spend = @today_finished_orders.sum(:total_price)
-      @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @month_ago_deduct_percentage =
+        Rails.cache.fetch("all_orders_month_ago_deduct_percentage", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
 
+      @today_finished_orders =
+        Rails.cache.fetch("all_orders_month_today_finished_orders", expires_in: 12.hours) do
+          @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).reload
+        end
+
+      @today_spend =
+        Rails.cache.fetch("all_orders_today_spend", expires_in: 12.hours) do
+          @today_finished_orders.sum(:total_price).to_f
+        end
+      @today_deduct_percentage =
+        Rails.cache.fetch("all_orders_today_spend", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
 
       @custom_query_orders = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time])
       @custom_query_spend = @custom_query_orders.sum(:total_price)
       @custom_query_deduct_percentage = DeductPercentage.where(order_id: @custom_query_orders.pluck(:id)).sum(:deduct_percentages)
     else
       @goods = Goods.find(params[:goods_id])
-
       @finished_orders = @goods.orders.where('status =?', 'Finished')
-      @total_spend = @finished_orders.sum(:total_price)
-      @total_deduct_percentage = DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @total_spend =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_total_spend", expires_in: 12.hours) do
+          @finished_orders.sum(:total_price).to_f
+        end
 
-      @month_ago_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now)
-      @month_ago_spend = @month_ago_finished_orders.sum(:total_price)
-      @month_ago_deduct_percentage = DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @total_deduct_percentage =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_total_deduct_percentage", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
 
-      @today_finished_orders = @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
-      @today_spend = @today_finished_orders.sum(:total_price)
-      @today_deduct_percentage = DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages)
+      @month_ago_finished_orders =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_month_ago_finished_orders", expires_in: 12.hours) do
+          @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
+        end
+
+      @month_ago_spend =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_month_ago_spend", expires_in: 12.hours) do
+          @month_ago_finished_orders.sum(:total_price).to_f
+        end
+      @month_ago_deduct_percentage =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_month_ago_deduct_percentage", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @month_ago_finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
+
+      @today_finished_orders =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_today_finished_orders", expires_in: 12.hours) do
+          @finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).reload
+        end
+      @today_spend =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_today_spend", expires_in: 12.hours) do
+          @today_finished_orders.sum(:total_price).to_f
+        end
+      @today_deduct_percentage =
+        Rails.cache.fetch("goods_#{@goods.id}_orders_today_deduct_percentage", expires_in: 12.hours) do
+          DeductPercentage.where(order_id: @today_finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
+        end
 
       @custom_query_orders = @finished_orders.where('created_at BETWEEN ? AND ?', params[:start_time], params[:end_time])
       @custom_query_spend = @custom_query_orders.sum(:total_price)
