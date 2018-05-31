@@ -40,6 +40,8 @@ gem 'grape'
 
 gem 'unicorn'
 
+gem 'whenever', require: false
+
 # gem 'momentjs-rails', '>= 2.9.0'
 # gem 'bootstrap3-datetimepicker-rails', '~> 4.17.47'
 
@@ -54,7 +56,7 @@ group :development, :test do
 
   #test controller
   gem 'rails-controller-testing'
-  
+
   gem 'pry-rails', '~> 0.3.6'
 end
 

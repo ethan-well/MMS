@@ -12,7 +12,7 @@ class Order < ApplicationRecord
   after_update :update_user_level
   after_update :execute_deduct_percentage
 
-  has_one :deduct_percentage
+  has_one :deduct_percentage, dependent: :destroy
 
 
   def can_refund?
