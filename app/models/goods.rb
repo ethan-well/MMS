@@ -27,10 +27,8 @@ class Goods < ApplicationRecord
         DeductPercentage.where(order_id: finished_orders.pluck(:id)).sum(:deduct_percentages).to_f
       end
       # month_ago_finished_orders
-      month_ago_finished_orders =
-        Rails.cache.fetch("all_orders_month_ago_finished_orders", expires_in: 12.hours) do
-          finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
-        end
+      month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
+      
       # month_ago_spend
       Rails.cache.fetch("all_orders_month_ago_spend", expires_in: 12.hours) do
         month_ago_finished_orders.sum(:total_price).to_f
@@ -42,10 +40,7 @@ class Goods < ApplicationRecord
       end
 
       # today_finished_orders
-      today_finished_orders =
-        Rails.cache.fetch("all_orders_month_today_finished_orders", expires_in: 12.hours) do
-          finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).reload
-        end
+      today_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).reload
 
       # today_spend
       Rails.cache.fetch("all_orders_today_spend", expires_in: 12.hours) do
@@ -71,10 +66,7 @@ class Goods < ApplicationRecord
     end
 
     # smonth_ago_finished_orders
-    month_ago_finished_orders =
-      Rails.cache.fetch("goods_#{self.id}_orders_month_ago_finished_orders", expires_in: 12.hours) do
-        finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
-      end
+    month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now)
 
     # month_ago_spend
     Rails.cache.fetch("goods_#{self.id}_orders_month_ago_spend", expires_in: 12.hours) do
@@ -87,10 +79,7 @@ class Goods < ApplicationRecord
     end
 
     # today_finished_orders
-    today_finished_orders =
-      Rails.cache.fetch("goods_#{self.id}_orders_today_finished_orders", expires_in: 12.hours) do
-        finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now).reload
-      end
+    today_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_day, DateTime.now)
 
     # today_spend
     Rails.cache.fetch("goods_#{self.id}_orders_today_spend", expires_in: 12.hours) do
