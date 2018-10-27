@@ -10,12 +10,12 @@ class AdminsController < ApplicationController
      elsif params[:goods_type_id].present?
        @goods =  @goods.where(goods_type_id: params[:goods_type_id])
      end
-    @goods = @goods.order(created_at: :desc).page(params[:page] || 1).per(20)
+    @goods = @goods.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
 
   def types
     @types = GoodsType.all
-    @types = @types.order(created_at: :desc).page(params[:page] || 1).per(20)
+    @types = @types.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
 
   def create_goods
@@ -58,7 +58,7 @@ class AdminsController < ApplicationController
   def orders
     @orders = Order.where('status = ?', params['status']).order('created_at desc')
     search_orders
-    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(20)
+    @orders = @orders.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
 
   def users
@@ -68,7 +68,7 @@ class AdminsController < ApplicationController
       else
         User.all
       end
-    @users = @users.order(created_at: :desc).page(params[:page] || 1).per(20)
+    @users = @users.order(created_at: :desc).page(params[:page] || 1).per(10)
   end
 
   def can_log_in_or_invite

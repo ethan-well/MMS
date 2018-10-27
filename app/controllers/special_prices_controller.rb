@@ -27,7 +27,7 @@ class SpecialPricesController < ApplicationController
     @goods = Goods.all
     @user = User.find(params[:user_id])
     @special_prices = @user.special_prices.includes(:goods)
-    @goods = @goods.page(params[:page] || 1).per(20)
+    @goods = @goods.page(params[:page] || 1).per(10)
   end
 
   def goods_special_prices

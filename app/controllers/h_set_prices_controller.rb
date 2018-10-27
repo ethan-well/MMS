@@ -3,7 +3,7 @@ class HSetPricesController < ApplicationController
     @goods = Goods.all
     @user = current_user.low_level_users.find_by_id(params[:user_id])
     return redirect_to :back, alert: '用户不存在' unless @user.present?
-    @goods = @goods.page(params[:page] || 0).per(20)
+    @goods = @goods.page(params[:page] || 0).per(10)
   end
 
   def create_or_update
