@@ -28,8 +28,8 @@ class Goods < ApplicationRecord
       end
       # month_ago_finished_orders
       # month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.now.beginning_of_month, DateTime.now).reload
-      month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new(2018, 07, 01), DateTime.new(2018, 08, 01)).reload
-      
+      month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new(2018, 7, 1), DateTime.new(2018, 8, 1)).reload
+
       # month_ago_spend
       Rails.cache.fetch("all_orders_month_ago_spend", expires_in: 12.hours) do
         month_ago_finished_orders.sum(:total_price).to_f
@@ -67,7 +67,7 @@ class Goods < ApplicationRecord
     end
 
     # smonth_ago_finished_orders
-    month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new(2018, 07, 01), DateTime.new(2018, 08, 01))
+    month_ago_finished_orders = finished_orders.where('created_at BETWEEN ? AND ?', DateTime.new(2018, 7, 1), DateTime.new(2018, 8, 1))
 
     # month_ago_spend
     Rails.cache.fetch("goods_#{self.id}_orders_month_ago_spend", expires_in: 12.hours) do
