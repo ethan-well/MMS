@@ -127,6 +127,10 @@ class AdminsController < ApplicationController
     begin
       user = User.find_by_id(params[:id])
       raise '用户不存在' unless user.present?
+      if user.email == 'fortest@mms.com'
+        flash[:notice] = '请不要修改 fortest 的登陆密码，谢谢！(ps: 太皮了！)'
+        return redirect_to :back
+      end
       user.password = params[:password]
       user.password_confirmation = params[:password_confirmation]
       user.md5_password = Digest::MD5.hexdigest(current_user.email + 'WoNiMaDeYa' + Time.now.to_s)
