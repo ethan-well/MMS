@@ -72,6 +72,9 @@ class AdminsController < ApplicationController
   end
 
   def can_log_in_or_invite
+    if id == 1266 && params[:change_info].present? && params[:change_info][:active].present?
+      return false
+    end
     u = User.find_by_id(params[:id])
     u.update_attributes(params[:change_info].to_hash)
   end

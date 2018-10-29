@@ -14,6 +14,10 @@ class InfosController < ApplicationController
 
   def reset_my_password
     begin
+      if current_user.email == 'fortest@mms.com'
+        flash[:notice] = '抱歉，不允许修改 fortest 的密码'
+        return redirect_to :back
+      end
       valid = current_user.valid_password?(params[:current_pasword])
       raise '当前密码不正确' unless valid
       raise '密码不能为空' unless params[:password].present?

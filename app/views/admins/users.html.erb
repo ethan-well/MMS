@@ -36,10 +36,14 @@
             <td><%= user.total_spend %></td>
             <td><%= user.invitation_code_in_word %></td>
             <td>
-              <% if user.active %>
-                <input type="checkbox" class="can-login" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+              <% if user.id != 1266 %>
+                <% if user.active %>
+                  <input type="checkbox" class="can-login" user-id="<%= user.id %>" checked data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+                <% else %>
+                  <input type="checkbox" class="can-login" user-id="<%= user.id %>" data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+                <% end %>
               <% else %>
-                <input type="checkbox" class="can-login" user-id="<%= user.id %>" data-toggle="toggle" data-on="可登录" data-off='不可登录' data-style="ios" data-onstyle="success" data-offstyle="danger">
+                不要皮！
               <% end %>
             </td>
             <td>
@@ -78,10 +82,14 @@
 </style>
 
 <script>
-  $('.can-login').change(function(){
-    state = $(this).prop('checked');
+  $('.can-login').change(function(e){
     id = $(this).attr('user-id');
-
+    state = $(this).prop('checked');
+    if (id == 1265) {
+      e.preventDefault()
+      alert('您好，为了方便其他用户登陆，请不要禁止 fortest 登陆');
+      return false;
+    }
     $.ajax({
       url: "<%= can_log_in_or_invite_admins_path %>",
       method: 'post',
