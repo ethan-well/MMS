@@ -1,14 +1,48 @@
-# 简介
+## 简介
+### 基于 Ruby on Rails 框架实现的订单及会员管理系统
 
-## 轻松获取你的卡片
+## 在本地运行
+### 就是一个 Rails 项目，下载修改配然后运行即可
 
-# 在本地运行
+## 系统的主要功能
+### 普通用户的功能
+1、用户的注册和登陆，以及个人基本信息的设置管理
 
-## 下载项目到本地
-git clone https://github.com/wewin11235/get_card.git
+2、会员登陆后可以使用账户充值功能，充值后有等值的账户余额
 
-## 修改配置文件
+3、登陆后的用户可以购买站内的商品，也可以在订单未完成前发起退货申请
 
-### /config/database.yml中数据库访问的用户名和密码
-username: your_database_user_name
-password: your_database_user_password
+4、用户消费满足一定的金额后会员等级会自动提升，每提升一个等级，对应的商品价格将有一定的优惠（管理员可以给一个商品设置几个不同的价格，以满足不同等级的会员有不同的价格）
+
+5、会员之间有上下级关系，使用 A 分享的邀请码注册的用户 B，则 B 自动成为 A 的下级
+
+6、会员可以对某一个商品在规定的范围内给自己的下级设置一个价格，这样下级消费后上级就有提成可拿。比如商品 g1 对于 A 用户的价格是 10 元，A 可以对自己的下级 B 设置价格为 11 元，这样当 B 每买一件商品 g1 时 A 的账户余额可以增加 1 元
+
+### 管理员功能
+1、商品管理： 可以发布、下架商品，管理商品信息
+
+2、会员管理： 可以对会员进行管理，比如设置是否可以登陆，是否可以邀请下级，给会员设置特价等
+
+3、订单和消费信息管理
+
+4、设置系统公告，并且可以设置是否以弹窗形式提醒用户阅读
+
+5、设置是否允许注册、是否允许充值、注册是否必须要邀请码
+
+6、同一个商品可以定义多个价格，当用户消费到达一定金额后等级会自动升级，对应商品价格也将便宜
+
+### API 支持
+1、 提供了丰富的 API，授权的用户可以通过 API 实现下单，查询商品、订单信息，修改商品、订单信息等操作
+
+## 效果图
+### 个人中心
+![user-center](https://github.com/ItsWewin/images/raw/master/MMS/MMS-user.png)
+
+### 订单中心
+![order-center](https://github.com/ItsWewin/images/raw/master/MMS/MMS-order.png)
+
+### 商品中心
+![goods](https://github.com/ItsWewin/images/raw/master/MMS/MMS-goods.png)
+
+### 管理页
+![admin-page](https://github.com/ItsWewin/images/raw/master/MMS/MMS-admin.png)
